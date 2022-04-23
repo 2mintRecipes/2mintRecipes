@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 const List song_type_1 = [
-  "Music",
-  "Rock",
-  "Soul",
-  "Classic",
-  "Pop",
-  "R&B",
+  "Gỏi",
+  "Bún",
+  "Thức uống",
+  "Lẩu",
+  "Bánh",
+  "",
 ];
 const List song_type_2 = [
   "Podcasts",
@@ -19,7 +19,7 @@ const List song_type_2 = [
 const List songs = [
   {
     "img": "assets/images/Reputation.png",
-    "title": "Reputation",
+    "title": "Bánh cuốn",
     "description": "Feel good with this positively timeless playlist!",
     "song_count": "100 songs",
     "date": "about 19 hr",
@@ -37,7 +37,7 @@ const List songs = [
   },
   {
     "img": "assets/images/Red.jpeg",
-    "title": "Red",
+    "title": "Bánh xèo",
     "description": "Relax and indulge with beautiful piano pieces",
     "song_count": "324 songs",
     "date": "about 14 hr",
@@ -55,7 +55,7 @@ const List songs = [
   },
   {
     "img": "assets/images/Folklore.png",
-    "title": "Folklore",
+    "title": "Phở gà",
     "description": "Keep calm and focus with ambient and post-rock music.",
     "song_count": "195 songs",
     "date": "about 10 hr",
@@ -73,7 +73,7 @@ const List songs = [
   },
   {
     "img": "assets/images/Evermore.png",
-    "title": "Evermore",
+    "title": "Cheese Cake",
     "description": "Beats to relax, study and focus.",
     "song_count": "599 songs",
     "date": "about 21 hr",
@@ -91,7 +91,7 @@ const List songs = [
   },
   {
     "img": "assets/images/Fearless.png",
-    "title": "Fearless",
+    "title": "Trà Dâu",
     "description": "The perfect study beats, twenty four seven.",
     "song_count": "317 songs",
     "date": "about 11 hr",

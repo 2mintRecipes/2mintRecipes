@@ -25,12 +25,16 @@ class _HomepageState extends State<Homepage> {
   Widget getBody() {
     return SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Text(
-        "Find best recipes for cooking",
-        style: TextStyle(
-            fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-      ),
-      SearchCard(),
+      const Padding(
+          padding: const EdgeInsets.only(left: 30, top: 20),
+          child: Text(
+            "Find best recipes for cooking",
+            style: TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          )),
+      Padding(
+          padding: const EdgeInsets.only(left: 30, top: 20, right: 30),
+          child: SearchCard()),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,13 +57,11 @@ class _HomepageState extends State<Homepage> {
                       children: [
                         Container(
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: activeMenu1 == index
-                                    ? UI.appColor
-                                    : Colors.black,
-                              ),
+                              border: Border.all(width: 2, color: UI.appColor),
                               borderRadius: BorderRadius.circular(15),
+                              color: activeMenu1 == index
+                                  ? UI.appColor
+                                  : Colors.white,
                             ),
                             child: Padding(
                               padding: EdgeInsets.all(5),
@@ -68,8 +70,8 @@ class _HomepageState extends State<Homepage> {
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: activeMenu1 == index
-                                        ? UI.appColor
-                                        : Colors.white,
+                                        ? Colors.white
+                                        : UI.appColor,
                                     fontWeight: FontWeight.w600),
                               ),
                             ))
@@ -110,7 +112,7 @@ class _HomepageState extends State<Homepage> {
                           Text(
                             songs[index]['title'],
                             style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -139,11 +141,13 @@ class _HomepageState extends State<Homepage> {
             height: 20,
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: 10, top: 30),
-                child: Text("Trending Album For You",
-                    textAlign: TextAlign.left,
+                padding:
+                    EdgeInsets.only(left: 30, right: 30, bottom: 10, top: 30),
+                child: Text("Trending Foods For You",
                     style: TextStyle(
                         color: UI.appColor,
                         fontSize: 20,
@@ -176,7 +180,7 @@ class _HomepageState extends State<Homepage> {
                               Text(
                                 songs[index]['title'],
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
                               ),
@@ -192,10 +196,11 @@ class _HomepageState extends State<Homepage> {
             ],
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 30, left: 0, bottom: 10),
-                child: Text("Artist For You",
+                padding: EdgeInsets.only(top: 30, left: 30, bottom: 10),
+                child: Text("Hot Creators",
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: UI.appColor,
@@ -227,7 +232,7 @@ class _HomepageState extends State<Homepage> {
                               Text(
                                 "Taylor Swift",
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontSize: 15,
                                     fontWeight: FontWeight.w400),
                               )
