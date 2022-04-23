@@ -63,7 +63,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -75,10 +74,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Anton
-  #     fonts:
-  #       - asset: fonts/Anton.ttf
+  fonts:
+    - family: Anton
+      fonts:
+        - asset: fonts/Anton.ttf,
+      
+    - family: Tapestry
+      fonts:
+        - asset: fonts/Tapestry-Regular.ttf
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
