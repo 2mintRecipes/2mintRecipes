@@ -26,7 +26,7 @@ class _HomepageState extends State<Homepage> {
     return SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Padding(
-          padding: const EdgeInsets.only(left: 30, top: 20),
+          padding: EdgeInsets.only(left: 30, top: 20),
           child: Text(
             "Find best recipes for cooking",
             style: TextStyle(
@@ -223,7 +223,7 @@ class _HomepageState extends State<Homepage> {
                                 alignment: Alignment.center,
                                 child: CircleAvatar(
                                     backgroundImage: AssetImage(
-                                        'assets/images/Reputation.png'),
+                                        'assets/images/nong-nao-doll.jpg'),
                                     radius: 50),
                               ),
                               SizedBox(

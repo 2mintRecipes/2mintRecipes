@@ -18,7 +18,7 @@ const List song_type_2 = [
 ];
 const List songs = [
   {
-    "img": "assets/images/Reputation.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Bánh cuốn",
     "description": "Feel good with this positively timeless playlist!",
     "song_count": "100 songs",
@@ -36,7 +36,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/Red.jpeg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Bánh xèo",
     "description": "Relax and indulge with beautiful piano pieces",
     "song_count": "324 songs",
@@ -54,7 +54,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/Folklore.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Phở gà",
     "description": "Keep calm and focus with ambient and post-rock music.",
     "song_count": "195 songs",
@@ -72,7 +72,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/Evermore.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Cheese Cake",
     "description": "Beats to relax, study and focus.",
     "song_count": "599 songs",
@@ -90,7 +90,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/Fearless.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Trà Dâu",
     "description": "The perfect study beats, twenty four seven.",
     "song_count": "317 songs",
@@ -108,7 +108,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/img_6.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Chill Hits",
     "description": "Kick back to the best new and recent chill tunes.",
     "song_count": "130 songs",
@@ -126,7 +126,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/img_1.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Dark & Stormy",
     "description": "Beautifully dark, dramatic tracks.",
     "song_count": "50 songs",
@@ -144,7 +144,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/img_8.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Feel Good Piano",
     "description": "Positive piano music",
     "song_count": "69 songs",
@@ -162,7 +162,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/img_9.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Sad Songs",
     "description": "Beautiful songs to break your heart...",
     "song_count": "60 songs",
@@ -180,7 +180,7 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/img_10.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Mood Booster",
     "description": "Get happy with today's dose of feel-good songs",
     "song_count": "75 songs",
@@ -201,7 +201,7 @@ const List songs = [
 
 const List drinks = [
   {
-    "img": "assets/images/Reputation.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Trà dâu",
     "description": "Feel good with this positively timeless playlist!",
     "song_count": "100 songs",
@@ -219,7 +219,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/Red.jpeg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Trà sữa",
     "description": "Relax and indulge with beautiful piano pieces",
     "song_count": "324 songs",
@@ -237,7 +237,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/Folklore.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Trà đào",
     "description": "Keep calm and focus with ambient and post-rock music.",
     "song_count": "195 songs",
@@ -255,7 +255,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/Evermore.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Cà phê",
     "description": "Beats to relax, study and focus.",
     "song_count": "599 songs",
@@ -273,7 +273,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/Fearless.png",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Sinh tố bơ",
     "description": "The perfect study beats, twenty four seven.",
     "song_count": "317 songs",
@@ -291,7 +291,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/img_6.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Chill Hits",
     "description": "Kick back to the best new and recent chill tunes.",
     "song_count": "130 songs",
@@ -309,7 +309,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/img_1.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Dark & Stormy",
     "description": "Beautifully dark, dramatic tracks.",
     "song_count": "50 songs",
@@ -327,7 +327,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/img_8.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Feel Good Piano",
     "description": "Positive piano music",
     "song_count": "69 songs",
@@ -345,7 +345,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/img_9.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Sad Songs",
     "description": "Beautiful songs to break your heart...",
     "song_count": "60 songs",
@@ -363,7 +363,7 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/img_10.jpg",
+    "img": "assets/images/nong-nao-doll.jpg",
     "title": "Mood Booster",
     "description": "Get happy with today's dose of feel-good songs",
     "song_count": "75 songs",
