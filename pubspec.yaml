@@ -78,11 +78,11 @@ flutter:
   fonts:
     - family: Anton
       fonts:
-        - asset: fonts/Anton.ttf
+        - asset: assets/fonts/Anton.ttf
       
     - family: Tapestry
       fonts:
-        - asset: fonts/Tapestry-Regular.ttf
+        - asset: assets/fonts/Tapestry-Regular.ttf
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
