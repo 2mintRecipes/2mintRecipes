@@ -19,11 +19,11 @@ class Input extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      width: 250,
+      height: 60,
+      width: 300,
       margin: EdgeInsets.only(bottom: 10),
       child: TextFormField(
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 20),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return validation;
@@ -31,13 +31,14 @@ class Input extends StatelessWidget {
         },
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
               borderSide: BorderSide(color: border)),
           labelText: title,
+          labelStyle: TextStyle(color: UI.appColor),
           fillColor: fill,
           filled: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),

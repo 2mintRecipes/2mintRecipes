@@ -57,7 +57,7 @@ class _LoginState extends State<Login> {
                           Input(
                               validation: "Email required !!",
                               title: "Email",
-                              border: Colors.black,
+                              border: UI.appColor,
                               fill: Colors.white,
                               text: Colors.black),
                           Password(),
@@ -69,7 +69,7 @@ class _LoginState extends State<Login> {
                               icon: Icon(Icons.login_rounded))
                         ]),
                     Container(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.only(top: 30),
                       width: 300,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +81,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               'Register',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
                           TextButton(
@@ -91,7 +91,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               'Forgot password?',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
+                                  TextStyle(color: Colors.white, fontSize: 17),
                             ),
                           ),
                         ],

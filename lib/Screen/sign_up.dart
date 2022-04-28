@@ -70,32 +70,32 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     Input(
                         validation: "Fullname",
-                        title: "Fullname required",
-                        border: Colors.black,
+                        title: "Fullname",
+                        border: UI.appColor,
                         fill: Colors.white,
                         text: Colors.black),
                     Input(
                         validation: "Username",
-                        title: "Username required",
-                        border: Colors.black,
+                        title: "Username",
+                        border: UI.appColor,
                         fill: Colors.white,
                         text: Colors.black),
                     Input(
-                        validation: "Email required !!",
+                        validation: "Email",
                         title: "Email",
-                        border: Colors.black,
+                        border: UI.appColor,
                         fill: Colors.white,
                         text: Colors.black),
                     Input(
-                        validation: "Password required !!",
+                        validation: "Password",
                         title: "Password",
-                        border: Colors.black,
+                        border: UI.appColor,
                         fill: Colors.white,
                         text: Colors.black),
                     Input(
-                        validation: "Re-enter Password required !!",
+                        validation: "Re-enter Password",
                         title: "Re-enter Password",
-                        border: Colors.black,
+                        border: UI.appColor,
                         fill: Colors.white,
                         text: Colors.black),
                     Button(
@@ -104,17 +104,20 @@ class _SignUpState extends State<SignUp> {
                         textColor: Colors.white,
                         destination: '/root',
                         icon: Icon(Icons.app_registration)),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                     TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },
                       child: Text(
                         'You have an already Account? Log In',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                     ),
                     const SizedBox(
-                      height: 70.0,
+                      height: 20.0,
                     ),
                     Text(
                       "_____________  or _____________",
