@@ -78,7 +78,7 @@ flutter:
   fonts:
     - family: Anton
       fonts:
-        - asset: fonts/Anton.ttf,
+        - asset: fonts/Anton.ttf
       
     - family: Tapestry
       fonts:
