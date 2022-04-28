@@ -33,16 +33,16 @@ class Welcome extends StatelessWidget {
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Anton',
-                            fontSize: 60)),
+                            fontSize: 50)),
                     Text("Cooking",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Anton',
-                            fontSize: 60)),
+                            fontSize: 50)),
                     Text("Find the best recipe for today now...",
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                        style: TextStyle(color: Colors.white, fontSize: 18)),
                     Button(
                         title: "Start now ",
                         buttonColor: UI.appColor,
