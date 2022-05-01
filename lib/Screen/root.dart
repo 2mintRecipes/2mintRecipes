@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first/Screen/bookmark.dart';
-import 'package:flutter_first/Screen/profile.dart';
+import 'package:flutter_first/Screen/profile/profile.dart';
 import 'package:flutter_first/Screen/welcome.dart';
 import '../components/custom_paint.dart';
 import '../components/nav_model.dart';

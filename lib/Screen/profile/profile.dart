@@ -3,7 +3,7 @@ import 'package:flutter_first/app_ui.dart';
 import 'package:flutter_first/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
 
-import '../database.dart';
+import '../../database.dart';
 
 class Profile extends StatefulWidget {
   static const routeName = '/Profile';
