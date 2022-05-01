@@ -101,10 +101,13 @@ class _HomepageState extends State<Homepage> {
                             width: 250,
                             height: 150,
                             decoration: BoxDecoration(
+                                border:
+                                    Border.all(width: 2, color: UI.appColor),
+                                borderRadius: BorderRadius.circular(15),
                                 image: DecorationImage(
                                     image: AssetImage(songs[index]['img']),
                                     fit: BoxFit.cover),
-                                color: UI.appColor),
+                                color: Colors.white),
                           ),
                           SizedBox(
                             height: 10,
@@ -169,10 +172,13 @@ class _HomepageState extends State<Homepage> {
                                 width: 250,
                                 height: 150,
                                 decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: UI.appColor),
+                                    borderRadius: BorderRadius.circular(15),
                                     image: DecorationImage(
                                         image: AssetImage(songs[index]['img']),
                                         fit: BoxFit.cover),
-                                    color: UI.appColor),
+                                    color: Colors.white),
                               ),
                               SizedBox(
                                 height: 10,

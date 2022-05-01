@@ -3,41 +3,47 @@ import 'package:flutter/material.dart';
 import '../app_ui.dart';
 
 class Input extends StatelessWidget {
-  final String validation;
-  final String title;
-  final Color border;
-  final Color fill;
-  final Color text;
+  final IconData icon;
+  final String hintText;
+  final bool isPassword;
+  final bool isEmail;
 
   const Input(
-      {required this.validation,
-      required this.title,
-      required this.border,
-      required this.fill,
-      required this.text});
+      {required this.icon,
+      required this.hintText,
+      required this.isPassword,
+      required this.isEmail});
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      height: 40,
-      width: 250,
-      margin: EdgeInsets.only(bottom: 10),
-      child: TextFormField(
-        style: TextStyle(fontSize: 15),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return validation;
-          }
-        },
+      height: size.width / 7,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextField(
+        style: TextStyle(color: Colors.white, fontSize: 20),
+        obscureText: isPassword,
+        keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
         decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(color: border)),
-          labelText: title,
-          fillColor: fill,
-          filled: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          prefixIcon: Icon(
+            icon,
+            color: Colors.white.withOpacity(.5),
+            size: 30,
+            semanticLabel: "thienje",
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: "  " + hintText,
+          hintStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.white.withOpacity(.5),
           ),
         ),
       ),
