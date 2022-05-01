@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_first/Screen/bookmark.dart';
 import 'package:flutter_first/Screen/root.dart';
 import 'package:flutter_first/Screen/login.dart';
 import 'package:flutter_first/Screen/sign_up.dart';
@@ -19,15 +20,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "2mint Recipes",
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-        ),
+        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
         home: Welcome(),
         routes: {
           Welcome.routeName: (context) => Welcome(),
           Login.routeName: (context) => Login(),
           SignUp.routeName: (context) => SignUp(),
           Root.routeName: (context) => Root(),
+          Bookmark.routeName: (context) => Bookmark()
         });
   }
 }

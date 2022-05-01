@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^1.0.3
+  getwidget: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -75,10 +76,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Anton
-  #     fonts:
-  #       - asset: fonts/Anton.ttf
+  fonts:
+    - family: Anton
+      fonts:
+        - asset: assets/fonts/Anton.ttf
+      
+    - family: Tapestry
+      fonts:
+        - asset: assets/fonts/Tapestry-Regular.ttf
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

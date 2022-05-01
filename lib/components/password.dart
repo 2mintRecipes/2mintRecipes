@@ -8,11 +8,11 @@ class Password extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      width: 250,
+      height: 60,
+      width: 300,
       child: TextFormField(
         onChanged: (value) => {},
-        style: TextStyle(fontSize: 15),
+        style: TextStyle(fontSize: 20),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter the password';
@@ -23,14 +23,15 @@ class Password extends StatelessWidget {
         obscureText: true,
         decoration: InputDecoration(
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(color: Colors.black)),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+              borderSide: BorderSide(color: UI.appColor)),
           labelText: 'Password',
+          labelStyle: TextStyle(color: UI.appColor),
           fillColor: Colors.white,
           filled: true,
           // hintText: 'Password',
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),
