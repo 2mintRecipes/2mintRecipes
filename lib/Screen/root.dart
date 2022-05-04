@@ -27,7 +27,7 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: getBody(),
       bottomNavigationBar: navigationBar(),
     );
@@ -80,28 +80,37 @@ class _RootState extends State<Root> {
 
   AnimatedContainer navigationBar() {
     return AnimatedContainer(
-      padding: EdgeInsets.only(bottom: 7),
-      height: 60.0,
-      duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
-        color: UI.appColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(selectBtn == 0 ? 0.0 : 20.0),
-          topRight:
-              Radius.circular(selectBtn == navBtn.length - 1 ? 0.0 : 20.0),
+        padding: EdgeInsets.only(bottom: 7),
+        height: 60.0,
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(selectBtn == 0 ? 0.0 : 20.0),
+            topRight:
+                Radius.circular(selectBtn == navBtn.length - 1 ? 0.0 : 20.0),
+          ),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          for (int i = 0; i < navBtn.length; i++)
-            GestureDetector(
-              onTap: () => setState(() => selectBtn = i),
-              child: iconBtn(i),
-            ),
-        ],
-      ),
-    );
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Theme(
+                data:
+                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          for (int i = 0; i < navBtn.length; i++)
+                            GestureDetector(
+                              onTap: () => setState(() => selectBtn = i),
+                              child: iconBtn(i),
+                            ),
+                        ],
+                      ),
+                    )))));
   }
 
   SizedBox iconBtn(int i) {

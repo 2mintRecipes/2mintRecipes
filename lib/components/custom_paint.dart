@@ -5,7 +5,7 @@ import 'package:flutter_first/app_ui.dart';
 class ButtonNotch extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var dotPoint = Offset(size.width / 2, 2);
+    var dotPoint = Offset(size.width / 2, 4);
 
     var paint_1 = Paint()
       ..color = Colors.white
