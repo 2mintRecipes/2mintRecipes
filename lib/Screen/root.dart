@@ -28,7 +28,7 @@ class _RootState extends State<Root> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: getBody(),
-      bottomNavigationBar: BottomNavigationBar(items: [BottomNavigationBarItem(icon: icon)],
+      bottomNavigationBar: navigationBar(),
     );
   }
 
@@ -117,8 +117,6 @@ class _RootState extends State<Root> {
                       ),
                     )))));
   }
-
- 
 
   SizedBox iconBtn(int i) {
     bool isActive = selectBtn == i ? true : false;
