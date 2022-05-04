@@ -75,10 +75,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Anton
-  #     fonts:
-  #       - asset: fonts/Anton.ttf
+  fonts:
+    - family: Anton
+      fonts:
+        - asset: assets/fonts/Anton.ttf
+      
+    - family: Tapestry
+      fonts:
+        - asset: assets/fonts/Tapestry-Regular.ttf
   
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

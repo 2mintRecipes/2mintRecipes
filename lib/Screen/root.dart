@@ -3,6 +3,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_first/Screen/account.dart';
+import 'package:flutter_first/Screen/bookmark.dart';
 import 'package:flutter_first/Screen/welcome.dart';
 import '../components/custom_paint.dart';
 import '../components/nav_model.dart';
@@ -35,13 +37,7 @@ class _RootState extends State<Root> {
       index: selectBtn,
       children: [
         Homepage(),
-        Center(
-          child: Text(
-            "Bookmark",
-            style: TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
+        Bookmark(),
         Center(
           child: Text(
             "Create",
@@ -56,13 +52,7 @@ class _RootState extends State<Root> {
                 fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
-        Center(
-          child: Text(
-            "Account",
-            style: TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
+        Account(),
       ],
     );
   }

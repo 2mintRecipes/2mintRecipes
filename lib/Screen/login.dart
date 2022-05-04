@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_first/Screen/root.dart';
 import 'package:flutter_first/components/button.dart';
@@ -17,6 +19,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
       children: [
@@ -37,69 +40,86 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.5,
+                height: MediaQuery.of(context).size.height * 0.4,
                 child: Transform.scale(
                     scale: 0.6, child: Image.asset(UI.app_logo)),
               ),
               Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          // Text(
-                          //   "LOG IN",
-                          //   style: TextStyle(
-                          //       fontSize: 30, fontWeight: FontWeight.bold),
-                          // ),
-                          Input(
-                              validation: "Email required !!",
-                              title: "Email",
-                              border: Colors.black,
-                              fill: Colors.white,
-                              text: Colors.black),
-                          Password(),
-                          Button(
-                              title: 'Log In',
-                              buttonColor: UI.appColor,
-                              textColor: Colors.white,
-                              destination: '/root',
-                              icon: Icon(Icons.login_rounded))
-                        ]),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      width: 300,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/signup');
-                            },
-                            child: Text(
-                              'Register',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/forgot');
-                            },
-                            child: Text(
-                              'Forgot password?',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ),
-                        ],
+                  padding: EdgeInsets.all(10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Text(
+                                  //   "LOG IN",
+                                  //   style: TextStyle(
+                                  //       fontSize: 30, fontWeight: FontWeight.bold),
+                                  // ),
+                                  Input(
+                                      icon: Icons.alternate_email_outlined,
+                                      hintText: 'Email',
+                                      isPassword: false,
+                                      isEmail: true),
+
+                                  Input(
+                                      icon: Icons.lock_outline,
+                                      hintText: 'Password',
+                                      isPassword: true,
+                                      isEmail: false),
+                                  Button(
+                                      title: 'Log In',
+                                      buttonColor: UI.appColor,
+                                      textColor: Colors.white,
+                                      destination: '/root',
+                                      icon: Icon(Icons.login_rounded))
+                                ]),
+                            Container(
+                              padding: EdgeInsets.only(top: 30),
+                              width: 300,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/signup');
+                                    },
+                                    child: Text(
+                                      'Register',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/forgot');
+                                    },
+                                    child: Text(
+                                      'Forgot password?',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
-              )
+                    ),
+                  ))
             ],
           )),
         )

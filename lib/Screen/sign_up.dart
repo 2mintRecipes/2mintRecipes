@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_first/components/button.dart';
 import '../app_ui.dart';
@@ -59,79 +61,90 @@ class _SignUpState extends State<SignUp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.1),
                 child: Transform.scale(
                     scale: 0.6, child: Image.asset(UI.app_logo)),
               ),
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Input(
-                        validation: "Fullname",
-                        title: "Fullname required",
-                        border: Colors.black,
-                        fill: Colors.white,
-                        text: Colors.black),
-                    Input(
-                        validation: "Username",
-                        title: "Username required",
-                        border: Colors.black,
-                        fill: Colors.white,
-                        text: Colors.black),
-                    Input(
-                        validation: "Email required !!",
-                        title: "Email",
-                        border: Colors.black,
-                        fill: Colors.white,
-                        text: Colors.black),
-                    Input(
-                        validation: "Password required !!",
-                        title: "Password",
-                        border: Colors.black,
-                        fill: Colors.white,
-                        text: Colors.black),
-                    Input(
-                        validation: "Re-enter Password required !!",
-                        title: "Re-enter Password",
-                        border: Colors.black,
-                        fill: Colors.white,
-                        text: Colors.black),
-                    Button(
-                        title: ' Sign Up',
-                        buttonColor: UI.appColor,
-                        textColor: Colors.white,
-                        destination: '/root',
-                        icon: Icon(Icons.app_registration)),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: Text(
-                        'You have an already Account? Log In',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 70.0,
-                    ),
-                    Text(
-                      "_____________  or _____________",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    )
-                  ]),
-              Container(
-                padding: EdgeInsets.all(20),
-                width: 300,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    signInWith('assets/icons/google.png'),
-                    signInWith('assets/icons/facebook.png')
-                  ],
-                ),
-              )
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Input(
+                                        icon: Icons.badge_outlined,
+                                        hintText: 'Fullname',
+                                        isPassword: false,
+                                        isEmail: false),
+                                    Input(
+                                        icon: Icons.account_circle_outlined,
+                                        hintText: 'Username',
+                                        isPassword: false,
+                                        isEmail: false),
+                                    Input(
+                                        icon: Icons.email_outlined,
+                                        hintText: 'Email',
+                                        isPassword: false,
+                                        isEmail: true),
+                                    Input(
+                                        icon: Icons.lock_outlined,
+                                        hintText: 'Password',
+                                        isPassword: true,
+                                        isEmail: false),
+                                    Input(
+                                        icon: Icons.lock_outlined,
+                                        hintText: 'Re-enter Password',
+                                        isPassword: true,
+                                        isEmail: false),
+                                    Button(
+                                        title: ' Sign Up',
+                                        buttonColor: UI.appColor,
+                                        textColor: Colors.white,
+                                        destination: '/root',
+                                        icon: Icon(Icons.app_registration))
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/login');
+                                  },
+                                  child: Text(
+                                    'You have an already Account? Log In',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 17),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  "_____________  or _____________",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 15),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(20),
+                                  width: 300,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      signInWith('assets/icons/google.png'),
+                                      signInWith('assets/icons/facebook.png')
+                                    ],
+                                  ),
+                                )
+                              ])))),
             ],
           )),
         )
