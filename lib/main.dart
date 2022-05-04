@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "2mint Recipes",
-        theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+        theme: ThemeData(scaffoldBackgroundColor: Colors.transparent),
         home: Welcome(),
         routes: {
           Welcome.routeName: (context) => Welcome(),
