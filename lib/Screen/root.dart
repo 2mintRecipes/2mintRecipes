@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_first/Screen/notification/notification.dart';
 import 'package:flutter_first/Screen/profile/profile.dart';
 import 'package:flutter_first/Screen/bookmark.dart';
 import 'package:flutter_first/Screen/welcome.dart';
@@ -45,13 +46,7 @@ class _RootState extends State<Root> {
                 fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
-        Center(
-          child: Text(
-            "Notify",
-            style: TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
+        MyNotification(),
         Profile(),
       ],
     );
