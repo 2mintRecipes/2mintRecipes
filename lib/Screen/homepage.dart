@@ -26,7 +26,7 @@ class _HomepageState extends State<Homepage> {
     return SingleChildScrollView(
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Padding(
-          padding: const EdgeInsets.only(left: 30, top: 20),
+          padding: EdgeInsets.only(left: 30, top: 20),
           child: Text(
             "Find best recipes for cooking",
             style: TextStyle(
@@ -64,7 +64,7 @@ class _HomepageState extends State<Homepage> {
                                   : Colors.white,
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               child: Text(
                                 song_type_1[index],
                                 style: TextStyle(
@@ -82,17 +82,17 @@ class _HomepageState extends State<Homepage> {
               })),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Padding(
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 child: Row(
                     children: List.generate(10, (index) {
                   return Padding(
-                    padding: EdgeInsets.only(left: 30),
+                    padding: const EdgeInsets.only(left: 30),
                     child: GestureDetector(
                       onTap: () {},
                       child: Column(
@@ -109,26 +109,26 @@ class _HomepageState extends State<Homepage> {
                                     fit: BoxFit.cover),
                                 color: Colors.white),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Text(
                             songs[index]['title'],
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: 180,
                             child: Text(
                               songs[index]['description'],
                               maxLines: 1,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,
                                   fontWeight: FontWeight.w600),
@@ -140,7 +140,7 @@ class _HomepageState extends State<Homepage> {
                   );
                 }))),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Column(
@@ -148,8 +148,8 @@ class _HomepageState extends State<Homepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                    EdgeInsets.only(left: 30, right: 30, bottom: 10, top: 30),
+                padding: const EdgeInsets.only(
+                    left: 30, right: 30, bottom: 10, top: 30),
                 child: Text("Trending Foods For You",
                     style: TextStyle(
                         color: UI.appColor,
@@ -159,11 +159,11 @@ class _HomepageState extends State<Homepage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                    padding: EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 5),
                     child: Row(
                         children: List.generate(10, (index) {
                       return Padding(
-                        padding: EdgeInsets.only(left: 30),
+                        padding: const EdgeInsets.only(left: 30),
                         child: GestureDetector(
                           onTap: () {},
                           child: Column(
@@ -180,17 +180,17 @@ class _HomepageState extends State<Homepage> {
                                         fit: BoxFit.cover),
                                     color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 songs[index]['title'],
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                             ],
@@ -205,7 +205,7 @@ class _HomepageState extends State<Homepage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.only(top: 30, left: 30, bottom: 10),
+                padding: const EdgeInsets.only(top: 30, left: 30, bottom: 10),
                 child: Text("Hot Creators",
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -216,11 +216,11 @@ class _HomepageState extends State<Homepage> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Padding(
-                    padding: EdgeInsets.only(left: 5),
+                    padding: const EdgeInsets.only(left: 5),
                     child: Row(
                         children: List.generate(10, (index) {
                       return Padding(
-                        padding: EdgeInsets.only(left: 30),
+                        padding: const EdgeInsets.only(left: 30),
                         child: GestureDetector(
                           onTap: () {},
                           child: Column(
@@ -228,15 +228,15 @@ class _HomepageState extends State<Homepage> {
                               Align(
                                 alignment: Alignment.center,
                                 child: CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        'assets/images/Reputation.png'),
+                                    backgroundImage: const AssetImage(
+                                        'assets/images/nong-nao-doll.jpg'),
                                     radius: 50,
                                     backgroundColor: UI.appColor),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text(
+                              const Text(
                                 "Taylor Swift",
                                 style: TextStyle(
                                     color: Colors.black,
