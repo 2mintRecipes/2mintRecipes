@@ -3,16 +3,26 @@ import 'package:flutter/material.dart';
 import '../app_ui.dart';
 
 class Password extends StatelessWidget {
-  const Password({Key? key}) : super(key: key);
+  final String hintText;
+
+  Password({required this.hintText});
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      height: 60,
-      width: 300,
+      height: size.width / 7,
+      width: size.width / 1.25,
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(.1),
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: TextFormField(
         onChanged: (value) => {},
-        style: TextStyle(fontSize: 20),
+        style: TextStyle(color: Colors.white, fontSize: 20),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter the password';
@@ -22,16 +32,18 @@ class Password extends StatelessWidget {
         },
         obscureText: true,
         decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(color: UI.appColor)),
-          labelText: 'Password',
-          labelStyle: TextStyle(color: UI.appColor),
-          fillColor: Colors.white,
-          filled: true,
-          // hintText: 'Password',
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+          suffixIconColor: Colors.white,
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: Colors.white.withOpacity(.5),
+            size: 30,
+          ),
+          border: InputBorder.none,
+          hintMaxLines: 1,
+          hintText: "  " + hintText,
+          hintStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.white.withOpacity(.5),
           ),
         ),
       ),

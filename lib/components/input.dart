@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: use_key_in_widget_constructors
 
+import 'package:flutter/material.dart';
 import '../app_ui.dart';
 
 class Input extends StatelessWidget {
@@ -7,12 +8,14 @@ class Input extends StatelessWidget {
   final String hintText;
   final bool isPassword;
   final bool isEmail;
+  final TextEditingController textController;
 
-  const Input(
+  Input(
       {required this.icon,
       required this.hintText,
       required this.isPassword,
-      required this.isEmail});
+      required this.isEmail,
+      required this.textController});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class Input extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
+        controller: textController,
         style: TextStyle(color: Colors.white, fontSize: 20),
         obscureText: isPassword,
         keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
@@ -36,7 +40,6 @@ class Input extends StatelessWidget {
             icon,
             color: Colors.white.withOpacity(.5),
             size: 30,
-            semanticLabel: "thienje",
           ),
           border: InputBorder.none,
           hintMaxLines: 1,
