@@ -44,11 +44,13 @@ class Welcome extends StatelessWidget {
                         textAlign: TextAlign.left,
                         style: TextStyle(color: Colors.white, fontSize: 18)),
                     Button(
-                        title: "Start now ",
-                        buttonColor: UI.appColor,
-                        textColor: Colors.white,
-                        destination: "/login",
-                        icon: Icon(Icons.arrow_forward)),
+                      title: "Start now ",
+                      buttonColor: UI.appColor,
+                      textColor: Colors.white,
+                      destination: "/login",
+                      icon: Icon(Icons.arrow_forward),
+                      onTap: () {},
+                    ),
                   ]))
             ])));
   }

@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_first/Screen/homepage.dart';
 import 'package:flutter_first/Screen/root.dart';
 import 'package:flutter_first/components/button.dart';
 import '../app_ui.dart';
@@ -17,6 +18,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -71,19 +74,30 @@ class _LoginState extends State<Login> {
                                       icon: Icons.alternate_email_outlined,
                                       hintText: 'Email',
                                       isPassword: false,
-                                      isEmail: true),
-
-                                  Input(
-                                      icon: Icons.lock_outline,
-                                      hintText: 'Password',
-                                      isPassword: true,
-                                      isEmail: false),
+                                      isEmail: true,
+                                      textController: emailController),
+                                  Password(
+                                    hintText: "Password",
+                                  ),
                                   Button(
-                                      title: 'Log In',
-                                      buttonColor: UI.appColor,
-                                      textColor: Colors.white,
-                                      destination: '/root',
-                                      icon: Icon(Icons.login_rounded))
+                                    title: 'Log In',
+                                    buttonColor: UI.appColor,
+                                    textColor: Colors.white,
+                                    destination: '/root',
+                                    icon: Icon(Icons.login_rounded),
+                                    onTap: () {
+                                      //FirebaseAuth.instance
+                                      //     .signInWithEmailAndPassword(
+                                      //         email: emailController.text,
+                                      //         password: passwordController.text)
+                                      //     .then((value) {
+                                      //   Navigator.push(context,
+                                      //       MaterialPageRoute(builder: (context) => Homepage()));
+                                      // }).onError((error, stackTrace) {
+                                      //   print("Error ${error.toString()}");
+                                      // });
+                                    },
+                                  )
                                 ]),
                             Container(
                               padding: EdgeInsets.only(top: 30),

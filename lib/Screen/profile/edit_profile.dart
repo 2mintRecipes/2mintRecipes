@@ -20,6 +20,8 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final List<String> genderItems = [
     'Male',
     'Female',
@@ -29,6 +31,7 @@ class _EditProfileState extends State<EditProfile> {
   bool _confirmPasswordVisible = false;
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
+
   // late File imageFile;
 
   @override
@@ -367,7 +370,7 @@ class _EditProfileState extends State<EditProfile> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: const Color.fromARGB(39, 105, 171, 120)),
-      child: Column(children: const [
+      child: Column(children: [
         Text(
           "Thông tin đăng nhập",
           style: TextStyle(
@@ -378,25 +381,25 @@ class _EditProfileState extends State<EditProfile> {
         ),
         SizedBox(height: 10),
         Input(
-          icon: Icons.alternate_email_outlined,
-          hintText: 'Email',
-          isPassword: false,
-          isEmail: true,
-        ),
+            icon: Icons.alternate_email_outlined,
+            hintText: 'Email',
+            isPassword: false,
+            isEmail: true,
+            textController: emailController),
         SizedBox(height: 10),
         Input(
-          icon: Icons.lock_outline,
-          hintText: 'Mật khẩu',
-          isPassword: true,
-          isEmail: false,
-        ),
+            icon: Icons.lock_outline,
+            hintText: 'Mật khẩu',
+            isPassword: true,
+            isEmail: false,
+            textController: passwordController),
         SizedBox(height: 10),
         Input(
-          icon: Icons.lock_outline,
-          hintText: 'Nhập lại mật khẩu',
-          isPassword: true,
-          isEmail: false,
-        ),
+            icon: Icons.lock_outline,
+            hintText: 'Nhập lại mật khẩu',
+            isPassword: true,
+            isEmail: false,
+            textController: passwordController),
       ]),
     );
   }

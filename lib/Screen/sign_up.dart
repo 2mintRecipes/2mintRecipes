@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first/components/button.dart';
+import 'package:flutter_first/components/password.dart';
 import '../app_ui.dart';
 import '../components/input.dart';
 
@@ -39,6 +40,8 @@ Widget signInWith(String icon) {
 }
 
 class _SignUpState extends State<SignUp> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,33 +86,32 @@ class _SignUpState extends State<SignUp> {
                                         icon: Icons.badge_outlined,
                                         hintText: 'Fullname',
                                         isPassword: false,
-                                        isEmail: false),
+                                        isEmail: false,
+                                        textController:
+                                            TextEditingController()),
                                     Input(
                                         icon: Icons.account_circle_outlined,
                                         hintText: 'Username',
                                         isPassword: false,
-                                        isEmail: false),
+                                        isEmail: false,
+                                        textController:
+                                            TextEditingController()),
                                     Input(
                                         icon: Icons.email_outlined,
                                         hintText: 'Email',
                                         isPassword: false,
-                                        isEmail: true),
-                                    Input(
-                                        icon: Icons.lock_outlined,
-                                        hintText: 'Password',
-                                        isPassword: true,
-                                        isEmail: false),
-                                    Input(
-                                        icon: Icons.lock_outlined,
-                                        hintText: 'Re-enter Password',
-                                        isPassword: true,
-                                        isEmail: false),
+                                        isEmail: true,
+                                        textController: emailController),
+                                    Password(hintText: "Password"),
+                                    Password(hintText: "Re-enter Password"),
                                     Button(
-                                        title: ' Sign Up',
-                                        buttonColor: UI.appColor,
-                                        textColor: Colors.white,
-                                        destination: '/root',
-                                        icon: Icon(Icons.app_registration))
+                                      title: ' Sign Up',
+                                      buttonColor: UI.appColor,
+                                      textColor: Colors.white,
+                                      destination: '/root',
+                                      icon: Icon(Icons.app_registration),
+                                      onTap: () {},
+                                    )
                                   ],
                                 ),
                                 const SizedBox(
