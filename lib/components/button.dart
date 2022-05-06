@@ -8,13 +8,15 @@ class Button extends StatelessWidget {
   final Color textColor;
   final String destination;
   final Icon icon;
+  final Function onTap;
 
   const Button(
       {required this.title,
       required this.buttonColor,
       required this.textColor,
       required this.destination,
-      required this.icon});
+      required this.icon,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class Button extends StatelessWidget {
                       //to set border radius to button
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () {
-                Navigator.pushNamed(context, destination);
+                onTap();
               },
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

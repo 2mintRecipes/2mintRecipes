@@ -10,7 +10,6 @@ const List song_type_1 = [
   "Thức uống",
   "Lẩu",
   "Bánh",
-  "",
 ];
 const List song_type_2 = [
   "Podcasts",

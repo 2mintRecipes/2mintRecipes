@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first/app_ui.dart';
@@ -20,6 +21,8 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   final List<String> genderItems = [
     'Male',
     'Female',
@@ -29,6 +32,7 @@ class _EditProfileState extends State<EditProfile> {
   bool _confirmPasswordVisible = false;
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
+
   // late File imageFile;
 
   @override
@@ -41,34 +45,50 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: getBody(),
-    );
+        backgroundColor: Colors.transparent,
+        body: Stack(children: [
+          SafeArea(
+              child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    filterQuality: FilterQuality.low,
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.white.withOpacity(1), BlendMode.darken),
+                    image: const AssetImage("images/bg.jpg"))),
+          )),
+          getBody(),
+        ]));
   }
 
   Widget getBody() {
-    return SingleChildScrollView(
-      controller: ScrollController(),
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-      child: Column(
-        children: [
-          const Text(
-            "Cập nhật",
-            style: TextStyle(
-              fontSize: 26,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+    return ClipRRect(
+        child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+      child: SingleChildScrollView(
+        controller: ScrollController(),
+        padding:
+            const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+        child: Column(
+          children: [
+            const Text(
+              "Cập nhật",
+              style: TextStyle(
+                fontSize: 26,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 20),
-          getBasicInfo(),
-          const SizedBox(height: 20),
-          getUserInfo(),
-          const SizedBox(height: 20),
-          getUserConfidentialInfo(),
-        ],
+            const SizedBox(height: 20),
+            getBasicInfo(),
+            const SizedBox(height: 20),
+            getUserInfo(),
+            const SizedBox(height: 20),
+            getUserConfidentialInfo(),
+          ],
+        ),
       ),
-    );
+    ));
   }
 
   Widget getBasicInfo() {
@@ -87,14 +107,20 @@ class _EditProfileState extends State<EditProfile> {
               onPressed: () {
                 _getFromCamera();
               },
-              child: const Text('Chụp ảnh'),
+              child: const Text(
+                'Chụp ảnh',
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
             const SizedBox(width: 10),
             OutlinedButton(
               onPressed: () {
                 _getFromGallery();
               },
-              child: const Text('Thư viện'),
+              child: const Text(
+                'Thư viện',
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -106,8 +132,9 @@ class _EditProfileState extends State<EditProfile> {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: const Color.fromARGB(39, 105, 171, 120)),
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white.withOpacity(.4),
+      ),
       child: Form(
         key: _formKeyUserInfo,
         child: Padding(
@@ -119,7 +146,7 @@ class _EditProfileState extends State<EditProfile> {
                 "Thông tin cá nhân",
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -242,7 +269,10 @@ class _EditProfileState extends State<EditProfile> {
                     _formKeyUserInfo.currentState!.save();
                   }
                 },
-                child: const Text('Lưu'),
+                child: const Text(
+                  'Lưu',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -256,7 +286,7 @@ class _EditProfileState extends State<EditProfile> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: const Color.fromARGB(39, 105, 171, 120)),
+          color: Colors.white.withOpacity(.4)),
       child: Form(
         key: _formKeyCreInfo,
         child: Padding(
@@ -268,7 +298,7 @@ class _EditProfileState extends State<EditProfile> {
                 "Thông tin đăng nhập",
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -352,7 +382,10 @@ class _EditProfileState extends State<EditProfile> {
                     _formKeyCreInfo.currentState!.save();
                   }
                 },
-                child: const Text('Lưu'),
+                child: const Text(
+                  'Lưu',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -367,7 +400,7 @@ class _EditProfileState extends State<EditProfile> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: const Color.fromARGB(39, 105, 171, 120)),
-      child: Column(children: const [
+      child: Column(children: [
         Text(
           "Thông tin đăng nhập",
           style: TextStyle(
@@ -378,25 +411,25 @@ class _EditProfileState extends State<EditProfile> {
         ),
         SizedBox(height: 10),
         Input(
-          icon: Icons.alternate_email_outlined,
-          hintText: 'Email',
-          isPassword: false,
-          isEmail: true,
-        ),
+            icon: Icons.alternate_email_outlined,
+            hintText: 'Email',
+            isPassword: false,
+            isEmail: true,
+            textController: emailController),
         SizedBox(height: 10),
         Input(
-          icon: Icons.lock_outline,
-          hintText: 'Mật khẩu',
-          isPassword: true,
-          isEmail: false,
-        ),
+            icon: Icons.lock_outline,
+            hintText: 'Mật khẩu',
+            isPassword: true,
+            isEmail: false,
+            textController: passwordController),
         SizedBox(height: 10),
         Input(
-          icon: Icons.lock_outline,
-          hintText: 'Nhập lại mật khẩu',
-          isPassword: true,
-          isEmail: false,
-        ),
+            icon: Icons.lock_outline,
+            hintText: 'Nhập lại mật khẩu',
+            isPassword: true,
+            isEmail: false,
+            textController: passwordController),
       ]),
     );
   }
