@@ -204,9 +204,11 @@ class _ProfileState extends State<Profile> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        Text("My Gallary",
+        const Text("My Gallary",
             style: TextStyle(
-                color: UI.appColor, fontSize: 20, fontWeight: FontWeight.w500)),
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500)),
         const SizedBox(height: 20),
         GridView.count(
             crossAxisCount: 2,
@@ -223,7 +225,7 @@ class _ProfileState extends State<Profile> {
                       width: 250,
                       height: 150,
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: UI.appColor),
+                          border: Border.all(width: 2, color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
                               image: AssetImage(songs[index]['img']),
@@ -235,8 +237,8 @@ class _ProfileState extends State<Profile> {
                     ),
                     Text(
                       songs[index]['title'],
-                      style: TextStyle(
-                          color: UI.appColor,
+                      style: const TextStyle(
+                          color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
