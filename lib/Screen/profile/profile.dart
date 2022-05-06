@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_first/Screen/profile/edit_profile.dart';
 import 'package:flutter_first/app_ui.dart';
@@ -19,23 +21,39 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: getBody(),
-    );
+        backgroundColor: Colors.transparent,
+        body: Stack(children: [
+          SafeArea(
+              child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    filterQuality: FilterQuality.low,
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                        Colors.white.withOpacity(1), BlendMode.darken),
+                    image: const AssetImage("images/bg.jpg"))),
+          )),
+          getBody(),
+        ]));
   }
 
   Widget getBody() {
-    return SingleChildScrollView(
-      controller: ScrollController(),
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-      child: Column(
-        children: [
-          getBasicInfo(),
-          getOverview(),
-          getGallary(),
-        ],
+    return ClipRRect(
+        child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+      child: SingleChildScrollView(
+        controller: ScrollController(),
+        padding:
+            const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
+        child: Column(
+          children: [
+            getBasicInfo(),
+            getOverview(),
+            getGallary(),
+          ],
+        ),
       ),
-    );
+    ));
   }
 
   Widget getBasicInfo() {
@@ -56,24 +74,29 @@ class _ProfileState extends State<Profile> {
               const Text(
                 "Nguyễn Huỳnh Minh Tiến",
                 overflow: TextOverflow.ellipsis,
+                softWrap: true,
                 style: TextStyle(
                   fontSize: 25,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 "@TienNHM",
                 style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey,
+                    color: UI.appColor,
                     fontStyle: FontStyle.italic),
               ),
               const SizedBox(height: 10),
               OutlinedButton(
                 onPressed: editProfile,
-                child: const Text('Chỉnh sửa'),
+                child: const Text(
+                  'Chỉnh sửa',
+                  style: TextStyle(color: Colors.white),
+                  softWrap: true,
+                ),
               ),
             ],
           ),
@@ -97,7 +120,7 @@ class _ProfileState extends State<Profile> {
                 "Recipes",
                 style: TextStyle(
                   // fontSize: 25,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -106,7 +129,7 @@ class _ProfileState extends State<Profile> {
                 "14",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -126,7 +149,7 @@ class _ProfileState extends State<Profile> {
                 "Followers",
                 style: TextStyle(
                   // fontSize: 25,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -135,7 +158,7 @@ class _ProfileState extends State<Profile> {
                 "100",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -155,7 +178,7 @@ class _ProfileState extends State<Profile> {
                 "Following",
                 style: TextStyle(
                   // fontSize: 25,
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -164,7 +187,7 @@ class _ProfileState extends State<Profile> {
                 "10",
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -181,9 +204,11 @@ class _ProfileState extends State<Profile> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
-        Text("My Gallary",
+        const Text("My Gallary",
             style: TextStyle(
-                color: UI.appColor, fontSize: 20, fontWeight: FontWeight.w500)),
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w500)),
         const SizedBox(height: 20),
         GridView.count(
             crossAxisCount: 2,
@@ -200,7 +225,7 @@ class _ProfileState extends State<Profile> {
                       width: 250,
                       height: 150,
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: UI.appColor),
+                          border: Border.all(width: 2, color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
                               image: AssetImage(songs[index]['img']),
@@ -213,7 +238,7 @@ class _ProfileState extends State<Profile> {
                     Text(
                       songs[index]['title'],
                       style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
@@ -226,9 +251,9 @@ class _ProfileState extends State<Profile> {
                         songs[index]['description'],
                         maxLines: 1,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey,
+                            color: Colors.white.withOpacity(.4),
                             fontWeight: FontWeight.w600),
                       ),
                     )
