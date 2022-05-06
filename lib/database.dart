@@ -24,8 +24,7 @@ const List songs = [
   {
     "img": "assets/images/nong-nao-doll.jpg",
     "title": "Bánh cuốn",
-    "description":
-        "Feel good with this positively timeless playlist! Feel good with this positively timeless playlist! Feel good with this positively timeless playlist! Feel good with this positively timeless playlist!",
+    "description": "Feel good with this positively timeless playlist!",
     "song_count": "100 songs",
     "date": "about 19 hr",
     "color": Color(0xFFf69129),

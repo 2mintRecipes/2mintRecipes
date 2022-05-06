@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_first/app_ui.dart';
 import 'package:flutter_first/components/search_cart.dart';
@@ -18,51 +20,66 @@ class _MyNotificationState extends State<MyNotification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: getNotification(),
-    );
+        backgroundColor: Colors.transparent,
+        body: Stack(children: [
+          SafeArea(
+              child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    filterQuality: FilterQuality.low,
+                    fit: BoxFit.fitHeight,
+                    colorFilter: ColorFilter.mode(
+                        Colors.white.withOpacity(1), BlendMode.darken),
+                    image: AssetImage("images/bg.jpg"))),
+          )),
+          getNotification(),
+        ]));
   }
 
   Widget getNotification() {
-    return SingleChildScrollView(
-      controller: ScrollController(),
-      padding: const EdgeInsets.all(30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// Title
-          getTitle(),
+    return ClipRRect(
+        child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+      child: SingleChildScrollView(
+        controller: ScrollController(),
+        padding: const EdgeInsets.all(30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Title
+            getTitle(),
 
-          /// Notification type
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            controller: ScrollController(),
-            child: getNotificationTypes(),
-          ),
-
-          /// List of notifications
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            controller: ScrollController(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: getNotificationItems(),
+            /// Notification type
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: ScrollController(),
+              child: getNotificationTypes(),
             ),
-          ),
-        ],
+
+            /// List of notifications
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              controller: ScrollController(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: getNotificationItems(),
+              ),
+            ),
+          ],
+        ),
       ),
-    );
+    ));
   }
 
   Widget getTitle() {
     return Column(
       children: const [
-        Text("Notification",
-            style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.bold)),
+        Text(
+          "Notification",
+          style: TextStyle(
+              fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         SizedBox(
           height: 20,
         ),
@@ -86,19 +103,23 @@ class _MyNotificationState extends State<MyNotification> {
             children: [
               Container(
                   decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: UI.appColor),
-                      borderRadius: BorderRadius.circular(15),
-                      color: activeType == index ? UI.appColor : Colors.white),
+                    border: Border.all(
+                      color: Colors.black.withOpacity(.1),
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    color: activeType == index
+                        ? UI.appColor
+                        : Colors.black.withOpacity(.1),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.only(
                         top: 5, right: 10, bottom: 5, left: 10),
                     child: Text(
                       notificationType[index],
                       style: TextStyle(
-                          fontSize: 15,
-                          color:
-                              activeType == index ? Colors.white : UI.appColor,
-                          fontWeight: FontWeight.w600),
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400),
                     ),
                   ))
             ],

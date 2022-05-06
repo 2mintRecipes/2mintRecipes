@@ -1,6 +1,8 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+
+import '../app_ui.dart';
 
 class SearchCard extends StatelessWidget {
   final TextEditingController _searchControl = new TextEditingController();
@@ -8,47 +10,42 @@ class SearchCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 6.0,
+      color: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
       child: Container(
-        // ignore: prefer_const_constructors
         decoration: BoxDecoration(
-          color: Colors.white,
-          // ignore: prefer_const_constructors
-          borderRadius: BorderRadius.all(
-            Radius.circular(5.0),
-          ),
+          color: Colors.black.withOpacity(.1),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: TextField(
           style: TextStyle(
-            fontSize: 15.0,
+            fontSize: 20.0,
+            fontWeight: FontWeight.w500,
             color: Colors.black,
           ),
           decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                borderSide: BorderSide(
+                  width: 2,
+                  color: Colors.white,
+                )),
             contentPadding: EdgeInsets.all(10.0),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(
-                color: Colors.white,
-              ),
-            ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.white,
+                color: Colors.black.withOpacity(.1),
               ),
-              borderRadius: BorderRadius.circular(5.0),
+              borderRadius: BorderRadius.circular(15.0),
             ),
-            hintText: "Search..",
-            prefixIcon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
+            hintText: "Search...",
+            prefixIcon: Icon(Icons.search, color: Colors.white, size: 30),
             suffixIcon: Icon(
-              Icons.filter_list,
-              color: Colors.black,
+              Icons.filter_alt_outlined,
+              color: Colors.white,
             ),
             hintStyle: TextStyle(
-              fontSize: 15.0,
-              color: Colors.black,
+              fontSize: 20.0,
+              color: Colors.white,
             ),
           ),
           maxLines: 1,
