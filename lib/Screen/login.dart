@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_first/Screen/homepage.dart';
 import 'package:flutter_first/Screen/root.dart';
 import 'package:flutter_first/components/button.dart';
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 import '../components/password.dart';
 import '../components/input.dart';
 
@@ -44,8 +44,8 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                 height: MediaQuery.of(context).size.height * 0.4,
-                child: Transform.scale(
-                    scale: 0.6, child: Image.asset(UI.app_logo)),
+                child:
+                    Transform.scale(scale: 0.6, child: Image.asset(UI.appLogo)),
               ),
               Container(
                   padding: EdgeInsets.all(10),

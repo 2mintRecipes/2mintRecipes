@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first/components/button.dart';
 import 'package:flutter_first/components/password.dart';
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 import '../components/input.dart';
 
 class SignUp extends StatefulWidget {
@@ -18,7 +16,7 @@ class SignUp extends StatefulWidget {
 
 Widget signInWith(String icon) {
   return Container(
-    margin: EdgeInsets.all(5),
+    margin: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       border: Border.all(color: Colors.grey.withOpacity(0), width: 0),
       borderRadius: BorderRadius.circular(12),
@@ -33,7 +31,8 @@ Widget signInWith(String icon) {
         ),
         TextButton(
             onPressed: () {},
-            child: Text('Sign In', style: TextStyle(color: Colors.white))),
+            child:
+                const Text('Sign In', style: TextStyle(color: Colors.white))),
       ],
     ),
   );
@@ -55,18 +54,14 @@ class _SignUpState extends State<SignUp> {
                   fit: BoxFit.fitHeight,
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.6), BlendMode.darken),
-                  image: AssetImage("images/welcome_bg.jpg"))),
+                  image: const AssetImage("images/welcome_bg.jpg"))),
         )),
         SingleChildScrollView(
-          child: Container(
-              child: Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                child: Transform.scale(
-                    scale: 0.6, child: Image.asset(UI.app_logo)),
-              ),
+              Transform.scale(scale: 0.6, child: Image.asset(UI.appLogo)),
               ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: BackdropFilter(
@@ -109,7 +104,7 @@ class _SignUpState extends State<SignUp> {
                                       buttonColor: UI.appColor,
                                       textColor: Colors.white,
                                       destination: '/root',
-                                      icon: Icon(Icons.app_registration),
+                                      icon: const Icon(Icons.app_registration),
                                       onTap: () {},
                                     )
                                   ],
@@ -121,7 +116,7 @@ class _SignUpState extends State<SignUp> {
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/login');
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'You have an already Account? Log In',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 17),
@@ -130,13 +125,13 @@ class _SignUpState extends State<SignUp> {
                                 const SizedBox(
                                   height: 20.0,
                                 ),
-                                Text(
+                                const Text(
                                   "_____________  or _____________",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 15),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
                                   width: 300,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -148,7 +143,7 @@ class _SignUpState extends State<SignUp> {
                                 )
                               ])))),
             ],
-          )),
+          ),
         )
       ],
     ));

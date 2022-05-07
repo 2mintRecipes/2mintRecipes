@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/app_ui.dart';
+import 'package:flutter_first/utils/app_ui.dart';
 import 'package:flutter_first/components/search_cart.dart';
 
 import '../database.dart';

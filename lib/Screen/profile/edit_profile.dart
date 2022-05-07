@@ -1,9 +1,8 @@
-import 'dart:html';
 import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/app_ui.dart';
+import 'package:flutter_first/utils/app_ui.dart';
 import 'package:flutter_first/components/input.dart';
 import 'package:flutter_first/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
@@ -109,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
               },
               child: const Text(
                 'Chụp ảnh',
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),
               ),
             ),
             const SizedBox(width: 10),
@@ -119,7 +118,7 @@ class _EditProfileState extends State<EditProfile> {
               },
               child: const Text(
                 'Thư viện',
-                style: const TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),
               ),
             ),
           ],

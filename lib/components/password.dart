@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 
 class Password extends StatelessWidget {
   final String hintText;
@@ -14,15 +14,15 @@ class Password extends StatelessWidget {
       height: size.width / 7,
       width: size.width / 1.25,
       alignment: Alignment.center,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(.1),
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextFormField(
         onChanged: (value) => {},
-        style: TextStyle(color: Colors.white, fontSize: 20),
+        style: const TextStyle(color: Colors.white, fontSize: 20),
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter the password';

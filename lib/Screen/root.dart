@@ -10,7 +10,7 @@ import 'package:flutter_first/Screen/welcome.dart';
 import '../components/nav_model.dart';
 import '../database.dart';
 import '../Screen/musicPlayer.dart';
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 import '../Screen/homepage.dart';
 
 class Root extends StatefulWidget {
@@ -25,7 +25,7 @@ class _RootState extends State<Root> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     // double navHeight = size.width * 0.15;
 
     return Scaffold(
@@ -88,8 +88,8 @@ class _RootState extends State<Root> {
               child: isActive
                   ? Text(
                       navBtn[i].name,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     )
                   : Image.asset(
                       navBtn[i].imagePath,

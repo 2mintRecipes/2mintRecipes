@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first/Screen/profile/edit_profile.dart';
-import 'package:flutter_first/app_ui.dart';
+import 'package:flutter_first/utils/app_ui.dart';
 import 'package:flutter_first/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -82,9 +82,9 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
+              const Text(
                 "@TienNHM",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 18,
                     color: UI.appColor,
                     fontStyle: FontStyle.italic),
