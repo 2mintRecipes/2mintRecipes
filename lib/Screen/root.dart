@@ -26,10 +26,13 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // double navHeight = size.width * 0.15;
+
     return Scaffold(
         body: getBody(),
         bottomNavigationBar: AnimatedContainer(
-          height: size.width * .15,
+          // height: navHeight < 55 ? navHeight : 55,
+          height: 55,
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
               color: UI.appColor,
