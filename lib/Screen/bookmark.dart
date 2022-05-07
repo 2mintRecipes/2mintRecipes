@@ -65,15 +65,15 @@ class _BookmarkState extends State<Bookmark> {
   Widget getTitle() {
     return Padding(
         padding:
-            const EdgeInsets.only(left: 30, right: 20, bottom: 10, top: 10),
+            const EdgeInsets.only(left: 30, right: 20, bottom: 10, top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Bookmark",
                 style: TextStyle(
-                    color: Colors.white.withOpacity(.8),
-                    fontSize: 27,
-                    fontWeight: FontWeight.w600)),
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold)),
           ],
         ));
   }
@@ -126,57 +126,70 @@ class _BookmarkState extends State<Bookmark> {
   }
 
   Widget getListBookmarkItems() {
-    return GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        crossAxisSpacing: 20,
-        padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
-        controller: ScrollController(),
-        children: List.generate(10, (index) {
-          return GestureDetector(
-            onTap: () {},
-            child: Column(
-              children: [
-                Container(
-                  width: 250,
-                  height: 150,
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2, color: Colors.white.withOpacity(.4)),
-                      borderRadius: BorderRadius.circular(15),
-                      image: DecorationImage(
-                          image: AssetImage(songs[index]['img']),
-                          fit: BoxFit.cover),
-                      color: Colors.white.withOpacity(.4)),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Padding(
+          padding: const EdgeInsets.only(left: 5),
+          child: Column(
+              children: List.generate(10, (index) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: GestureDetector(
+                onTap: () {},
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width - 60,
+                      height: MediaQuery.of(context).size.width * .5,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: Colors.white.withOpacity(.4)),
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                              image: AssetImage(songs[index]['img']),
+                              fit: BoxFit.cover),
+                          color: Colors.white.withOpacity(.4)),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      songs[index]['title'],
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                          color: UI.appColor,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.white.withOpacity(.5),
+                          child: const Text(
+                            'MT',
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                        ),
+                        Text(
+                          '  By ',
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white.withOpacity(.7)),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 35,
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  songs[index]['title'],
-                  style: TextStyle(
-                      color: UI.appColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  width: 180,
-                  child: Text(
-                    songs[index]['description'],
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white.withOpacity(.8),
-                        fontWeight: FontWeight.w600),
-                  ),
-                )
-              ],
-            ),
-          );
-        }));
+              ),
+            );
+          }))),
+    );
   }
 }

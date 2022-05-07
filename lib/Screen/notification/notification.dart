@@ -42,7 +42,7 @@ class _MyNotificationState extends State<MyNotification> {
       filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
       child: SingleChildScrollView(
         controller: ScrollController(),
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.only(left: 30, top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
