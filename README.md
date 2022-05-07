@@ -1,4 +1,4 @@
-# flutter_first
+# 2mintRecipes
 
 A new Flutter project.
 
