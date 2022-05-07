@@ -34,6 +34,7 @@ class Button extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10))),
               onPressed: () {
                 onTap();
+                Navigator.pushNamed(context, destination);
               },
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

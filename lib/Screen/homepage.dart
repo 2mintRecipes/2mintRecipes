@@ -1,10 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/app_ui.dart';
+import 'package:flutter_first/utils/app_ui.dart';
 import 'package:flutter_first/components/search_cart.dart';
-
-import '../components/button.dart';
 import '../database.dart';
 
 class Homepage extends StatefulWidget {
@@ -139,7 +137,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           songs[index]['title'],
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: UI.appColor,
                               fontSize: 22,
                               fontWeight: FontWeight.w500),
@@ -277,7 +275,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           songs[index]['title'],
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: UI.appColor,
                               fontSize: 22,
                               fontWeight: FontWeight.w500),
@@ -373,7 +371,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           songs[index]['title'],
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: UI.appColor,
                               fontSize: 22,
                               fontWeight: FontWeight.w500),
@@ -465,11 +463,11 @@ class _HomepageState extends State<Homepage> {
                     onTap: () {},
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.center,
                           child: CircleAvatar(
-                              backgroundImage: const AssetImage(
-                                  'assets/images/nong-nao-doll.jpg'),
+                              backgroundImage:
+                                  AssetImage('assets/images/nong-nao-doll.jpg'),
                               radius: 50,
                               backgroundColor: UI.appColor),
                         ),

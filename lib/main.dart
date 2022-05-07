@@ -6,7 +6,7 @@ import 'package:flutter_first/Screen/login.dart';
 import 'package:flutter_first/Screen/sign_up.dart';
 import 'Screen/root.dart';
 import 'Screen/welcome.dart';
-import 'app_ui.dart';
+import 'utils/app_ui.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -29,13 +29,13 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "2mint Recipes",
         theme: ThemeData(scaffoldBackgroundColor: Colors.transparent),
-        home: Welcome(),
+        home: const Welcome(),
         routes: {
-          Welcome.routeName: (context) => Welcome(),
-          Login.routeName: (context) => Login(),
-          SignUp.routeName: (context) => SignUp(),
-          Root.routeName: (context) => Root(),
-          Bookmark.routeName: (context) => Bookmark()
+          Welcome.routeName: (context) => const Welcome(),
+          Login.routeName: (context) => const Login(),
+          SignUp.routeName: (context) => const SignUp(),
+          Root.routeName: (context) => const Root(),
+          Bookmark.routeName: (context) => const Bookmark()
         });
   }
 }

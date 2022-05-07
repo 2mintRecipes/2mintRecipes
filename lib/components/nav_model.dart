@@ -1,4 +1,4 @@
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 
 class Model {
   final int id;

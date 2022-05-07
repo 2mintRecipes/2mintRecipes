@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../app_ui.dart';
+import '../utils/app_ui.dart';
 
 class SearchCard extends StatelessWidget {
   final TextEditingController _searchControl = new TextEditingController();
