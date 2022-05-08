@@ -21,9 +21,10 @@ const List song_type_2 = [
 ];
 const List songs = [
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Bánh cuốn",
-    "description": "Feel good with this positively timeless playlist!",
+    "description":
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
     "song_count": "100 songs",
     "date": "about 19 hr",
     "color": Color(0xFFf69129),
@@ -39,9 +40,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Bánh xèo",
-    "description": "Relax and indulge with beautiful piano pieces",
+    "description":
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     "song_count": "324 songs",
     "date": "about 14 hr",
     "color": Color(0xFF64849c),
@@ -57,9 +59,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Phở gà",
-    "description": "Keep calm and focus with ambient and post-rock music.",
+    "description":
+        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ",
     "song_count": "195 songs",
     "date": "about 10 hr",
     "color": Color(0xFF58546c),
@@ -75,8 +78,9 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Cheese Cake",
+    "img": "assets/images/MIT2021.png",
+    "title":
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "description": "Beats to relax, study and focus.",
     "song_count": "599 songs",
     "date": "about 21 hr",
@@ -93,9 +97,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Trà Dâu",
-    "description": "The perfect study beats, twenty four seven.",
+    "description":
+        "Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?",
     "song_count": "317 songs",
     "date": "about 11 hr",
     "color": Color(0xFF93689a),
@@ -111,9 +116,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Chill Hits",
-    "description": "Kick back to the best new and recent chill tunes.",
+    "img": "assets/images/MIT2021.png",
+    "title": "Bánh bao",
+    "description":
+        "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
     "song_count": "130 songs",
     "date": "about 7 hr",
     "color": Color(0xFFa4c4d3),
@@ -129,9 +135,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Dark & Stormy",
-    "description": "Beautifully dark, dramatic tracks.",
+    "img": "assets/images/MIT2021.png",
+    "title": "Bánh mì",
+    "description":
+        "But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?",
     "song_count": "50 songs",
     "date": "about 17 hr",
     "color": Color(0xFF5e4f78),
@@ -147,9 +154,9 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Feel Good Piano",
-    "description": "Positive piano music",
+    "img": "assets/images/MIT2021.png",
+    "title": "Trà tắc",
+    "description": "Et harum quidem rerum facilis est et expedita distinctio.",
     "song_count": "69 songs",
     "date": "2 hr 14 min",
     "color": Color(0xFFa4c1ad),
@@ -165,9 +172,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Sad Songs",
-    "description": "Beautiful songs to break your heart...",
+    "img": "assets/images/MIT2021.png",
+    "title": "Match đá xay",
+    "description":
+        "In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided",
     "song_count": "60 songs",
     "date": "3 hr 25 min",
     "color": Color(0xFFd9e3ec),
@@ -183,9 +191,10 @@ const List songs = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Mood Booster",
-    "description": "Get happy with today's dose of feel-good songs",
+    "img": "assets/images/MIT2021.png",
+    "title": "Bánh cuốn",
+    "description":
+        "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
     "song_count": "75 songs",
     "date": "3 hr 56 min",
     "color": Color(0xFF4e6171),
@@ -204,9 +213,10 @@ const List songs = [
 
 const List drinks = [
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Trà dâu",
-    "description": "Feel good with this positively timeless playlist!",
+    "description":
+        "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
     "song_count": "100 songs",
     "date": "about 19 hr",
     "color": Color(0xFFf69129),
@@ -222,9 +232,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Trà sữa",
-    "description": "Relax and indulge with beautiful piano pieces",
+    "description":
+        "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
     "song_count": "324 songs",
     "date": "about 14 hr",
     "color": Color(0xFF64849c),
@@ -240,9 +251,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Trà đào",
-    "description": "Keep calm and focus with ambient and post-rock music.",
+    "description":
+        "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
     "song_count": "195 songs",
     "date": "about 10 hr",
     "color": Color(0xFF58546c),
@@ -258,9 +270,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Cà phê",
-    "description": "Beats to relax, study and focus.",
+    "description":
+        "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
     "song_count": "599 songs",
     "date": "about 21 hr",
     "color": Color(0xFFbad6ec),
@@ -276,9 +289,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
+    "img": "assets/images/MIT2021.png",
     "title": "Sinh tố bơ",
-    "description": "The perfect study beats, twenty four seven.",
+    "description":
+        "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
     "song_count": "317 songs",
     "date": "about 11 hr",
     "color": Color(0xFF93689a),
@@ -294,9 +308,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Chill Hits",
-    "description": "Kick back to the best new and recent chill tunes.",
+    "img": "assets/images/MIT2021.png",
+    "title": "Trà sữa khổng lồ",
+    "description":
+        "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.",
     "song_count": "130 songs",
     "date": "about 7 hr",
     "color": Color(0xFFa4c4d3),
@@ -312,9 +327,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Dark & Stormy",
-    "description": "Beautifully dark, dramatic tracks.",
+    "img": "assets/images/MIT2021.png",
+    "title": "Chè Thái",
+    "description":
+        "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
     "song_count": "50 songs",
     "date": "about 17 hr",
     "color": Color(0xFF5e4f78),
@@ -330,9 +346,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Feel Good Piano",
-    "description": "Positive piano music",
+    "img": "assets/images/MIT2021.png",
+    "title": "Chè bưởi",
+    "description":
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "song_count": "69 songs",
     "date": "2 hr 14 min",
     "color": Color(0xFFa4c1ad),
@@ -348,9 +365,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Sad Songs",
-    "description": "Beautiful songs to break your heart...",
+    "img": "assets/images/MIT2021.png",
+    "title": "Chè đậu đen",
+    "description":
+        "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
     "song_count": "60 songs",
     "date": "3 hr 25 min",
     "color": Color(0xFFd9e3ec),
@@ -366,9 +384,10 @@ const List drinks = [
     ]
   },
   {
-    "img": "assets/images/nong-nao-doll.jpg",
-    "title": "Mood Booster",
-    "description": "Get happy with today's dose of feel-good songs",
+    "img": "assets/images/MIT2021.png",
+    "title": "Chè đậu xanh",
+    "description":
+        "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
     "song_count": "75 songs",
     "date": "3 hr 56 min",
     "color": Color(0xFF4e6171),
