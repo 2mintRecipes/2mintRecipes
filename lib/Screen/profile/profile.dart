@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const GFAvatar(
-          backgroundImage: AssetImage("assets/images/nong-nao-doll.jpg"),
+          backgroundImage: AssetImage("assets/images/MIT2021.png"),
           shape: GFAvatarShape.circle,
           size: 64,
         ),

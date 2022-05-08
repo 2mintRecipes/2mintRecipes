@@ -42,24 +42,25 @@ class _BookmarkState extends State<Bookmark> {
         child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
             child: SingleChildScrollView(
+                controller: ScrollController(),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  /// Title
-                  getTitle(),
+                      /// Title
+                      getTitle(),
 
-                  /// Search card
-                  Padding(
-                      padding:
-                          const EdgeInsets.only(left: 30, top: 20, right: 30),
-                      child: SearchCard()),
+                      /// Search card
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 20, right: 30),
+                          child: SearchCard()),
 
-                  /// Get Bookmark Type
-                  getBookmarkType(),
+                      /// Get Bookmark Type
+                      getBookmarkType(),
 
-                  /// Bookmark Items
-                  getListBookmarkItems(),
-                ]))));
+                      /// Bookmark Items
+                      getListBookmarkItems(),
+                    ]))));
   }
 
   Widget getTitle() {
@@ -68,7 +69,7 @@ class _BookmarkState extends State<Bookmark> {
             const EdgeInsets.only(left: 30, right: 20, bottom: 10, top: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: const [
             Text("Bookmark",
                 style: TextStyle(
                     fontSize: 30,
@@ -81,6 +82,7 @@ class _BookmarkState extends State<Bookmark> {
   Widget getBookmarkType() {
     return SingleChildScrollView(
       //lists with kind tags
+      controller: ScrollController(),
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(left: 30, top: 20, bottom: 20),
       child: Row(
@@ -128,6 +130,7 @@ class _BookmarkState extends State<Bookmark> {
   Widget getListBookmarkItems() {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
+      controller: ScrollController(),
       child: Padding(
           padding: const EdgeInsets.only(left: 5),
           child: Column(

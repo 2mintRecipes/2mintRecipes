@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
     return Column(
       children: [
         const GFAvatar(
-          backgroundImage: AssetImage("assets/images/nong-nao-doll.jpg"),
+          backgroundImage: AssetImage("assets/images/MIT2021.png"),
           shape: GFAvatarShape.circle,
           size: 150,
         ),

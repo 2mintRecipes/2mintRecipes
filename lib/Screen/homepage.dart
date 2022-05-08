@@ -467,7 +467,7 @@ class _HomepageState extends State<Homepage> {
                           alignment: Alignment.center,
                           child: CircleAvatar(
                               backgroundImage:
-                                  AssetImage('assets/images/nong-nao-doll.jpg'),
+                                  AssetImage('assets/images/MIT2021.png'),
                               radius: 50,
                               backgroundColor: UI.appColor),
                         ),
