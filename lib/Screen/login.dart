@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:x2mint_recipes/Screen/homepage.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
@@ -22,30 +23,36 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
         body: Stack(
       children: [
         SafeArea(
             child: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.fitHeight,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.6), BlendMode.darken),
-                  image: AssetImage("assets/images/welcome_bg.jpg"))),
+            image: DecorationImage(
+              filterQuality: FilterQuality.low,
+              fit: BoxFit.fitHeight,
+              colorFilter: ColorFilter.mode(
+                Colors.black.withOpacity(0.6),
+                BlendMode.darken,
+              ),
+              image: AssetImage("assets/images/welcome_bg.jpg"),
+            ),
+          ),
         )),
         SingleChildScrollView(
-          child: Container(
-              child: Column(
+          controller: ScrollController(),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4,
-                child:
-                    Transform.scale(scale: 0.6, child: Image.asset(UI.appLogo)),
+                child: Transform.scale(
+                  scale: 0.6,
+                  child: Image.asset(UI.appLogo),
+                ),
               ),
               Container(
                   padding: EdgeInsets.all(10),
@@ -71,32 +78,36 @@ class _LoginState extends State<Login> {
                                   //       fontSize: 30, fontWeight: FontWeight.bold),
                                   // ),
                                   Input(
-                                      icon: Icons.alternate_email_outlined,
-                                      hintText: 'Email',
-                                      isPassword: false,
-                                      isEmail: true,
-                                      textController: emailController),
-                                  Password(
-                                    hintText: "Password",
+                                    icon: Icons.alternate_email_outlined,
+                                    hintText: 'Email',
+                                    isPassword: false,
+                                    isEmail: true,
+                                    textController: emailController,
                                   ),
-                                  Button(
-                                    title: 'Log In',
-                                    buttonColor: UI.appColor,
-                                    textColor: Colors.white,
-                                    destination: '/root',
-                                    icon: Icon(Icons.login_rounded),
-                                    onTap: () {
-                                      //FirebaseAuth.instance
-                                      //     .signInWithEmailAndPassword(
-                                      //         email: emailController.text,
-                                      //         password: passwordController.text)
-                                      //     .then((value) {
-                                      //   Navigator.push(context,
-                                      //       MaterialPageRoute(builder: (context) => Homepage()));
-                                      // }).onError((error, stackTrace) {
-                                      //   print("Error ${error.toString()}");
-                                      // });
+                                  Input(
+                                    icon: Icons.lock_outline_sharp,
+                                    hintText: 'Password',
+                                    isPassword: true,
+                                    isEmail: false,
+                                    textController: passwordController,
+                                  ),
+                                  // Password(hintText: "Password"),
+                                  TextButton(
+                                    onPressed: () {
+                                      loginWithUsernamePassword();
                                     },
+                                    child: Text("Login"),
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.white,
+                                      backgroundColor: UI.appColor,
+                                    ),
+
+                                    // title: 'Log In',
+                                    // buttonColor: UI.appColor,
+                                    // textColor: Colors.white,
+                                    // destination: '/root',
+                                    // icon: Icon(Icons.login_rounded),
+                                    // onTap: () {},
                                   )
                                 ]),
                             Container(
@@ -135,9 +146,25 @@ class _LoginState extends State<Login> {
                     ),
                   ))
             ],
-          )),
+          ),
         )
       ],
     ));
+  }
+
+  void loginWithUsernamePassword() {
+    var email = emailController.text;
+    var password = passwordController.text;
+
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Homepage()),
+      );
+    }).onError((error, stackTrace) {
+      print("Error ${error.toString()}");
+    });
   }
 }
