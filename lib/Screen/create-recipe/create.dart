@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/utils/app_ui.dart';
-import 'package:flutter_first/components/search_cart.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
 
 import '../../database.dart';
@@ -37,7 +37,7 @@ class _CreateState extends State<Create> {
                     Colors.white.withOpacity(1),
                     BlendMode.darken,
                   ),
-                  image: const AssetImage("images/bg.jpg"),
+                  image: const AssetImage("assets/images/bg.jpg"),
                 ),
               ),
             ),
@@ -250,43 +250,17 @@ class _CreateState extends State<Create> {
                 crossAxisSpacing: 10,
                 shrinkWrap: true,
                 controller: ScrollController(),
-                children: getListSteps(),
+                children:
+                    List.generate(numSteps, (index) => getStepItem(index + 1)),
               ),
 
               /// Add button
-              const SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () {
-                  setState(() {
-                    numSteps += 1;
-                  });
-                },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: BorderSide(
-                        color: Colors.white.withOpacity(0.4),
-                        width: 2,
-                      ),
-                    ),
-                  ),
-                ),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: const Text(
-                  'Add new step',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+              getAddNewRecipeButton(),
             ],
           ),
         ),
       ),
     );
-  }
-
-  List<Widget> getListSteps() {
-    return List.generate(numSteps, (index) => getStepItem(index + 1));
   }
 
   Widget getStepItem(int index) {
@@ -332,6 +306,37 @@ class _CreateState extends State<Create> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget getAddNewRecipeButton() {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        OutlinedButton(
+          onPressed: () {
+            setState(() {
+              numSteps += 1;
+            });
+          },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: BorderSide(
+                  color: Colors.white.withOpacity(0.4),
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: const Text(
+            'Add new step',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -5,11 +5,13 @@ const List notificationType = [
   "Tất cả",
 ];
 const List song_type_1 = [
+  "Cơm",
   "Gỏi",
   "Bún",
   "Thức uống",
   "Lẩu",
   "Bánh",
+  "Đồ chay"
 ];
 const List song_type_2 = [
   "Podcasts",
@@ -79,9 +81,9 @@ const List songs = [
   },
   {
     "img": "assets/images/MIT2021.png",
-    "title":
+    "title": "Bánh hạnh nhân",
+    "description":
         "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "description": "Beats to relax, study and focus.",
     "song_count": "599 songs",
     "date": "about 21 hr",
     "color": Color(0xFFbad6ec),
@@ -173,7 +175,7 @@ const List songs = [
   },
   {
     "img": "assets/images/MIT2021.png",
-    "title": "Match đá xay",
+    "title": "Matcha đá xay",
     "description":
         "In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided",
     "song_count": "60 songs",

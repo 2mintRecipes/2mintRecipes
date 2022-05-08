@@ -1,16 +1,9 @@
-//import 'dart:html';
-
-import 'dart:html';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_first/Screen/create-recipe/create.dart';
-import 'package:flutter_first/Screen/notification/notification.dart';
-import 'package:flutter_first/Screen/profile/profile.dart';
-import 'package:flutter_first/Screen/bookmark.dart';
-import 'package:flutter_first/Screen/welcome.dart';
+import 'package:x2mint_recipes/Screen/create-recipe/create.dart';
+import 'package:x2mint_recipes/Screen/notification/notification.dart';
+import 'package:x2mint_recipes/Screen/profile/profile.dart';
+import 'package:x2mint_recipes/Screen/bookmark.dart';
 import '../components/nav_model.dart';
-import '../database.dart';
-import '../Screen/musicPlayer.dart';
 import '../utils/app_ui.dart';
 import '../Screen/homepage.dart';
 
@@ -81,10 +74,10 @@ class _RootState extends State<Root> {
           Align(
               alignment: Alignment.center,
               child: isActive
-                  ? Text(
-                      navBtn[i].name,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                  ? Image.asset(
+                      navBtn[i].imagePath,
+                      color: Colors.orangeAccent,
+                      scale: 0.7,
                     )
                   : Image.asset(
                       navBtn[i].imagePath,

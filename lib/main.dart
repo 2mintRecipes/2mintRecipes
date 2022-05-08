@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_first/Screen/bookmark.dart';
-import 'package:flutter_first/Screen/root.dart';
-import 'package:flutter_first/Screen/login.dart';
-import 'package:flutter_first/Screen/sign_up.dart';
+import 'package:x2mint_recipes/Screen/bookmark.dart';
+import 'package:x2mint_recipes/Screen/root.dart';
+import 'package:x2mint_recipes/Screen/login.dart';
+import 'package:x2mint_recipes/Screen/sign_up.dart';
 import 'Screen/root.dart';
 import 'Screen/welcome.dart';
 import 'utils/app_ui.dart';

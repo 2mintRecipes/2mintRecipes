@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(flutter_first LANGUAGES CXX)
+project(x2mint_recipes LANGUAGES CXX)
 
-set(BINARY_NAME "flutter_first")
+set(BINARY_NAME "x2mint_recipes")
 
 cmake_policy(SET CMP0063 NEW)
 
