@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:x2mint_recipes/Screen/bookmark.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
 import 'package:x2mint_recipes/Screen/login.dart';
@@ -8,8 +10,11 @@ import 'Screen/root.dart';
 import 'Screen/welcome.dart';
 import 'utils/app_ui.dart';
 
-void main() {
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
   SystemChrome.setPreferredOrientations([

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "530052324208",
+    "project_id": "app-2mint-recipes",
+    "storage_bucket": "app-2mint-recipes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530052324208:android:e3a8203a5a4835af75cdb5",
+        "android_client_info": {
+          "package_name": "com.example.x2mint_recipes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530052324208-ioct4vm38dn8r4ku42d93d31h7bf4l8p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNc0WQsNvM9guXwQ1fTGryVrGepw7p1II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530052324208-ioct4vm38dn8r4ku42d93d31h7bf4l8p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
