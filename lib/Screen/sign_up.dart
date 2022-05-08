@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/components/button.dart';
-import 'package:flutter_first/components/password.dart';
+import 'package:x2mint_recipes/components/button.dart';
+import 'package:x2mint_recipes/components/password.dart';
 import '../utils/app_ui.dart';
 import '../components/input.dart';
 
@@ -54,7 +54,7 @@ class _SignUpState extends State<SignUp> {
                   fit: BoxFit.fitHeight,
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.6), BlendMode.darken),
-                  image: const AssetImage("images/welcome_bg.jpg"))),
+                  image: const AssetImage("assets/images/welcome_bg.jpg"))),
         )),
         SingleChildScrollView(
           child: Column(

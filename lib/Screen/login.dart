@@ -3,9 +3,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/Screen/homepage.dart';
-import 'package:flutter_first/Screen/root.dart';
-import 'package:flutter_first/components/button.dart';
+import 'package:x2mint_recipes/Screen/homepage.dart';
+import 'package:x2mint_recipes/Screen/root.dart';
+import 'package:x2mint_recipes/components/button.dart';
 import '../utils/app_ui.dart';
 import '../components/password.dart';
 import '../components/input.dart';
@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
                   fit: BoxFit.fitHeight,
                   colorFilter: ColorFilter.mode(
                       Colors.black.withOpacity(0.6), BlendMode.darken),
-                  image: AssetImage("images/welcome_bg.jpg"))),
+                  image: AssetImage("assets/images/welcome_bg.jpg"))),
         )),
         SingleChildScrollView(
           child: Container(

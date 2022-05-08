@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 
 import '../database.dart';
 

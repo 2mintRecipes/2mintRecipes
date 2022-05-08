@@ -2,9 +2,9 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/utils/app_ui.dart';
-import 'package:flutter_first/components/input.dart';
-import 'package:flutter_first/components/search_cart.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Colors.white.withOpacity(1), BlendMode.darken),
-                    image: const AssetImage("images/bg.jpg"))),
+                    image: const AssetImage("assets/images/bg.jpg"))),
           )),
           getBody(),
         ]));
@@ -94,7 +94,7 @@ class _EditProfileState extends State<EditProfile> {
     return Column(
       children: [
         const GFAvatar(
-          backgroundImage: AssetImage("assets/images/nong-nao-doll.jpg"),
+          backgroundImage: AssetImage("assets/images/MIT2021.png"),
           shape: GFAvatarShape.circle,
           size: 150,
         ),

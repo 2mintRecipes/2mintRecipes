@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/utils/app_ui.dart';
-import 'package:flutter_first/components/search_cart.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/components/search_cart.dart';
 import '../database.dart';
 
 class Homepage extends StatefulWidget {
@@ -28,7 +28,7 @@ class _HomepageState extends State<Homepage> {
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                       Colors.white.withOpacity(1), BlendMode.darken),
-                  image: const AssetImage("images/bg.jpg"))),
+                  image: const AssetImage("assets/images/bg.jpg"))),
         )),
         getBody()
       ]),
@@ -45,20 +45,12 @@ class _HomepageState extends State<Homepage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                   /// Title
-                  const Padding(
-                      padding: EdgeInsets.only(left: 30, top: 20),
-                      child: Text(
-                        "Find best recipes for cooking",
-                        style: TextStyle(
-                            fontSize: 30,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      )),
+                  getTitle(),
 
                   /// Search card
                   Padding(
                       padding:
-                          const EdgeInsets.only(left: 30, top: 20, right: 30),
+                          const EdgeInsets.only(left: 30, right: 30, top: 10),
                       child: SearchCard()),
 
                   /// Trending now
@@ -73,6 +65,16 @@ class _HomepageState extends State<Homepage> {
                   /// Hot Creators
                   getHotCreators(),
                 ]))));
+  }
+
+  Widget getTitle() {
+    return const Padding(
+        padding: EdgeInsets.only(left: 30, top: 30),
+        child: Text(
+          "2mint Recipes",
+          style: TextStyle(
+              fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+        ));
   }
 
   Widget getTrendingNow() {
@@ -467,7 +469,7 @@ class _HomepageState extends State<Homepage> {
                           alignment: Alignment.center,
                           child: CircleAvatar(
                               backgroundImage:
-                                  AssetImage('assets/images/nong-nao-doll.jpg'),
+                                  AssetImage('assets/images/MIT2021.png'),
                               radius: 50,
                               backgroundColor: UI.appColor),
                         ),

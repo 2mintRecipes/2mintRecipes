@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_first/Screen/login.dart';
-import 'package:flutter_first/Screen/sign_up.dart';
-import 'package:flutter_first/components/button.dart';
+import 'package:x2mint_recipes/Screen/login.dart';
+import 'package:x2mint_recipes/Screen/sign_up.dart';
+import 'package:x2mint_recipes/components/button.dart';
 import '../utils/app_ui.dart';
 
 class Welcome extends StatelessWidget {
@@ -18,7 +18,7 @@ class Welcome extends StatelessWidget {
                     fit: BoxFit.fitHeight,
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.6), BlendMode.darken),
-                    image: const AssetImage("images/welcome_bg.jpg"))),
+                    image: const AssetImage("assets/images/welcome_bg.jpg"))),
             child: Column(children: [
               Expanded(child: Container()),
               Expanded(

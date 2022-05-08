@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_first/Screen/profile/edit_profile.dart';
-import 'package:flutter_first/utils/app_ui.dart';
-import 'package:flutter_first/components/search_cart.dart';
+import 'package:x2mint_recipes/Screen/profile/edit_profile.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:getwidget/getwidget.dart';
 
 import '../../database.dart';
@@ -31,7 +31,7 @@ class _ProfileState extends State<Profile> {
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                         Colors.white.withOpacity(1), BlendMode.darken),
-                    image: const AssetImage("images/bg.jpg"))),
+                    image: const AssetImage("assets/images/bg.jpg"))),
           )),
           getBody(),
         ]));
@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const GFAvatar(
-          backgroundImage: AssetImage("assets/images/nong-nao-doll.jpg"),
+          backgroundImage: AssetImage("assets/images/MIT2021.png"),
           shape: GFAvatarShape.circle,
           size: 64,
         ),
