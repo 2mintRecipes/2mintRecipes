@@ -3,6 +3,7 @@
 import 'dart:html';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_first/Screen/create-recipe/create.dart';
 import 'package:flutter_first/Screen/notification/notification.dart';
 import 'package:flutter_first/Screen/profile/profile.dart';
 import 'package:flutter_first/Screen/bookmark.dart';
@@ -63,13 +64,7 @@ class _RootState extends State<Root> {
       children: const [
         Homepage(),
         Bookmark(),
-        Center(
-          child: Text(
-            "Create",
-            style: TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-        ),
+        Create(),
         MyNotification(),
         Profile(),
       ],
