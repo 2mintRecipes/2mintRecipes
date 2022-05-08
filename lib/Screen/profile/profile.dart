@@ -214,6 +214,7 @@ class _ProfileState extends State<Profile> {
             crossAxisCount: 2,
             shrinkWrap: true,
             crossAxisSpacing: 20,
+            mainAxisSpacing: 30,
             // padding: const EdgeInsets.all(10),
             controller: ScrollController(),
             children: List.generate(10, (index) {

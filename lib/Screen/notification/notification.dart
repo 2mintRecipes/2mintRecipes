@@ -61,17 +61,21 @@ class _MyNotificationState extends State<MyNotification> {
   }
 
   Widget getTitle() {
-    return Column(
-      children: const [
-        Text(
-          "Notification",
-          style: TextStyle(
-              fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text(
+            "Notifications",
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -122,7 +126,7 @@ class _MyNotificationState extends State<MyNotification> {
   }
 
   Widget getNotificationItem(int index) {
-    double cWidth = MediaQuery.of(context).size.width * 0.7;
+    double cWidth = MediaQuery.of(context).size.width * 0.65;
     double notificationWidth = MediaQuery.of(context).size.width * 0.88;
 
     return GestureDetector(
@@ -168,6 +172,7 @@ class _MyNotificationState extends State<MyNotification> {
                             songs[index]['title'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.justify,
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,

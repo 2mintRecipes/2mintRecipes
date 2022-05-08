@@ -65,8 +65,7 @@ class _BookmarkState extends State<Bookmark> {
 
   Widget getTitle() {
     return Padding(
-        padding:
-            const EdgeInsets.only(left: 30, right: 20, bottom: 10, top: 20),
+        padding: const EdgeInsets.only(left: 30, right: 20, top: 35),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [

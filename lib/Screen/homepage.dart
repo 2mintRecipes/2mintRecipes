@@ -69,7 +69,7 @@ class _HomepageState extends State<Homepage> {
 
   Widget getTitle() {
     return const Padding(
-        padding: EdgeInsets.only(left: 30, top: 30),
+        padding: EdgeInsets.only(left: 30, top: 35),
         child: Text(
           "2mint Recipes",
           style: TextStyle(
@@ -88,7 +88,7 @@ class _HomepageState extends State<Homepage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Trending now 💥",
+                Text("Trending 💥",
                     style: TextStyle(
                         color: Colors.white.withOpacity(.8),
                         fontSize: 27,
