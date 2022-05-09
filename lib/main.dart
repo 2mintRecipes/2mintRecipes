@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "2mint Recipes",
       theme: ThemeData(scaffoldBackgroundColor: Colors.transparent),
-      home: const Homepage(),
-      initialRoute: '/',
+      home: const Root(),
+      initialRoute: '/root',
       onGenerateRoute: _getRoute,
       routes: {
         Welcome.routeName: (context) => const Welcome(),
@@ -54,14 +54,14 @@ class MyApp extends StatelessWidget {
     bool isLogged = false;
     Auth.isLogged().then((value) => isLogged = value);
 
-    if (settings.name != '/login' || isLogged) {
-      return null;
+    if (!isLogged) {
+      return MaterialPageRoute<void>(
+        settings: settings,
+        builder: (BuildContext context) => const Login(),
+        fullscreenDialog: true,
+      );
     }
 
-    return MaterialPageRoute<void>(
-      settings: settings,
-      builder: (BuildContext context) => const Login(),
-      fullscreenDialog: true,
-    );
+    return null;
   }
 }
