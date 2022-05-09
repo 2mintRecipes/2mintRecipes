@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:x2mint_recipes/Screen/homepage.dart';
+import 'package:x2mint_recipes/common/auth.dart';
 import 'firebase_options.dart';
 import 'package:x2mint_recipes/Screen/bookmark.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
@@ -27,20 +29,39 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "2mint Recipes",
-        theme: ThemeData(scaffoldBackgroundColor: Colors.transparent),
-        home: const Welcome(),
-        routes: {
-          Welcome.routeName: (context) => const Welcome(),
-          Login.routeName: (context) => const Login(),
-          SignUp.routeName: (context) => const SignUp(),
-          Root.routeName: (context) => const Root(),
-          Bookmark.routeName: (context) => const Bookmark()
-        });
+      debugShowCheckedModeBanner: false,
+      title: "2mint Recipes",
+      theme: ThemeData(scaffoldBackgroundColor: Colors.transparent),
+      home: const Homepage(),
+      initialRoute: '/',
+      onGenerateRoute: _getRoute,
+      routes: {
+        Welcome.routeName: (context) => const Welcome(),
+        Login.routeName: (context) => const Login(),
+        SignUp.routeName: (context) => const SignUp(),
+        Root.routeName: (context) => const Root(),
+        Bookmark.routeName: (context) => const Bookmark(),
+      },
+    );
+  }
+
+  Route<dynamic>? _getRoute(RouteSettings settings) {
+    bool isLogged = false;
+    Auth.isLogged().then((value) => isLogged = value);
+
+    if (settings.name != '/login' || isLogged) {
+      return null;
+    }
+
+    return MaterialPageRoute<void>(
+      settings: settings,
+      builder: (BuildContext context) => const Login(),
+      fullscreenDialog: true,
+    );
   }
 }

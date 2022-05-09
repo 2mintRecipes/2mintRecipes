@@ -1,12 +1,12 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x2mint_recipes/Screen/homepage.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
 import 'package:x2mint_recipes/components/button.dart';
+import 'package:x2mint_recipes/utils/seccure_storage.dart';
 import '../utils/app_ui.dart';
 import '../components/password.dart';
 import '../components/input.dart';
@@ -21,6 +21,9 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  SecureStorage secureStorage = SecureStorage();
+
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
@@ -32,7 +35,7 @@ class _LoginState extends State<Login> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   filterQuality: FilterQuality.low,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.6),
                     BlendMode.darken,
@@ -165,6 +168,11 @@ class _LoginState extends State<Login> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
       print(value);
+
+      if (value.user != null) {
+        secureStorage.writeSecureData('uid', value.user!.uid);
+      }
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Homepage()),

@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/components/search_cart.dart';
+import 'package:x2mint_recipes/utils/seccure_storage.dart';
 import '../database.dart';
 
 class Homepage extends StatefulWidget {
-  static const routeName = '/homepage';
+  static const routeName = '/';
   const Homepage({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +16,27 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  int activeMenu1 = 0;
+  int activeMenu = 0;
+  SecureStorage secureStorage = SecureStorage();
+  String? uid;
+
+  @override
+  void initState() {
+    super.initState();
+
+    init();
+  }
+
+  Future init() async {
+    final uid = await secureStorage.readSecureData('uid');
+
+    if (uid != null) {
+      setState(() {
+        this.uid = uid;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,12 +45,16 @@ class _HomepageState extends State<Homepage> {
         SafeArea(
             child: Container(
           decoration: BoxDecoration(
-              image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(1), BlendMode.darken),
-                  image: const AssetImage("assets/images/bg.jpg"))),
+            image: DecorationImage(
+              filterQuality: FilterQuality.low,
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(
+                Colors.white.withOpacity(1),
+                BlendMode.darken,
+              ),
+              image: const AssetImage("assets/images/bg.jpg"),
+            ),
+          ),
         )),
         getBody()
       ]),
@@ -68,11 +94,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget getTitle() {
-    return const Padding(
-        padding: EdgeInsets.only(left: 30, top: 35),
+    return Padding(
+        padding: const EdgeInsets.only(left: 30, top: 35),
         child: Text(
-          "2mint Recipes",
-          style: TextStyle(
+          uid ?? '2mint Recipes',
+          style: const TextStyle(
               fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
         ));
   }
@@ -204,7 +230,7 @@ class _HomepageState extends State<Homepage> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
-                      activeMenu1 = index;
+                      activeMenu = index;
                     });
                   },
                   child: Column(
@@ -216,7 +242,7 @@ class _HomepageState extends State<Homepage> {
                               color: Colors.black.withOpacity(.1),
                             ),
                             borderRadius: BorderRadius.circular(15),
-                            color: activeMenu1 == index
+                            color: activeMenu == index
                                 ? UI.appColor
                                 : Colors.black.withOpacity(.1),
                           ),
