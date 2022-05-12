@@ -27,11 +27,13 @@ class Button extends StatelessWidget {
         height: 50,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-              onSurface: Colors.white,
-              shape: RoundedRectangleBorder(
-                  //to set border radius to button
-                  borderRadius: BorderRadius.circular(10))),
+            primary: buttonColor,
+            onSurface: Colors.white,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
           onPressed: () {
             onTap();
             Navigator.pushNamed(context, destination);

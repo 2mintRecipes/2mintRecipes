@@ -14,3 +14,13 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## TODO
+
+Add following lines to your `android\local.properties` file:
+
+```
+flutter.minSdkVersion=21
+flutter.targetSdkVersion=30
+flutter.compileSdkVersion=30
+```

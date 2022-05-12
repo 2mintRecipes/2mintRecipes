@@ -2,9 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/components/search_cart.dart';
-
-import '../../database.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 
 class MyNotification extends StatefulWidget {
   static const routeName = '/notification';
@@ -20,44 +18,51 @@ class _MyNotificationState extends State<MyNotification> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Stack(children: [
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
           SafeArea(
-              child: Container(
-            decoration: BoxDecoration(
+            child: Container(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                    filterQuality: FilterQuality.low,
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                        Colors.white.withOpacity(1), BlendMode.darken),
-                    image: const AssetImage("assets/images/bg.jpg"))),
-          )),
+                  filterQuality: FilterQuality.low,
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(1), BlendMode.darken),
+                  image: const AssetImage("assets/images/bg.jpg"),
+                ),
+              ),
+            ),
+          ),
           getNotification(),
-        ]));
+        ],
+      ),
+    );
   }
 
   Widget getNotification() {
     return ClipRRect(
-        child: BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-      child: SingleChildScrollView(
-        controller: ScrollController(),
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// Title
-            getTitle(),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
+        child: SingleChildScrollView(
+          controller: ScrollController(),
+          padding: const EdgeInsets.only(left: 30, top: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Title
+              getTitle(),
 
-            /// Notification type
-            getNotificationTypes(),
+              /// Notification type
+              getNotificationTypes(),
 
-            /// List of notifications
-            getListNotifications(),
-          ],
+              /// List of notifications
+              getListNotifications(),
+            ],
+          ),
         ),
       ),
-    ));
+    );
   }
 
   Widget getTitle() {
@@ -84,44 +89,49 @@ class _MyNotificationState extends State<MyNotification> {
       scrollDirection: Axis.horizontal,
       controller: ScrollController(),
       child: Row(
-          children: List.generate(notificationType.length, (index) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 25),
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                activeType = index;
-              });
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black.withOpacity(.1),
+        children: List.generate(
+          notificationType.length,
+          (index) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 25),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    activeType = index;
+                  });
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.black.withOpacity(.1),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                        color: activeType == index
+                            ? UI.appColor
+                            : Colors.black.withOpacity(.1),
                       ),
-                      borderRadius: BorderRadius.circular(15),
-                      color: activeType == index
-                          ? UI.appColor
-                          : Colors.black.withOpacity(.1),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 5, right: 10, bottom: 5, left: 10),
-                      child: Text(
-                        notificationType[index],
-                        style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            top: 5, right: 10, bottom: 5, left: 10),
+                        child: Text(
+                          notificationType[index],
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400),
+                        ),
                       ),
-                    ))
-              ],
-            ),
-          ),
-        );
-      })),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -144,9 +154,10 @@ class _MyNotificationState extends State<MyNotification> {
                 padding: const EdgeInsets.all(10),
                 width: notificationWidth,
                 decoration: BoxDecoration(
-                    // border: Border.all(width: 2, color: UI.appColor),
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.white.withOpacity(.4)),
+                  // border: Border.all(width: 2, color: UI.appColor),
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white.withOpacity(.4),
+                ),
                 child: Row(
                   children: [
                     Container(

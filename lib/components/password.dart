@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../utils/app_ui.dart';
-
 class Password extends StatelessWidget {
   final String hintText;
 
-  Password({required this.hintText});
+  const Password({required this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +27,7 @@ class Password extends StatelessWidget {
           } else if (value.length <= 6) {
             return 'Password must be greator than 6 digits';
           }
+          return null;
         },
         obscureText: true,
         decoration: InputDecoration(
