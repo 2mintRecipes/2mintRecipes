@@ -2,14 +2,11 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:x2mint_recipes/Screen/homepage.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
-import 'package:x2mint_recipes/components/button.dart';
-import 'package:x2mint_recipes/utils/seccure_storage.dart';
-import '../utils/app_ui.dart';
-import '../components/password.dart';
-import '../components/input.dart';
+import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/services/auth.service.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -23,6 +20,7 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
 
   SecureStorage secureStorage = SecureStorage();
+  AuthClass authClass = AuthClass();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class _LoginState extends State<Login> {
                     Colors.black.withOpacity(0.6),
                     BlendMode.darken,
                   ),
-                  image: AssetImage("assets/images/welcome_bg.jpg"),
+                  image: const AssetImage("assets/images/welcome_bg.jpg"),
                 ),
               ),
             ),
@@ -66,7 +64,7 @@ class _LoginState extends State<Login> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: BackdropFilter(
@@ -82,7 +80,7 @@ class _LoginState extends State<Login> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               "LOG IN",
                               style: TextStyle(
                                 fontSize: 30,
@@ -107,17 +105,18 @@ class _LoginState extends State<Login> {
                             ElevatedButton.icon(
                               onPressed: () {
                                 loginWithUsernamePassword();
+                                // authClass.googleSignIn(context);
                               },
                               style: TextButton.styleFrom(
                                 primary: Colors.white,
                                 backgroundColor: UI.appColor,
                               ),
-                              icon: Icon(Icons.login_sharp),
-                              label: Text("Login"),
+                              icon: const Icon(Icons.login_sharp),
+                              label: const Text("Login"),
                             )
                           ]),
                       Container(
-                        padding: EdgeInsets.only(top: 30),
+                        padding: const EdgeInsets.only(top: 30),
                         width: 300,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,7 +125,7 @@ class _LoginState extends State<Login> {
                               onPressed: () {
                                 Navigator.pushNamed(context, '/signup');
                               },
-                              child: Text(
+                              child: const Text(
                                 'Register',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -138,7 +137,7 @@ class _LoginState extends State<Login> {
                               onPressed: () {
                                 Navigator.pushNamed(context, '/forgot');
                               },
-                              child: Text(
+                              child: const Text(
                                 'Forgot password?',
                                 style: TextStyle(
                                   color: Colors.white,
@@ -175,7 +174,7 @@ class _LoginState extends State<Login> {
 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()),
+        MaterialPageRoute(builder: (context) => const Root()),
       );
     }).onError((error, stackTrace) {
       print("Error ${error.toString()}");

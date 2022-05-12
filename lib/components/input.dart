@@ -1,7 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
-
 import 'package:flutter/material.dart';
-import '../utils/app_ui.dart';
 
 class Input extends StatelessWidget {
   final IconData icon;
