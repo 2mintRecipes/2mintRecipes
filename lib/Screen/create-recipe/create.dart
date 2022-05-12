@@ -1,11 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/components/search_cart.dart';
-import 'package:getwidget/getwidget.dart';
-
-import '../../database.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 
 class Create extends StatefulWidget {
   static const routeName = '/Create';
@@ -72,18 +68,21 @@ class _CreateState extends State<Create> {
   }
 
   Widget getTitleSection() {
-    return Column(
-      children: const [
-        Text(
-          "Create Recipe",
-          style: TextStyle(
-            fontSize: 30,
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: const [
+          Text(
+            "Create recipe",
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(height: 20),
-      ],
+        ],
+      ),
     );
   }
 
