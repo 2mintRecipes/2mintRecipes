@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/services/notifications.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
@@ -14,33 +15,62 @@ class MyNotification extends StatefulWidget {
 
 class _MyNotificationState extends State<MyNotification> {
   int activeType = 0;
+  NotificationsService notificationService = NotificationsService();
+  late Future _allNotificationsFuture;
+  List<Map<String, dynamic>> _allNotifications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future init() async {
+    _allNotificationsFuture = notificationService.getAll();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(1), BlendMode.darken),
-                  image: const AssetImage("assets/images/bg.jpg"),
+    return FutureBuilder(
+      future: _allNotificationsFuture,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot snapshot,
+      ) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasData) {
+          _allNotifications = snapshot.data;
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        filterQuality: FilterQuality.low,
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Colors.white.withOpacity(1), BlendMode.darken),
+                        image: const AssetImage("assets/images/bg.jpg"),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                getBody(),
+              ],
             ),
-          ),
-          getNotification(),
-        ],
-      ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
-  Widget getNotification() {
+  Widget getBody() {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
@@ -165,14 +195,12 @@ class _MyNotificationState extends State<MyNotification> {
                       height: 48,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              image: AssetImage(songs[index]['img']),
+                          image: const DecorationImage(
+                              image: AssetImage("assets/images/MIT2021.png"),
                               fit: BoxFit.cover),
                           color: UI.appColor),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
+                    const SizedBox(width: 10),
                     SizedBox(
                       width: cWidth,
                       child: Column(
@@ -180,7 +208,7 @@ class _MyNotificationState extends State<MyNotification> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            songs[index]['title'],
+                            _allNotifications[index]['title'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.justify,
@@ -190,11 +218,9 @@ class _MyNotificationState extends State<MyNotification> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Text(
-                            songs[index]['description'],
+                            _allNotifications[index]['content'],
                             style: const TextStyle(color: Colors.black),
                           ),
                         ],
@@ -217,9 +243,12 @@ class _MyNotificationState extends State<MyNotification> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(10, (index) {
-          return getNotificationItem(index);
-        }),
+        children: List.generate(
+          _allNotifications.length,
+          (index) {
+            return getNotificationItem(index);
+          },
+        ),
       ),
     );
   }

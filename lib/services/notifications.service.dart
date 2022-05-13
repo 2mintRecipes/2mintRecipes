@@ -1,10 +1,10 @@
 import 'package:x2mint_recipes/services/db.service.dart';
 
-class RecipesService {
-  Future getAllRecipes() async {
+class NotificationsService {
+  Future getAll() async {
     try {
       List<Map<String, dynamic>> result =
-          await StorageService.getAll('recipes');
+          await StorageService.getAll('notifications');
 
       return result;
     } catch (e) {
