@@ -29,7 +29,7 @@ class _RootState extends State<Root> {
         height: 55,
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
-          color: UI.appColor,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(currentIndex == 0 ? 0.0 : 20.0),
             topRight:
@@ -42,7 +42,7 @@ class _RootState extends State<Root> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            for (int i = 0; i < navBtn.length; i++)
+            for (int i = 0; i < 5; i++)
               GestureDetector(
                 onTap: () => setState(() => currentIndex = i),
                 child: iconBtn(i),
@@ -68,27 +68,20 @@ class _RootState extends State<Root> {
 
   SizedBox iconBtn(int i) {
     bool isActive = currentIndex == i ? true : false;
-    var height = isActive ? 100.0 : 0.0;
-    var width = isActive ? 100.0 : 0.0;
+
     return SizedBox(
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: isActive
-                ? Image.asset(
-                    navBtn[i].imagePath,
-                    color: Colors.orangeAccent,
-                    scale: 0.7,
-                  )
-                : Image.asset(
-                    navBtn[i].imagePath,
-                    color: Colors.white,
-                    scale: 0.7,
-                  ),
-          ),
-        ],
+        child: Align(
+      alignment: Alignment.center,
+      child: Transform.scale(
+        scale: 0.7,
+        child: isActive
+            ? Image.asset(
+                navBtn[i + 5].imagePath,
+              )
+            : Image.asset(
+                navBtn[i].imagePath,
+              ),
       ),
-    );
+    ));
   }
 }
