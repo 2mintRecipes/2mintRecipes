@@ -110,8 +110,8 @@ class _SignUpState extends State<SignUp> {
                                   isPassword: false,
                                   isEmail: true,
                                   textController: emailController),
-                              Password(hintText: "Password"),
-                              Password(hintText: "Re-enter Password"),
+                              const Password(hintText: "Password"),
+                              const Password(hintText: "Re-enter Password"),
                               Button(
                                 title: ' Sign Up',
                                 buttonColor: UI.appColor,
