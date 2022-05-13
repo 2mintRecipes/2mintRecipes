@@ -395,7 +395,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 250,
                             child: Text(
-                              songs[index]['description'],
+                              _allRecipes[index]['description'],
                               maxLines: 3,
                               textAlign: TextAlign.start,
                               style: TextStyle(
@@ -501,7 +501,7 @@ class _HomePageState extends State<HomePage> {
                           SizedBox(
                             width: 250,
                             child: Text(
-                              songs[index]['description'],
+                              _allRecipes[index]['description'],
                               maxLines: 3,
                               textAlign: TextAlign.start,
                               style: TextStyle(
