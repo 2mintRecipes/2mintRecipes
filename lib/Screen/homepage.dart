@@ -7,7 +7,7 @@ import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/database.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
