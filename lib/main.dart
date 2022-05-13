@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:x2mint_recipes/Screen/profile/forgot_password.dart';
 import 'package:x2mint_recipes/Screen/welcome.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'firebase_options.dart';
@@ -75,6 +76,7 @@ class _MyAppState extends State<MyApp> {
         SignUp.routeName: (context) => const SignUp(),
         Root.routeName: (context) => const Root(),
         Bookmark.routeName: (context) => const Bookmark(),
+        ForgotPassword.routeName: (context) => const ForgotPassword(),
       },
     );
   }
