@@ -14,8 +14,9 @@ import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
   static const routeName = '/login';
+  //final Function(String? email, String? password)? onSubmitted;
+  const Login({Key? key}) : super(key: key);
   @override
   State<Login> createState() => _LoginState();
 }
@@ -23,6 +24,61 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late String email, password;
+  String? emailError, passwordError;
+
+  @override
+  void initState() {
+    super.initState();
+    email = "";
+    password = "";
+    emailError = null;
+    passwordError = null;
+  }
+
+  void resetErrorText() {
+    setState(() {
+      emailError = null;
+      passwordError = null;
+    });
+  }
+
+  bool validate() {
+    resetErrorText();
+
+    RegExp emailExp = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+    bool isValid = true;
+    if (email.isEmpty) {
+      setState(() {
+        emailError = "       Please enter a Email";
+      });
+      isValid = false;
+    }
+    if (!emailExp.hasMatch(email)) {
+      setState(() {
+        emailError = "       Email is invalid";
+      });
+      isValid = false;
+    }
+
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = "       Please enter a password";
+      });
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  void submit() {
+    if (validate()) {
+      {
+        loginWithUsernamePassword();
+      }
+    }
+  }
 
   SecureStorage secureStorage = SecureStorage();
   AuthClass authClass = AuthClass();
@@ -76,7 +132,7 @@ class _LoginState extends State<Login> {
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,44 +141,83 @@ class _LoginState extends State<Login> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "LOG IN",
-                              style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 20),
+                              child: Text(
+                                "LOG IN",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                            Input(
-                              icon: Icons.alternate_email_outlined,
-                              hintText: 'Email',
-                              isPassword: false,
-                              isEmail: true,
-                              textController: emailController,
-                            ),
-                            Input(
-                              icon: Icons.lock_outline_sharp,
-                              hintText: 'Password',
-                              isPassword: true,
-                              isEmail: false,
-                              textController: passwordController,
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                loginWithUsernamePassword();
-                                // authClass.googleSignIn(context);
+                            InputField(
+                              prefixIcon: Icons.alternate_email,
+                              onChanged: (value) {
+                                if (emailError != null) {
+                                  setState(() {
+                                    emailError = null;
+                                  });
+                                }
+                                setState(() {
+                                  email = value;
+                                });
                               },
-                              style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: UI.appColor,
+                              labelText: "Email",
+                              errorText: emailError,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              autoFocus: true,
+                              textEditingController: emailController,
+                            ),
+                            InputField(
+                              prefixIcon: Icons.lock,
+                              onChanged: (value) {
+                                if (passwordError != null) {
+                                  setState(() {
+                                    passwordError = null;
+                                  });
+                                }
+                                setState(() {
+                                  password = value;
+                                });
+                              },
+                              onSubmitted: (val) => submit(),
+                              labelText: "Password",
+                              errorText: passwordError,
+                              obscureText: true,
+                              textInputAction: TextInputAction.next,
+                              textEditingController: passwordController,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(15),
+                              child: SizedBox(
+                                height: 50,
+                                child: ElevatedButton.icon(
+                                  onPressed: submit,
+                                  style: TextButton.styleFrom(
+                                    primary: Colors.white,
+                                    backgroundColor: UI.appColor,
+                                    shape: RoundedRectangleBorder(
+                                      //to set border radius to button
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  icon: const Icon(Icons.login_sharp),
+                                  label: const Text(
+                                    "Login",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
                               ),
-                              icon: const Icon(Icons.login_sharp),
-                              label: const Text("Login"),
                             )
                           ]),
                       Container(
-                        padding: const EdgeInsets.only(top: 30),
-                        width: 300,
+                        padding: EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width * .7,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
