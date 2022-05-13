@@ -6,7 +6,7 @@ class UI {
   static const String imagespath = 'assets/images/';
 
   static const String appLogo = "assets/images/appLogo.png";
-  static const String home = "assets/icons/home.png";
+  static const String home = "assets/icons/homeActive.png";
   static const String notify = "assets/icons/notify.png";
   static const String bookmark = "assets/icons/bookmark.png";
   static const String create = "assets/icons/create.png";
@@ -19,4 +19,6 @@ class UI {
   static const Color selectColor = Color.fromARGB(255, 46, 104, 13);
   static const TextStyle h1 =
       TextStyle(color: UI.appColor, fontSize: 50, fontWeight: FontWeight.w500);
+
+  static const double topPadding = 50;
 }

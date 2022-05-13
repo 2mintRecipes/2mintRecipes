@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget getTitle() {
     return const Padding(
-      padding: EdgeInsets.only(left: 30, top: 35),
+      padding: EdgeInsets.only(left: 30, top: UI.topPadding),
       child: Text(
         '2mint Recipes',
         style: TextStyle(

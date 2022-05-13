@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 class Password extends StatelessWidget {
   final String hintText;
-
-  const Password({required this.hintText});
+  Password({required this.hintText});
 
   @override
   Widget build(BuildContext context) {
