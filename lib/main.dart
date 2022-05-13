@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:x2mint_recipes/Screen/welcome.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'firebase_options.dart';
@@ -34,12 +35,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   AuthClass authClass = AuthClass();
   Widget currentPage = const Welcome();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
     // currentPage = const Welcome();
     checkLogin();
+    // Create a new user with a first and last name
+    final user = <String, dynamic>{
+      "first": "Ada",
+      "last": "Lovelace",
+      "born": 1815,
+    };
+
+    // Add a new document with a generated ID
+    firestore.collection("users").add(user).then((DocumentReference doc) =>
+        print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
   checkLogin() async {
