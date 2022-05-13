@@ -33,8 +33,8 @@ class InputField extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.only(left: 30, right: 30, bottom: 15),
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5),
         decoration: BoxDecoration(
             color: Colors.black.withOpacity(.2),
             borderRadius: BorderRadius.circular(15)),

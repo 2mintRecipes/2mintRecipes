@@ -123,6 +123,12 @@ class _SignUpState extends State<SignUp> {
       });
       isValid = false;
     }
+    if (reEnterPassword.isEmpty) {
+      setState(() {
+        reEnterPassword = "       Please confirm password";
+      });
+      isValid = false;
+    }
     if (password != reEnterPassword) {
       setState(() {
         reEnterPasswordError = "       Passwords do not match";
@@ -135,7 +141,7 @@ class _SignUpState extends State<SignUp> {
   void submit() {
     if (validate()) {
       {
-        //loginWithUsernamePassword(); regis ở đây nè :v
+        //regis ở đây nè :v
       }
     }
   }
@@ -150,7 +156,7 @@ class _SignUpState extends State<SignUp> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   filterQuality: FilterQuality.low,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fill,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.6),
                     BlendMode.darken,
@@ -162,12 +168,16 @@ class _SignUpState extends State<SignUp> {
           ),
           SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Transform.scale(
-                  scale: 0.6,
-                  child: Image.asset(UI.appLogo),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * .1,
+                  child: Transform.scale(
+                    scale: 0.5,
+                    child: Image.asset(UI.appLogo),
+                  ),
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(15),
@@ -175,14 +185,26 @@ class _SignUpState extends State<SignUp> {
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.7,
+                      height: MediaQuery.of(context).size.height * 0.85,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text(
+                                    "SIGN UP",
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+
                                 /// here
                                 InputField(
                                   prefixIcon: Icons.badge,
@@ -281,7 +303,7 @@ class _SignUpState extends State<SignUp> {
                                       reEnterPasswordController,
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(15),
+                                  padding: const EdgeInsets.all(10),
                                   child: SizedBox(
                                     height: 50,
                                     child: ElevatedButton.icon(
@@ -306,9 +328,6 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ),
                               ]),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
                           TextButton(
                             onPressed: () {
                               Navigator.pushNamed(context, '/login');
@@ -316,18 +335,18 @@ class _SignUpState extends State<SignUp> {
                             child: const Text(
                               'You have an already Account? Log In',
                               style:
-                                  TextStyle(color: Colors.white, fontSize: 17),
+                                  TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
                           const SizedBox(
-                            height: 20.0,
+                            height: 5,
                           ),
                           const Text(
                             "_____________  or _____________",
-                            style: TextStyle(color: Colors.white, fontSize: 15),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(10),
                             width: 300,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
