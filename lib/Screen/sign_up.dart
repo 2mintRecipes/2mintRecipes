@@ -45,8 +45,101 @@ Widget signInWith(String icon) {
 }
 
 class _SignUpState extends State<SignUp> {
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController reEnterPasswordController = TextEditingController();
+
+  late String fullName, username, email, password, reEnterPassword;
+  String? fullNameError,
+      usernameError,
+      emailError,
+      passwordError,
+      reEnterPasswordError;
+
+  @override
+  void initState() {
+    super.initState();
+    fullName = "";
+    username = "";
+    email = "";
+    password = "";
+    reEnterPassword = "";
+
+    fullNameError = null;
+    usernameError = null;
+    emailError = null;
+    passwordError = null;
+    reEnterPasswordError = null;
+  }
+
+  void resetErrorText() {
+    setState(() {
+      fullNameError = null;
+      usernameError = null;
+      emailError = null;
+      passwordError = null;
+      reEnterPasswordError = null;
+    });
+  }
+
+  bool validate() {
+    resetErrorText();
+
+    RegExp emailExp = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+    bool isValid = true;
+
+    if (fullName.isEmpty) {
+      setState(() {
+        fullNameError = "       Please enter a FullName";
+      });
+      isValid = false;
+    }
+    if (username.isEmpty) {
+      setState(() {
+        usernameError = "       Please enter a Username";
+      });
+      isValid = false;
+    }
+    if (email.isEmpty) {
+      setState(() {
+        emailError = "       Please enter a Email";
+      });
+      isValid = false;
+    }
+    if (!emailExp.hasMatch(email)) {
+      setState(() {
+        emailError = "       Email is invalid";
+      });
+      isValid = false;
+    }
+
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = "       Please enter a password";
+      });
+      isValid = false;
+    }
+    if (password != reEnterPassword) {
+      setState(() {
+        reEnterPasswordError = "       Passwords do not match";
+      });
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  void submit() {
+    if (validate()) {
+      {
+        //loginWithUsernamePassword(); regis ở đây nè :v
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,40 +181,131 @@ class _SignUpState extends State<SignUp> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Input(
-                                icon: Icons.badge_outlined,
-                                hintText: 'Fullname',
-                                isPassword: false,
-                                isEmail: false,
-                                textController: TextEditingController(),
-                              ),
-                              Input(
-                                icon: Icons.account_circle_outlined,
-                                hintText: 'Username',
-                                isPassword: false,
-                                isEmail: false,
-                                textController: TextEditingController(),
-                              ),
-                              Input(
-                                  icon: Icons.email_outlined,
-                                  hintText: 'Email',
-                                  isPassword: false,
-                                  isEmail: true,
-                                  textController: emailController),
-                              const Password(hintText: "Password"),
-                              const Password(hintText: "Re-enter Password"),
-                              Button(
-                                title: ' Sign Up',
-                                buttonColor: UI.appColor,
-                                textColor: Colors.white,
-                                destination: '/root',
-                                icon: const Icon(Icons.app_registration),
-                                onTap: () {},
-                              )
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                /// here
+                                InputField(
+                                  prefixIcon: Icons.badge,
+                                  onChanged: (value) {
+                                    if (fullNameError != null) {
+                                      setState(() {
+                                        fullNameError = null;
+                                      });
+                                    }
+                                    setState(() {
+                                      fullName = value;
+                                    });
+                                  },
+                                  labelText: "FullName",
+                                  errorText: fullNameError,
+                                  keyboardType: TextInputType.name,
+                                  textInputAction: TextInputAction.next,
+                                  autoFocus: true,
+                                  textEditingController: fullNameController,
+                                ),
+                                InputField(
+                                  prefixIcon: Icons.account_circle,
+                                  onChanged: (value) {
+                                    if (usernameError != null) {
+                                      setState(() {
+                                        usernameError = null;
+                                      });
+                                    }
+                                    setState(() {
+                                      username = value;
+                                    });
+                                  },
+                                  labelText: "Username",
+                                  errorText: usernameError,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.next,
+                                  autoFocus: true,
+                                  textEditingController: usernameController,
+                                ),
+                                InputField(
+                                  prefixIcon: Icons.alternate_email,
+                                  onChanged: (value) {
+                                    if (emailError != null) {
+                                      setState(() {
+                                        emailError = null;
+                                      });
+                                    }
+                                    setState(() {
+                                      email = value;
+                                    });
+                                  },
+                                  labelText: "Email",
+                                  errorText: emailError,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  autoFocus: true,
+                                  textEditingController: emailController,
+                                ),
+                                InputField(
+                                  prefixIcon: Icons.lock,
+                                  onChanged: (value) {
+                                    if (passwordError != null) {
+                                      setState(() {
+                                        passwordError = null;
+                                      });
+                                    }
+                                    setState(() {
+                                      password = value;
+                                    });
+                                  },
+                                  labelText: "Password",
+                                  errorText: passwordError,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.next,
+                                  autoFocus: true,
+                                  textEditingController: passwordController,
+                                ),
+                                InputField(
+                                  prefixIcon: Icons.lock,
+                                  onChanged: (value) {
+                                    if (reEnterPasswordError != null) {
+                                      setState(() {
+                                        reEnterPasswordError = null;
+                                      });
+                                    }
+                                    setState(() {
+                                      reEnterPassword = value;
+                                    });
+                                  },
+                                  labelText: "Confirm Password",
+                                  errorText: reEnterPasswordError,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  textInputAction: TextInputAction.next,
+                                  autoFocus: true,
+                                  textEditingController:
+                                      reEnterPasswordController,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton.icon(
+                                      onPressed: submit,
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: UI.appColor,
+                                        shape: RoundedRectangleBorder(
+                                          //to set border radius to button
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                      icon: const Icon(Icons.app_registration),
+                                      label: const Text(
+                                        "Sign Up",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 20, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ]),
                           const SizedBox(
                             height: 10.0,
                           ),

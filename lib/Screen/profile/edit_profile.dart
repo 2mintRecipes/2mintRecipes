@@ -416,26 +416,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
         const SizedBox(height: 10),
-        Input(
-            icon: Icons.alternate_email_outlined,
-            hintText: 'Email',
-            isPassword: false,
-            isEmail: true,
-            textController: emailController),
-        const SizedBox(height: 10),
-        Input(
-            icon: Icons.lock_outline,
-            hintText: 'Mật khẩu',
-            isPassword: true,
-            isEmail: false,
-            textController: passwordController),
-        const SizedBox(height: 10),
-        Input(
-            icon: Icons.lock_outline,
-            hintText: 'Nhập lại mật khẩu',
-            isPassword: true,
-            isEmail: false,
-            textController: passwordController),
+        //here
       ]),
     );
   }
