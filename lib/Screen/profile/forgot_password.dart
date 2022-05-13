@@ -5,41 +5,35 @@ import 'package:flutter/material.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
 import 'package:x2mint_recipes/components/button.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
-import '../utils/app_ui.dart';
-import '../components/password.dart';
-import '../components/input.dart';
 import 'package:x2mint_recipes/components/input.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 
-class Login extends StatefulWidget {
-  static const routeName = '/login';
+class ForgotPassword extends StatefulWidget {
+  static const routeName = '/forgotPassword';
   //final Function(String? email, String? password)? onSubmitted;
-  const Login({Key? key}) : super(key: key);
+  const ForgotPassword({Key? key}) : super(key: key);
   @override
-  State<Login> createState() => _LoginState();
+  State<ForgotPassword> createState() => _ForgotPasswordState();
 }
 
-class _LoginState extends State<Login> {
+class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  late String email, password;
-  String? emailError, passwordError;
+  late String email;
+  String? emailError;
 
   @override
   void initState() {
     super.initState();
     email = "";
-    password = "";
+
     emailError = null;
-    passwordError = null;
   }
 
   void resetErrorText() {
     setState(() {
       emailError = null;
-      passwordError = null;
     });
   }
 
@@ -63,25 +57,16 @@ class _LoginState extends State<Login> {
       isValid = false;
     }
 
-    if (password.isEmpty) {
-      setState(() {
-        passwordError = "       Please enter a password";
-      });
-      isValid = false;
-    }
     return isValid;
   }
 
   void submit() {
     if (validate()) {
       {
-        loginWithUsernamePassword();
+        //loginWithUsernamePassword();
       }
     }
   }
-
-  SecureStorage secureStorage = SecureStorage();
-  AuthClass authClass = AuthClass();
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +117,7 @@ class _LoginState extends State<Login> {
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.3,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -144,7 +129,7 @@ class _LoginState extends State<Login> {
                             const Padding(
                               padding: EdgeInsets.only(bottom: 20),
                               child: Text(
-                                "LOG IN",
+                                "RETRIEVE PASSWORD",
                                 style: TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
@@ -171,25 +156,6 @@ class _LoginState extends State<Login> {
                               autoFocus: true,
                               textEditingController: emailController,
                             ),
-                            InputField(
-                              prefixIcon: Icons.lock,
-                              onChanged: (value) {
-                                if (passwordError != null) {
-                                  setState(() {
-                                    passwordError = null;
-                                  });
-                                }
-                                setState(() {
-                                  password = value;
-                                });
-                              },
-                              onSubmitted: (val) => submit(),
-                              labelText: "Password",
-                              errorText: passwordError,
-                              obscureText: true,
-                              textInputAction: TextInputAction.next,
-                              textEditingController: passwordController,
-                            ),
                             Padding(
                               padding: EdgeInsets.all(15),
                               child: SizedBox(
@@ -206,7 +172,7 @@ class _LoginState extends State<Login> {
                                   ),
                                   icon: const Icon(Icons.login_sharp),
                                   label: const Text(
-                                    "Login",
+                                    "Send mail",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 20, color: Colors.white),
@@ -215,39 +181,6 @@ class _LoginState extends State<Login> {
                               ),
                             )
                           ]),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * .7,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/signup');
-                              },
-                              child: const Text(
-                                'Register',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/forgotPassword');
-                              },
-                              child: const Text(
-                                'Forgot password?',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -257,27 +190,5 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
-  }
-
-  void loginWithUsernamePassword() {
-    var email = emailController.text;
-    var password = passwordController.text;
-
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      // print(value);
-
-      if (value.user != null) {
-        secureStorage.writeSecureData('uid', value.user!.uid);
-      }
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Root()),
-      );
-    }).onError((error, stackTrace) {
-      print("Error ${error.toString()}");
-    });
   }
 }
