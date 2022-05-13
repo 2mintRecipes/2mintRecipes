@@ -1,9 +1,4 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/utils/app_ui.dart';
-
-import '../database.dart';
 
 class Account extends StatefulWidget {
   static const routeName = '/bookmark';
@@ -26,23 +21,30 @@ class _AccountState extends State<Account> {
 
 Widget getAccount(Size size) {
   return SingleChildScrollView(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    const Padding(
-        padding: const EdgeInsets.only(left: 30, top: 20),
-        child: Text(
-          "Your bookmark",
-          style: TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-        )),
-    Column(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          height: size.height,
-          child: Image.network("https://unsplash.com/photos/bOBM8CB4ZC4"),
+        const Padding(
+          padding: EdgeInsets.only(left: 30, top: 20),
+          child: Text(
+            "Your bookmark",
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
-        Center()
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: size.height,
+              child: Image.network("https://unsplash.com/photos/bOBM8CB4ZC4"),
+            ),
+          ],
+        ),
       ],
     ),
-  ]));
+  );
 }

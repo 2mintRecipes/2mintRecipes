@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:x2mint_recipes/Screen/create-recipe/create.dart';
+import 'package:x2mint_recipes/Screen/homepage.dart';
 import 'package:x2mint_recipes/Screen/notification/notification.dart';
 import 'package:x2mint_recipes/Screen/profile/profile.dart';
 import 'package:x2mint_recipes/Screen/bookmark.dart';
-import '../components/nav_model.dart';
-import '../utils/app_ui.dart';
-import '../Screen/homepage.dart';
+import 'package:x2mint_recipes/components/nav_model.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class Root extends StatefulWidget {
   const Root({Key? key}) : super(key: key);
@@ -23,39 +23,41 @@ class _RootState extends State<Root> {
     // double navHeight = size.width * 0.15;
 
     return Scaffold(
-        body: getBody(),
-        bottomNavigationBar: AnimatedContainer(
-          // height: navHeight < 55 ? navHeight : 55,
-          height: 55,
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-              color: UI.appColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(currentIndex == 0 ? 0.0 : 20.0),
-                topRight: Radius.circular(
-                    currentIndex == navBtn.length - 1 ? 0.0 : 20.0),
-                bottomLeft: Radius.circular(currentIndex == 0 ? 0.0 : 20.0),
-                bottomRight: Radius.circular(
-                    currentIndex == navBtn.length - 1 ? 0.0 : 20.0),
-              )),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              for (int i = 0; i < navBtn.length; i++)
-                GestureDetector(
-                  onTap: () => setState(() => currentIndex = i),
-                  child: iconBtn(i),
-                ),
-            ],
+      body: getBody(),
+      bottomNavigationBar: AnimatedContainer(
+        // height: navHeight < 55 ? navHeight : 55,
+        height: 55,
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: UI.appColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(currentIndex == 0 ? 0.0 : 20.0),
+            topRight:
+                Radius.circular(currentIndex == navBtn.length - 1 ? 0.0 : 20.0),
+            bottomLeft: Radius.circular(currentIndex == 0 ? 0.0 : 20.0),
+            bottomRight:
+                Radius.circular(currentIndex == navBtn.length - 1 ? 0.0 : 20.0),
           ),
-        ));
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            for (int i = 0; i < navBtn.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => currentIndex = i),
+                child: iconBtn(i),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget getBody() {
     return IndexedStack(
       index: currentIndex,
       children: const [
-        Homepage(),
+        HomePage(),
         Bookmark(),
         Create(),
         MyNotification(),
@@ -72,18 +74,19 @@ class _RootState extends State<Root> {
       child: Stack(
         children: [
           Align(
-              alignment: Alignment.center,
-              child: isActive
-                  ? Image.asset(
-                      navBtn[i].imagePath,
-                      color: Colors.orangeAccent,
-                      scale: 0.7,
-                    )
-                  : Image.asset(
-                      navBtn[i].imagePath,
-                      color: Colors.white,
-                      scale: 0.7,
-                    )),
+            alignment: Alignment.center,
+            child: isActive
+                ? Image.asset(
+                    navBtn[i].imagePath,
+                    color: Colors.orangeAccent,
+                    scale: 0.7,
+                  )
+                : Image.asset(
+                    navBtn[i].imagePath,
+                    color: Colors.white,
+                    scale: 0.7,
+                  ),
+          ),
         ],
       ),
     );

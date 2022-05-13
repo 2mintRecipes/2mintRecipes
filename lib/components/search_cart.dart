@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-import '../utils/app_ui.dart';
-
 class SearchCard extends StatelessWidget {
-  final TextEditingController _searchControl = new TextEditingController();
+  final TextEditingController _searchControl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Card(
       color: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(.1),
@@ -25,11 +25,12 @@ class SearchCard extends StatelessWidget {
           ),
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                borderSide: BorderSide(
-                  width: 2,
-                  color: Colors.white,
-                )),
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide(
+                width: 2,
+                color: Colors.white,
+              ),
+            ),
             contentPadding: EdgeInsets.all(10.0),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(

@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/login.dart';
-import 'package:x2mint_recipes/Screen/sign_up.dart';
 import 'package:x2mint_recipes/components/button.dart';
 import '../utils/app_ui.dart';
 
@@ -14,12 +11,16 @@ class Welcome extends StatelessWidget {
       body: Container(
         padding: const EdgeInsets.all(30),
         decoration: BoxDecoration(
-            image: DecorationImage(
-                filterQuality: FilterQuality.low,
-                fit: BoxFit.fitHeight,
-                colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.6), BlendMode.darken),
-                image: const AssetImage("assets/images/welcome_bg.jpg"))),
+          image: DecorationImage(
+            filterQuality: FilterQuality.low,
+            fit: BoxFit.fitHeight,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.6),
+              BlendMode.darken,
+            ),
+            image: const AssetImage("assets/images/welcome_bg.jpg"),
+          ),
+        ),
         child: Column(
           children: [
             Expanded(child: Container()),
@@ -32,7 +33,10 @@ class Welcome extends StatelessWidget {
                     "Let's",
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: Colors.white, fontFamily: 'Anton', fontSize: 50),
+                      color: Colors.white,
+                      fontFamily: 'Anton',
+                      fontSize: 50,
+                    ),
                   ),
                   const Text(
                     "Cooking",

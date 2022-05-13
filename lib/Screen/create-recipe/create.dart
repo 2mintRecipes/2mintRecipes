@@ -1,11 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/components/search_cart.dart';
-import 'package:getwidget/getwidget.dart';
-
-import '../../database.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 
 class Create extends StatefulWidget {
   static const routeName = '/Create';
