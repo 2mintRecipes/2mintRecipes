@@ -43,15 +43,15 @@ class _MyAppState extends State<MyApp> {
     // currentPage = const Welcome();
     checkLogin();
     // Create a new user with a first and last name
-    final user = <String, dynamic>{
-      "first": "Ada",
-      "last": "Lovelace",
-      "born": 1815,
-    };
+    // final user = <String, dynamic>{
+    //   "first": "Ada",
+    //   "last": "Lovelace",
+    //   "born": 1815,
+    // };
 
-    // Add a new document with a generated ID
-    firestore.collection("users").add(user).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    // // Add a new document with a generated ID
+    // firestore.collection("users").add(user).then((DocumentReference doc) =>
+    //     print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
   checkLogin() async {

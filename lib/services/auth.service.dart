@@ -7,6 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:x2mint_recipes/Screen/root.dart';
 
 class AuthClass {
+  final storage = const FlutterSecureStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
@@ -15,7 +16,6 @@ class AuthClass {
     ],
   );
 
-  final storage = const FlutterSecureStorage();
   Future<void> googleSignIn(BuildContext context) async {
     try {
       GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();

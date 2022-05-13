@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/services/db.service.dart';
+import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/database.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -17,49 +20,60 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int activeMenu = 0;
   SecureStorage secureStorage = SecureStorage();
-  String? uid;
+  RecipesService recipesService = RecipesService();
+  late Future _allRecipesFuture;
+  List<Map<String, dynamic>> _allRecipes = [];
 
   @override
   void initState() {
     super.initState();
-
     init();
   }
 
   Future init() async {
-    final uid = await secureStorage.readSecureData('uid');
-
-    if (uid != null) {
-      setState(() {
-        this.uid = uid;
-      });
-    }
+    _allRecipesFuture = recipesService.getAllRecipes();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.white.withOpacity(1),
-                    BlendMode.darken,
+    return FutureBuilder(
+      future: _allRecipesFuture,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot snapshot,
+      ) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasData) {
+          _allRecipes = snapshot.data;
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        filterQuality: FilterQuality.low,
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white.withOpacity(1),
+                          BlendMode.darken,
+                        ),
+                        image: const AssetImage("assets/images/bg.jpg"),
+                      ),
+                    ),
                   ),
-                  image: const AssetImage("assets/images/bg.jpg"),
                 ),
-              ),
+                getBody()
+              ],
             ),
-          ),
-          getBody()
-        ],
-      ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 
@@ -113,6 +127,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _sizedContainer(Widget child) {
+    return SizedBox(
+      width: 300.0,
+      height: 150.0,
+      child: Center(child: child),
+    );
+  }
+
   Widget getTrendingNow() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -155,7 +177,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 5),
             child: Row(
               children: List.generate(
-                10,
+                _allRecipes.length,
                 (index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 30),
@@ -164,6 +186,29 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // _sizedContainer(
+                          //   CachedNetworkImage(
+                          //     imageUrl: allRecipes[index]['image'],
+                          //     imageBuilder: (context, imageProvider) =>
+                          //         Container(
+                          //       decoration: BoxDecoration(
+                          //         image: DecorationImage(
+                          //           image: imageProvider,
+                          //           fit: BoxFit.cover,
+                          //           colorFilter: const ColorFilter.mode(
+                          //             Colors.red,
+                          //             BlendMode.colorBurn,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     placeholder: (context, url) =>
+                          //         const CircularProgressIndicator(),
+                          //     errorWidget: (context, url, error) =>
+                          //         const Icon(Icons.error),
+                          //   ),
+                          // ),
+
                           Container(
                             width: 250,
                             height: 150,
@@ -174,16 +219,18 @@ class _HomePageState extends State<HomePage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image: AssetImage(songs[index]['img']),
+                                  image:
+                                      NetworkImage(_allRecipes[index]['image']),
                                   fit: BoxFit.cover),
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
+
                           const SizedBox(
                             height: 5,
                           ),
                           Text(
-                            songs[index]['title'],
+                            _allRecipes[index]['name'],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 color: UI.appColor,
@@ -308,7 +355,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 5),
             child: Row(
               children: List.generate(
-                10,
+                _allRecipes.length,
                 (index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 30),
@@ -328,14 +375,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image: AssetImage(songs[index]['img']),
+                                  image:
+                                      NetworkImage(_allRecipes[index]['image']),
                                   fit: BoxFit.cover),
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            songs[index]['title'],
+                            _allRecipes[index]['name'],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                               color: UI.appColor,
@@ -415,7 +463,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 5),
             child: Row(
               children: List.generate(
-                10,
+                _allRecipes.length,
                 (index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 30),
@@ -434,14 +482,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image: AssetImage(songs[index]['img']),
+                                  image:
+                                      NetworkImage(_allRecipes[index]['image']),
                                   fit: BoxFit.cover),
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            songs[index]['title'],
+                            _allRecipes[index]['name'],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 color: UI.appColor,
@@ -535,7 +584,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 5),
             child: Row(
               children: List.generate(
-                10,
+                _allRecipes.length,
                 (index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 30),
