@@ -16,57 +16,49 @@ class MyNotification extends StatefulWidget {
 class _MyNotificationState extends State<MyNotification> {
   int activeType = 0;
   NotificationsService notificationService = NotificationsService();
-  late Future _allNotificationsFuture;
-  List<Map<String, dynamic>> _allNotifications = [];
+  late Future _notificationsFuture;
+  List<Map<String, dynamic>> _notifications = [];
 
   @override
   void initState() {
     super.initState();
-    init();
+    getNotifications("UNREAD");
   }
 
-  Future init() async {
-    _allNotificationsFuture = notificationService.getAll();
+  String getActiveNotificationsType() {
+    if (activeType == 0) {
+      return 'UNREAD';
+    } else {
+      return 'ALL';
+    }
+  }
+
+  Future getNotifications(String status) async {
+    _notificationsFuture = notificationService.getNotificationsByStatus(status);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _allNotificationsFuture,
-      builder: (
-        BuildContext context,
-        AsyncSnapshot snapshot,
-      ) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        }
-        if (snapshot.hasData) {
-          _allNotifications = snapshot.data;
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              children: [
-                SafeArea(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        filterQuality: FilterQuality.low,
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            Colors.white.withOpacity(1), BlendMode.darken),
-                        image: const AssetImage("assets/images/bg.jpg"),
-                      ),
-                    ),
-                  ),
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  filterQuality: FilterQuality.low,
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(1), BlendMode.darken),
+                  image: const AssetImage("assets/images/bg.jpg"),
                 ),
-                getBody(),
-              ],
+              ),
             ),
-          );
-        }
-
-        return Container();
-      },
+          ),
+          getBody(),
+        ],
+      ),
     );
   }
 
@@ -120,7 +112,7 @@ class _MyNotificationState extends State<MyNotification> {
       controller: ScrollController(),
       child: Row(
         children: List.generate(
-          notificationType.length,
+          notificationsTypeLabel.length,
           (index) {
             return Padding(
               padding: const EdgeInsets.only(right: 25),
@@ -128,6 +120,7 @@ class _MyNotificationState extends State<MyNotification> {
                 onTap: () {
                   setState(() {
                     activeType = index;
+                    getNotifications(getActiveNotificationsType());
                   });
                 },
                 child: Column(
@@ -147,7 +140,7 @@ class _MyNotificationState extends State<MyNotification> {
                         padding: const EdgeInsets.only(
                             top: 5, right: 10, bottom: 5, left: 10),
                         child: Text(
-                          notificationType[index],
+                          notificationsTypeLabel[index],
                           style: const TextStyle(
                               fontSize: 20,
                               color: Colors.white,
@@ -208,7 +201,7 @@ class _MyNotificationState extends State<MyNotification> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            _allNotifications[index]['title'],
+                            _notifications[index]['title'],
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.justify,
@@ -220,7 +213,7 @@ class _MyNotificationState extends State<MyNotification> {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            _allNotifications[index]['content'],
+                            _notifications[index]['content'],
                             style: const TextStyle(color: Colors.black),
                           ),
                         ],
@@ -237,19 +230,35 @@ class _MyNotificationState extends State<MyNotification> {
   }
 
   Widget getListNotifications() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      controller: ScrollController(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          _allNotifications.length,
-          (index) {
-            return getNotificationItem(index);
-          },
-        ),
-      ),
+    return FutureBuilder(
+      future: _notificationsFuture,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot snapshot,
+      ) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasData) {
+          _notifications = snapshot.data;
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: ScrollController(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                _notifications.length,
+                (index) {
+                  return getNotificationItem(index);
+                },
+              ),
+            ),
+          );
+        }
+
+        return Container();
+      },
     );
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class StorageService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  static getInstance() {
+  static FirebaseFirestore getInstance() {
     if (_db == null) {
       return FirebaseFirestore.instance;
     } else {
@@ -12,8 +12,9 @@ class StorageService {
     }
   }
 
-  static getCollection(String collectionName) {
-    return getInstance().getCollection(collectionName);
+  static CollectionReference<Map<String, dynamic>> getCollection(
+      String collectionName) {
+    return getInstance().collection(collectionName);
   }
 
   static Future add(String collectionName, dynamic data) async {
