@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/dto/recipe.dto.dart';
+import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
 class Create extends StatefulWidget {
@@ -12,10 +15,15 @@ class Create extends StatefulWidget {
 }
 
 class _CreateState extends State<Create> {
-  int activeMenu1 = 0;
-  int numSteps = 0;
+  int _numSteps = 0;
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
+  String? _selectedLevel;
+  final List<String> _levelItems = ['1', '2', '3', '4', '5'];
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _levelController = TextEditingController();
+  RecipesService recipesService = RecipesService();
 
   @override
   Widget build(BuildContext context) {
@@ -188,10 +196,42 @@ class _CreateState extends State<Create> {
                 ),
               ),
               const SizedBox(height: 20),
+              TextFormField(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Total time',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              getLevelItem(),
+              TextFormField(
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Category',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKeyBasicInfo.currentState!.validate()) {
                     _formKeyBasicInfo.currentState!.save();
+                    _addRecipe();
                   }
                 },
                 style: ButtonStyle(
@@ -250,7 +290,7 @@ class _CreateState extends State<Create> {
                 shrinkWrap: true,
                 controller: ScrollController(),
                 children:
-                    List.generate(numSteps, (index) => getStepItem(index + 1)),
+                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
               ),
 
               /// Add button
@@ -315,7 +355,7 @@ class _CreateState extends State<Create> {
         OutlinedButton(
           onPressed: () {
             setState(() {
-              numSteps += 1;
+              _numSteps += 1;
             });
           },
           style: ButtonStyle(
@@ -337,5 +377,82 @@ class _CreateState extends State<Create> {
         ),
       ],
     );
+  }
+
+  Widget getLevelItem() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      child: Column(
+        children: [
+          DropdownButtonFormField2(
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.people),
+              //Add isDense true and zero Padding.
+              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+              isDense: true,
+              // contentPadding: EdgeInsets.zero,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              //Add more decoration as you want here
+              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+            ),
+            isExpanded: true,
+            hint: const Text(
+              'Level',
+              // style: TextStyle(fontSize: 14),
+            ),
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.black45,
+            ),
+            // iconSize: 30,
+            // buttonHeight: 60,
+            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            items: _levelItems
+                .map(
+                  (item) => DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(
+                      item,
+                      // style: const TextStyle(
+                      //   fontSize: 14,
+                      // ),
+                    ),
+                  ),
+                )
+                .toList(),
+            validator: (value) {
+              if (value == null) {
+                return 'Chọn mức độ';
+              }
+            },
+            onChanged: (value) {
+              //Do something when changing the item if you want.
+            },
+            onSaved: (value) {
+              _selectedLevel = value.toString();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  _addRecipe() async {
+    RecipeDto data = RecipeDto(
+      name: _nameController.text,
+      description: _descriptionController.text,
+      level: int.parse(_levelController.text),
+      image: null,
+    );
+    print(data.toJson());
+
+    await recipesService.add(data).then((value) {
+      print(value);
+    });
   }
 }

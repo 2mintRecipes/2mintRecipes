@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future init() async {
-    _allRecipesFuture = recipesService.getAllRecipes();
+    _allRecipesFuture = recipesService.getAll();
   }
 
   @override

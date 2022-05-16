@@ -38,7 +38,7 @@ class StorageService {
   static Future get(String collectionName) async {
     await getCollection(collectionName).get().then((event) {
       for (var doc in event.docs) {
-        print("${doc.id} => ${doc.data()}");
+        //print("${doc.id} => ${doc.data()}");
       }
     });
   }
