@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List notificationType = [
+const List notificationsTypeLabel = [
   "Chưa đọc",
   "Tất cả",
 ];

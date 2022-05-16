@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/components/search_cart.dart';
-
-import '../utils/database.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 
 class Bookmark extends StatefulWidget {
   static const routeName = '/bookmark';
@@ -16,6 +16,20 @@ class Bookmark extends StatefulWidget {
 
 class _BookmarkState extends State<Bookmark> {
   int activeMenu = 0;
+  RecipesService recipesService = RecipesService();
+  late Future _allRecipesFuture;
+  List<Map<String, dynamic>> _allRecipes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future init() async {
+    _allRecipesFuture = recipesService.getAllRecipes();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +43,9 @@ class _BookmarkState extends State<Bookmark> {
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(1), BlendMode.darken),
+                    Colors.white.withOpacity(1),
+                    BlendMode.darken,
+                  ),
                   image: const AssetImage("assets/images/bg.jpg"),
                 ),
               ),
@@ -145,77 +161,94 @@ class _BookmarkState extends State<Bookmark> {
       scrollDirection: Axis.vertical,
       controller: ScrollController(),
       child: Padding(
-        padding: const EdgeInsets.only(left: 5),
-        child: Column(
-          children: List.generate(
-            10,
-            (index) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width - 60,
-                        height: MediaQuery.of(context).size.width * .5,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.white.withOpacity(.4),
+          padding: const EdgeInsets.only(left: 5),
+          child: FutureBuilder(
+            future: _allRecipesFuture,
+            builder: (
+              BuildContext context,
+              AsyncSnapshot snapshot,
+            ) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasData) {
+                _allRecipes = snapshot.data;
+                return Column(
+                  children: List.generate(
+                    _allRecipes.length,
+                    (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 30),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width - 60,
+                                height: MediaQuery.of(context).size.width * .5,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 2,
+                                    color: Colors.white.withOpacity(.4),
+                                  ),
+                                  borderRadius: BorderRadius.circular(15),
+                                  image: DecorationImage(
+                                      image: NetworkImage(
+                                          _allRecipes[index]['image']),
+                                      fit: BoxFit.cover),
+                                  color: Colors.white.withOpacity(.4),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                _allRecipes[index]['name'],
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                    color: UI.appColor,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              const SizedBox(
+                                height: 3,
+                              ),
+                              Row(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(.5),
+                                    child: const Text(
+                                      'MT',
+                                      style: TextStyle(
+                                          fontSize: 15, color: Colors.white),
+                                    ),
+                                  ),
+                                  Text(
+                                    '  By ',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white.withOpacity(.7),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 35,
+                              ),
+                            ],
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: AssetImage(songs[index]['img']),
-                              fit: BoxFit.cover),
-                          color: Colors.white.withOpacity(.4),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        songs[index]['title'],
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                            color: UI.appColor,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white.withOpacity(.5),
-                            child: const Text(
-                              'MT',
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.white),
-                            ),
-                          ),
-                          Text(
-                            '  By ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white.withOpacity(.7),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 35,
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                ),
-              );
+                );
+              }
+
+              return Container();
             },
-          ),
-        ),
-      ),
+          )),
     );
   }
 }
