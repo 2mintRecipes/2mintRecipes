@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:x2mint_recipes/services/db.service.dart';
 
 class NotificationsService {
@@ -19,17 +20,15 @@ class NotificationsService {
       if (status == 'ALL') {
         result = await StorageService.getAll('notifications');
       } else {
-        StorageService.getCollection("notifications")
+        await StorageService.getCollection("notifications")
             .where("status", isEqualTo: status)
             .get()
-            .then((event) {
-          event.docs.forEach((doc) {
-            result.add(doc.data());
+            .then((value) {
+          value.docs.forEach((element) {
+            result.add(element.data());
           });
         });
       }
-
-      print(result);
 
       return result;
     } catch (e) {
