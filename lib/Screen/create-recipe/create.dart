@@ -18,11 +18,15 @@ class _CreateState extends State<Create> {
   int _numSteps = 0;
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
-  String? _selectedLevel;
   final List<String> _levelItems = ['1', '2', '3', '4', '5'];
+  String? _selectedLevel;
   TextEditingController _nameController = TextEditingController();
+  TextEditingController _servingsController = TextEditingController();
+  TextEditingController _cookTimeController = TextEditingController();
+  TextEditingController _totalTimeController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _levelController = TextEditingController();
+  TextEditingController _categoryController = TextEditingController();
+
   RecipesService recipesService = RecipesService();
 
   @override
@@ -50,6 +54,17 @@ class _CreateState extends State<Create> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _servingsController.dispose();
+    _cookTimeController.dispose();
+    _totalTimeController.dispose();
+    _descriptionController.dispose();
+    _categoryController.dispose();
+    super.dispose();
   }
 
   Widget getBody() {
@@ -152,6 +167,8 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _nameController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -167,13 +184,15 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _servingsController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
                   prefixIcon: const Icon(Icons.people_sharp),
-                  hintText: 'Serves',
+                  hintText: 'Servings',
                   hintStyle: const TextStyle(fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -182,6 +201,8 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _cookTimeController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -197,6 +218,8 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _totalTimeController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -210,9 +233,11 @@ class _CreateState extends State<Create> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
               getLevelItem(),
               TextFormField(
+                controller: _categoryController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -220,6 +245,23 @@ class _CreateState extends State<Create> {
                   ),
                   prefixIcon: const Icon(Icons.timer_sharp),
                   hintText: 'Category',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _descriptionController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Description',
                   hintStyle: const TextStyle(fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -385,6 +427,12 @@ class _CreateState extends State<Create> {
       child: Column(
         children: [
           DropdownButtonFormField2(
+            value: _selectedLevel,
+            onChanged: (value) {
+              setState(() {
+                _selectedLevel = value as String;
+              });
+            },
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.people),
               //Add isDense true and zero Padding.
@@ -398,6 +446,7 @@ class _CreateState extends State<Create> {
               //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
             ),
             isExpanded: true,
+
             hint: const Text(
               'Level',
               // style: TextStyle(fontSize: 14),
@@ -415,23 +464,23 @@ class _CreateState extends State<Create> {
             items: _levelItems
                 .map(
                   (item) => DropdownMenuItem<String>(
-                    value: item,
-                    child: Text(
-                      item,
-                      // style: const TextStyle(
-                      //   fontSize: 14,
-                      // ),
-                    ),
-                  ),
+                      value: item,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          item,
+                          // style: const TextStyle(
+                          //   fontSize: 14,
+                          // ),
+                          // textAlign: TextAlign.center,
+                        ),
+                      )),
                 )
                 .toList(),
             validator: (value) {
               if (value == null) {
                 return 'Chọn mức độ';
               }
-            },
-            onChanged: (value) {
-              //Do something when changing the item if you want.
             },
             onSaved: (value) {
               _selectedLevel = value.toString();
@@ -442,17 +491,35 @@ class _CreateState extends State<Create> {
     );
   }
 
+  void _clearText() {
+    _nameController.clear();
+    _descriptionController.clear();
+    _categoryController.clear();
+    _cookTimeController.clear();
+    _totalTimeController.clear();
+    _servingsController.clear();
+    _selectedLevel = null;
+  }
+
   _addRecipe() async {
     RecipeDto data = RecipeDto(
       name: _nameController.text,
       description: _descriptionController.text,
-      level: int.parse(_levelController.text),
-      image: null,
+      servings: double.tryParse(_servingsController.text),
+      cookTime: double.tryParse(_cookTimeController.text),
+      totalTime: double.tryParse(_totalTimeController.text),
+      category: _categoryController.text,
+      level: int.tryParse(_selectedLevel ?? "0"),
+      image:
+          "https://i.pinimg.com/564x/f4/c0/24/f4c024614b8806c25da375453924b577.jpg",
     );
     print(data.toJson());
 
     await recipesService.add(data).then((value) {
       print(value);
+      _clearText();
+    }).onError((error, stackTrace) {
+      print(error.toString());
     });
   }
 }
