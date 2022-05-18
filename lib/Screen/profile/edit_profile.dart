@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/components/input.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -25,8 +26,8 @@ class _EditProfileState extends State<EditProfile> {
   bool _confirmPasswordVisible = false;
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
-
-  // late File imageFile;
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
 
   @override
   void initState() {
@@ -93,11 +94,17 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  getAvatar() {
+    return _image != null
+        ? FileImage(_image!)
+        : const AssetImage("assets/images/avatar.jpg");
+  }
+
   Widget getBasicInfo() {
     return Column(
       children: [
-        const GFAvatar(
-          backgroundImage: AssetImage("assets/images/MIT2021.png"),
+        GFAvatar(
+          backgroundImage: getAvatar(),
           shape: GFAvatarShape.circle,
           size: 150,
         ),
@@ -406,8 +413,8 @@ class _EditProfileState extends State<EditProfile> {
         borderRadius: BorderRadius.circular(8),
         color: const Color.fromARGB(39, 105, 171, 120),
       ),
-      child: Column(children: [
-        const Text(
+      child: Column(children: const [
+        Text(
           "Thông tin đăng nhập",
           style: TextStyle(
             fontSize: 20,
@@ -415,7 +422,7 @@ class _EditProfileState extends State<EditProfile> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: 10),
         //here
       ]),
     );
@@ -423,29 +430,21 @@ class _EditProfileState extends State<EditProfile> {
 
   /// Get from gallery
   _getFromGallery() async {
-    // PickedFile pickedFile = await ImagePicker().getImage(
-    //   source: ImageSource.gallery,
-    //   maxWidth: 1800,
-    //   maxHeight: 1800,
-    // );
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageFile = File(pickedFile.path);
-    //   });
-    // }
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
   }
 
   /// Get from Camera
   _getFromCamera() async {
-    // PickedFile pickedFile = await ImagePicker().getImage(
-    //   source: ImageSource.camera,
-    //   maxWidth: 1800,
-    //   maxHeight: 1800,
-    // );
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageFile = File(pickedFile.path);
-    //   });
-    // }
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
   }
 }
