@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:x2mint_recipes/services/cloudinary.service.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/EditProfile';
@@ -28,7 +29,7 @@ class _EditProfileState extends State<EditProfile> {
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
-  final cloudinary = CloudinaryPublic('x2mint', '2mint-recipes');
+  final CloudinaryService _cloudinaryService = CloudinaryService();
   File? _image;
 
   @override
@@ -438,19 +439,8 @@ class _EditProfileState extends State<EditProfile> {
         _image = File(image.path);
       });
 
-      try {
-        CloudinaryResponse response = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(
-            image.path,
-            resourceType: CloudinaryResourceType.Image,
-          ),
-        );
-
-        print(response.secureUrl);
-      } on CloudinaryException catch (e) {
-        print(e.message);
-        print(e.request);
-      }
+      var re = await _cloudinaryService.uploadImage(image.path);
+      print(re);
     }
   }
 
@@ -462,19 +452,8 @@ class _EditProfileState extends State<EditProfile> {
         _image = File(image.path);
       });
 
-      try {
-        CloudinaryResponse response = await cloudinary.uploadFile(
-          CloudinaryFile.fromFile(
-            image.path,
-            resourceType: CloudinaryResourceType.Image,
-          ),
-        );
-
-        print(response.secureUrl);
-      } on CloudinaryException catch (e) {
-        print(e.message);
-        print(e.request);
-      }
+      var re = await _cloudinaryService.uploadImage(image.path);
+      print(re);
     }
   }
 }
