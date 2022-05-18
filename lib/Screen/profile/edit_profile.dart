@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
@@ -27,6 +28,7 @@ class _EditProfileState extends State<EditProfile> {
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
   final ImagePicker _picker = ImagePicker();
+  final cloudinary = CloudinaryPublic('x2mint', '2mint-recipes');
   File? _image;
 
   @override
@@ -435,6 +437,20 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         _image = File(image.path);
       });
+
+      try {
+        CloudinaryResponse response = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(
+            image.path,
+            resourceType: CloudinaryResourceType.Image,
+          ),
+        );
+
+        print(response.secureUrl);
+      } on CloudinaryException catch (e) {
+        print(e.message);
+        print(e.request);
+      }
     }
   }
 
@@ -445,6 +461,20 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         _image = File(image.path);
       });
+
+      try {
+        CloudinaryResponse response = await cloudinary.uploadFile(
+          CloudinaryFile.fromFile(
+            image.path,
+            resourceType: CloudinaryResourceType.Image,
+          ),
+        );
+
+        print(response.secureUrl);
+      } on CloudinaryException catch (e) {
+        print(e.message);
+        print(e.request);
+      }
     }
   }
 }
