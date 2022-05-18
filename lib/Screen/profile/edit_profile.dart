@@ -1,9 +1,14 @@
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/components/input.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:x2mint_recipes/dto/user.dto.dart';
+import 'package:x2mint_recipes/services/cloudinary.service.dart';
+import 'package:x2mint_recipes/services/user.service.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/EditProfile';
@@ -14,19 +19,27 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  final List<String> genderItems = [
-    'Male',
-    'Female',
-  ];
-  String? selectedGender;
+  TextEditingController _fullnameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  String? _selectedGender;
+  String? _avatar;
+
+  final List<String> genderItems = ['Male', 'Female', 'Other'];
+
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
   final _formKeyUserInfo = GlobalKey<FormState>();
   final _formKeyCreInfo = GlobalKey<FormState>();
-
-  // late File imageFile;
+  final ImagePicker _picker = ImagePicker();
+  final UserService _userService = UserService();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
+  File? _image;
+  String? _imagePath;
 
   @override
   void initState() {
@@ -93,11 +106,18 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
+  getAvatar() {
+    return _image != null
+        ? FileImage(_image!)
+        // : CloudinaryImage('https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
+        : const AssetImage("assets/images/avatar.jpg");
+  }
+
   Widget getBasicInfo() {
     return Column(
       children: [
-        const GFAvatar(
-          backgroundImage: AssetImage("assets/images/MIT2021.png"),
+        GFAvatar(
+          backgroundImage: getAvatar(),
           shape: GFAvatarShape.circle,
           size: 150,
         ),
@@ -154,6 +174,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 10),
               TextFormField(
+                controller: _fullnameController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -169,6 +190,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _usernameController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -184,6 +206,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 20),
               DropdownButtonFormField2(
+                value: _selectedGender,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.people),
                   //Add isDense true and zero Padding.
@@ -230,14 +253,17 @@ class _EditProfileState extends State<EditProfile> {
                   }
                 },
                 onChanged: (value) {
-                  //Do something when changing the item if you want.
+                  setState(() {
+                    _selectedGender = value as String;
+                  });
                 },
                 onSaved: (value) {
-                  selectedGender = value.toString();
+                  _selectedGender = value.toString();
                 },
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _phoneController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -253,6 +279,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _addressController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -268,9 +295,10 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 30),
               OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKeyUserInfo.currentState!.validate()) {
                     _formKeyUserInfo.currentState!.save();
+                    await _updateUserInfo();
                   }
                 },
                 child: const Text(
@@ -283,6 +311,26 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
     );
+  }
+
+  Future _updateUserInfo() async {
+    if (_imagePath != null) {
+      _avatar = await _cloudinaryService.uploadImage(_imagePath!);
+      print(_avatar);
+
+      UserDto data = UserDto(
+        fullname: _fullnameController.text,
+        username: _usernameController.text,
+        address: _addressController.text,
+        phone: _phoneController.text,
+        gender: _selectedGender,
+        avatar: _avatar,
+      );
+      var re = await _userService.update(data);
+      print(re);
+    } else {
+      print("============");
+    }
   }
 
   Widget getUserConfidentialInfo() {
@@ -309,6 +357,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 10),
               TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -324,6 +373,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _passwordController,
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
@@ -353,6 +403,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _confirmPasswordController,
                 obscureText: !_confirmPasswordVisible,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
@@ -399,53 +450,23 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Widget _getUserConfidentialInfo() {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: const Color.fromARGB(39, 105, 171, 120),
-      ),
-      child: Column(children: [
-        const Text(
-          "Thông tin đăng nhập",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 10),
-        //here
-      ]),
-    );
-  }
-
-  /// Get from gallery
   _getFromGallery() async {
-    // PickedFile pickedFile = await ImagePicker().getImage(
-    //   source: ImageSource.gallery,
-    //   maxWidth: 1800,
-    //   maxHeight: 1800,
-    // );
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageFile = File(pickedFile.path);
-    //   });
-    // }
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+        _imagePath = image.path;
+      });
+    }
   }
 
-  /// Get from Camera
   _getFromCamera() async {
-    // PickedFile pickedFile = await ImagePicker().getImage(
-    //   source: ImageSource.camera,
-    //   maxWidth: 1800,
-    //   maxHeight: 1800,
-    // );
-    // if (pickedFile != null) {
-    //   setState(() {
-    //     imageFile = File(pickedFile.path);
-    //   });
-    // }
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+        _imagePath = image.path;
+      });
+    }
   }
 }

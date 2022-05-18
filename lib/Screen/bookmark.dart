@@ -27,7 +27,7 @@ class _BookmarkState extends State<Bookmark> {
   }
 
   Future init() async {
-    _allRecipesFuture = recipesService.getAllRecipes();
+    _allRecipesFuture = recipesService.getAll();
   }
 
   @override

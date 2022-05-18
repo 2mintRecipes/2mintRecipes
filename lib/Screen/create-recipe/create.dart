@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/dto/recipe.dto.dart';
+import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
 class Create extends StatefulWidget {
@@ -12,10 +15,19 @@ class Create extends StatefulWidget {
 }
 
 class _CreateState extends State<Create> {
-  int activeMenu1 = 0;
-  int numSteps = 0;
+  int _numSteps = 0;
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
+  final List<String> _levelItems = ['1', '2', '3', '4', '5'];
+  String? _selectedLevel;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _servingsController = TextEditingController();
+  TextEditingController _cookTimeController = TextEditingController();
+  TextEditingController _totalTimeController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _categoryController = TextEditingController();
+
+  RecipesService recipesService = RecipesService();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +54,17 @@ class _CreateState extends State<Create> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _servingsController.dispose();
+    _cookTimeController.dispose();
+    _totalTimeController.dispose();
+    _descriptionController.dispose();
+    _categoryController.dispose();
+    super.dispose();
   }
 
   Widget getBody() {
@@ -144,6 +167,8 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _nameController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -159,13 +184,15 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _servingsController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 20,
                   ),
                   prefixIcon: const Icon(Icons.people_sharp),
-                  hintText: 'Serves',
+                  hintText: 'Servings',
                   hintStyle: const TextStyle(fontSize: 14),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -174,6 +201,8 @@ class _CreateState extends State<Create> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _cookTimeController,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -188,10 +217,63 @@ class _CreateState extends State<Create> {
                 ),
               ),
               const SizedBox(height: 20),
+              TextFormField(
+                controller: _totalTimeController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Total time',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              // const SizedBox(height: 20),
+              getLevelItem(),
+              TextFormField(
+                controller: _categoryController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Category',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _descriptionController,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 20,
+                  ),
+                  prefixIcon: const Icon(Icons.timer_sharp),
+                  hintText: 'Description',
+                  hintStyle: const TextStyle(fontSize: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               OutlinedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKeyBasicInfo.currentState!.validate()) {
                     _formKeyBasicInfo.currentState!.save();
+                    _addRecipe();
                   }
                 },
                 style: ButtonStyle(
@@ -250,7 +332,7 @@ class _CreateState extends State<Create> {
                 shrinkWrap: true,
                 controller: ScrollController(),
                 children:
-                    List.generate(numSteps, (index) => getStepItem(index + 1)),
+                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
               ),
 
               /// Add button
@@ -315,7 +397,7 @@ class _CreateState extends State<Create> {
         OutlinedButton(
           onPressed: () {
             setState(() {
-              numSteps += 1;
+              _numSteps += 1;
             });
           },
           style: ButtonStyle(
@@ -337,5 +419,107 @@ class _CreateState extends State<Create> {
         ),
       ],
     );
+  }
+
+  Widget getLevelItem() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      child: Column(
+        children: [
+          DropdownButtonFormField2(
+            value: _selectedLevel,
+            onChanged: (value) {
+              setState(() {
+                _selectedLevel = value as String;
+              });
+            },
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.people),
+              //Add isDense true and zero Padding.
+              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+              isDense: true,
+              // contentPadding: EdgeInsets.zero,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              //Add more decoration as you want here
+              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+            ),
+            isExpanded: true,
+
+            hint: const Text(
+              'Level',
+              // style: TextStyle(fontSize: 14),
+            ),
+            icon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.black45,
+            ),
+            // iconSize: 30,
+            // buttonHeight: 60,
+            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            items: _levelItems
+                .map(
+                  (item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          item,
+                          // style: const TextStyle(
+                          //   fontSize: 14,
+                          // ),
+                          // textAlign: TextAlign.center,
+                        ),
+                      )),
+                )
+                .toList(),
+            validator: (value) {
+              if (value == null) {
+                return 'Chọn mức độ';
+              }
+            },
+            onSaved: (value) {
+              _selectedLevel = value.toString();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _clearText() {
+    _nameController.clear();
+    _descriptionController.clear();
+    _categoryController.clear();
+    _cookTimeController.clear();
+    _totalTimeController.clear();
+    _servingsController.clear();
+    _selectedLevel = null;
+  }
+
+  _addRecipe() async {
+    RecipeDto data = RecipeDto(
+      name: _nameController.text,
+      description: _descriptionController.text,
+      servings: double.tryParse(_servingsController.text),
+      cookTime: double.tryParse(_cookTimeController.text),
+      totalTime: double.tryParse(_totalTimeController.text),
+      category: _categoryController.text,
+      level: int.tryParse(_selectedLevel ?? "0"),
+      image:
+          "https://i.pinimg.com/564x/f4/c0/24/f4c024614b8806c25da375453924b577.jpg",
+    );
+    print(data.toJson());
+
+    await recipesService.add(data).then((value) {
+      print(value);
+      _clearText();
+    }).onError((error, stackTrace) {
+      print(error.toString());
+    });
   }
 }
