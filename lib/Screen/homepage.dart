@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                         filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
-                          Colors.white.withOpacity(1),
+                          Colors.black.withOpacity(.6),
                           BlendMode.darken,
                         ),
                         image: const AssetImage("assets/images/bg.jpg"),
@@ -66,7 +66,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                getBody()
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: ClipRRect(
+                      // borderRadius: BorderRadius.circular(5),
+                      child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                          child: SingleChildScrollView(
+                            child: getBody(),
+                          ))),
+                )
               ],
             ),
           );
@@ -78,44 +87,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBody() {
-    return ClipRRect(
-      // borderRadius: BorderRadius.circular(5),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Title
-              getTitle(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// Title
+        getTitle(),
 
-              /// Search card
-              Padding(
-                padding: const EdgeInsets.only(left: 30, right: 30, top: 10),
-                child: SearchCard(),
-              ),
-
-              /// Trending now
-              getTrendingNow(),
-
-              /// Popular Category Bar
-              getPopularCategory(),
-
-              /// Recent Recipes
-              getRecentRecipes(),
-
-              /// Hot Creators
-              getHotCreators(),
-            ],
-          ),
+        /// Search card
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
+          child: SearchCard(),
         ),
-      ),
+
+        /// Trending now
+        getTrendingNow(),
+
+        /// Popular Category Bar
+        getPopularCategory(),
+
+        /// Recent Recipes
+        getRecentRecipes(),
+
+        /// Hot Creators
+        getHotCreators(),
+      ],
     );
   }
 
   Widget getTitle() {
     return const Padding(
-      padding: EdgeInsets.only(left: 30, top: UI.topPadding),
+      padding: EdgeInsets.only(
+        left: 30,
+        top: UI.topPadding,
+      ),
       child: Text(
         '2mint Recipes',
         style: TextStyle(
@@ -354,6 +358,8 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: List.generate(
                 _allRecipes.length,
                 (index) {
@@ -462,6 +468,8 @@ class _HomePageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.only(left: 5),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: List.generate(
                 _allRecipes.length,
                 (index) {

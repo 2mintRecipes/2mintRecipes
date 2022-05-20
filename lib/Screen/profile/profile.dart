@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,98 +38,115 @@ class _ProfileState extends State<Profile> {
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(1), BlendMode.darken),
+                    Colors.black.withOpacity(.6),
+                    BlendMode.darken,
+                  ),
                   image: const AssetImage("assets/images/bg.jpg"),
                 ),
               ),
             ),
           ),
-          getBody(),
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ClipRRect(
+                // borderRadius: BorderRadius.circular(5),
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: SingleChildScrollView(
+                      child: getBody(),
+                    ))),
+          )
         ],
       ),
     );
   }
 
   Widget getBody() {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: SingleChildScrollView(
-          controller: ScrollController(),
-          padding:
-              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child: Column(
-            children: [
-              getBasicInfo(),
-              getOverview(),
-              getGallary(),
-            ],
+    return Padding(
+      padding: EdgeInsets.only(top: UI.topPadding, left: 30, right: 30),
+      child: Column(
+        children: [
+          getBasicInfo(),
+          SizedBox(
+            height: 20,
           ),
-        ),
+          getOverview(),
+          getGallery(),
+        ],
       ),
     );
   }
 
   Widget getBasicInfo() {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const GFAvatar(
-          backgroundImage: AssetImage("assets/images/MIT2021.png"),
-          shape: GFAvatarShape.circle,
-          size: 64,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const GFAvatar(
+              backgroundImage: AssetImage("assets/images/MIT2021.png"),
+              shape: GFAvatarShape.circle,
+              size: 72,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: editProfile,
+                  child: const Text(
+                    'Edit Profile',
+                    style: TextStyle(color: Colors.white),
+                    softWrap: true,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                OutlinedButton(
+                  onPressed: () async {
+                    await authClass.signOut();
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (builder) => const Login()),
+                        (route) => false);
+                  },
+                  child: const Text(
+                    'Log Out',
+                    style: TextStyle(color: Colors.white),
+                    softWrap: true,
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Nguyễn Huỳnh Minh Tiến",
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+        const SizedBox(
+          height: 15,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "@TienNHM",
+              style: TextStyle(
+                  fontSize: 18,
+                  color: UI.appColor,
+                  fontStyle: FontStyle.italic),
+            ),
+            const Text(
+              "Nguyễn Huỳnh Minh Tiến",
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                "@TienNHM",
-                style: TextStyle(
-                    fontSize: 18,
-                    color: UI.appColor,
-                    fontStyle: FontStyle.italic),
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: editProfile,
-                child: const Text(
-                  'Chỉnh sửa',
-                  style: TextStyle(color: Colors.white),
-                  softWrap: true,
-                ),
-              ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () async {
-                  await authClass.signOut();
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (builder) => const Login()),
-                      (route) => false);
-                },
-                child: const Text(
-                  'Đăng xuất',
-                  style: TextStyle(color: Colors.white),
-                  softWrap: true,
-                ),
-              ),
-            ],
-          ),
-        )
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -227,23 +246,23 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget getGallary() {
+  Widget getGallery() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 20),
         const Text(
-          "My Gallary",
+          "My Gallery",
           style: TextStyle(
-              color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+              color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 20),
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
           crossAxisSpacing: 20,
-          mainAxisSpacing: 30,
+          mainAxisSpacing: 20,
           // padding: const EdgeInsets.all(10),
           controller: ScrollController(),
           children: List.generate(
@@ -254,8 +273,9 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     Container(
-                      width: 250,
-                      height: 150,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      width: MediaQuery.of(context).size.width * .3,
+                      height: MediaQuery.of(context).size.width * .3,
                       decoration: BoxDecoration(
                           border: Border.all(width: 2, color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
@@ -264,9 +284,6 @@ class _ProfileState extends State<Profile> {
                               fit: BoxFit.cover),
                           color: Colors.white),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
                     Text(
                       songs[index]['title'],
                       style: const TextStyle(
@@ -274,26 +291,31 @@ class _ProfileState extends State<Profile> {
                           fontSize: 20,
                           fontWeight: FontWeight.w500),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    SizedBox(
-                      width: 180,
-                      child: Text(
-                        songs[index]['description'],
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.white.withOpacity(.4),
-                            fontWeight: FontWeight.w600),
-                      ),
-                    )
+
+                    // const SizedBox(
+                    //   height: 5,
+                    // ),
+                    // SizedBox(
+                    //   width: MediaQuery.of(context).size.width * .35,
+                    //   child: Text(
+                    //     songs[index]['description'],
+                    //     maxLines: 2,
+                    //     overflow: TextOverflow.ellipsis,
+                    //     textAlign: TextAlign.center,
+                    //     style: TextStyle(
+                    //         fontSize: 12,
+                    //         color: Colors.white.withOpacity(.4),
+                    //         fontWeight: FontWeight.w600),
+                    //   ),
+                    // )
                   ],
                 ),
               );
             },
           ),
+        ),
+        const SizedBox(
+          height: 20,
         )
       ],
     );

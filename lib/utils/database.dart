@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 const List notificationsTypeLabel = [
-  "Chưa đọc",
-  "Tất cả",
+  "New",
+  "All",
 ];
 const List song_type_1 = [
   "Cơm",

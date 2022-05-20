@@ -50,59 +50,64 @@ class _MyNotificationState extends State<MyNotification> {
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                      Colors.white.withOpacity(1), BlendMode.darken),
+                    Colors.black.withOpacity(.6),
+                    BlendMode.darken,
+                  ),
                   image: const AssetImage("assets/images/bg.jpg"),
                 ),
               ),
             ),
           ),
-          getBody(),
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ClipRRect(
+                // borderRadius: BorderRadius.circular(5),
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: SingleChildScrollView(
+                      child: getBody(),
+                    ))),
+          )
         ],
       ),
     );
   }
 
   Widget getBody() {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: SingleChildScrollView(
-          controller: ScrollController(),
-          padding: const EdgeInsets.only(left: 30, top: 20, bottom: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Title
-              getTitle(),
+    return Padding(
+        padding:
+            const EdgeInsets.only(top: 50, bottom: 20, left: 30, right: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Title
+            getTitle(),
+            const SizedBox(
+              height: 20,
+            ),
 
-              /// Notification type
-              getNotificationTypes(),
+            /// Notification type
+            getNotificationTypes(),
 
-              /// List of notifications
-              getListNotifications(),
-            ],
-          ),
-        ),
-      ),
-    );
+            /// List of notifications
+            getListNotifications(),
+          ],
+        ));
   }
 
   Widget getTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          Text(
-            "Notifications",
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: const [
+        Text(
+          "Notifications",
+          style: TextStyle(
+            fontSize: 30,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -114,44 +119,36 @@ class _MyNotificationState extends State<MyNotification> {
         children: List.generate(
           notificationsTypeLabel.length,
           (index) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 25),
-              child: GestureDetector(
+            return GestureDetector(
                 onTap: () {
                   setState(() {
                     activeType = index;
                     getNotifications(getActiveNotificationsType());
                   });
                 },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black.withOpacity(.1),
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        color: activeType == index
-                            ? UI.appColor
-                            : Colors.black.withOpacity(.1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            top: 5, right: 10, bottom: 5, left: 10),
-                        child: Text(
-                          notificationsTypeLabel[index],
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
+                child: Container(
+                  margin: const EdgeInsets.only(right: 20),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black.withOpacity(.1),
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                    color: activeType == index
+                        ? UI.appColor
+                        : Colors.black.withOpacity(.1),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 5, bottom: 5, left: 10, right: 10),
+                    child: Text(
+                      notificationsTypeLabel[index],
+                      style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ));
           },
         ),
       ),
@@ -159,8 +156,9 @@ class _MyNotificationState extends State<MyNotification> {
   }
 
   Widget getNotificationItem(int index) {
-    double cWidth = MediaQuery.of(context).size.width * 0.65;
-    double notificationWidth = MediaQuery.of(context).size.width * 0.88;
+    double notificationWidth = MediaQuery.of(context).size.width - 60;
+    double contentWidth = notificationWidth * .7;
+    double photoWidth = notificationWidth * .2;
 
     return GestureDetector(
       onTap: () {},
@@ -184,8 +182,8 @@ class _MyNotificationState extends State<MyNotification> {
                 child: Row(
                   children: [
                     Container(
-                      width: 48,
-                      height: 48,
+                      width: photoWidth,
+                      height: photoWidth,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           image: const DecorationImage(
@@ -195,7 +193,7 @@ class _MyNotificationState extends State<MyNotification> {
                     ),
                     const SizedBox(width: 10),
                     SizedBox(
-                      width: cWidth,
+                      width: contentWidth,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
