@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../utils/app_ui.dart';
 
@@ -15,16 +16,17 @@ class SearchCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Container(
+        height: MediaQuery.of(context).size.width * .13,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(.1),
           borderRadius: BorderRadius.circular(15),
         ),
         child: TextField(
+          keyboardType: TextInputType.text,
           style: TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
+              fontSize: 20.0,
+              fontWeight: FontWeight.normal,
+              color: Colors.white),
           decoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
@@ -33,7 +35,7 @@ class SearchCard extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            contentPadding: EdgeInsets.all(10.0),
+            //contentPadding: EdgeInsets.all(10.0),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.black.withOpacity(.1),
@@ -42,7 +44,7 @@ class SearchCard extends StatelessWidget {
             ),
             hintText: "Search...",
             prefixIcon: Transform.scale(
-              scale: 0.7,
+              scale: 0.6,
               child: Image.asset(UI.search),
             ),
             //Icon(Icons.search, color: Colors.white, size: 30),

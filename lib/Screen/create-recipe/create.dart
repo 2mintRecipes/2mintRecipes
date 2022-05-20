@@ -211,7 +211,7 @@ class _CreateState extends State<Create> {
               ),
             ),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.restaurant,
               onChanged: (value) {
                 if (recipeNameError != null) {
                   setState(() {
@@ -230,7 +230,7 @@ class _CreateState extends State<Create> {
               textEditingController: _nameController,
             ),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.supervisor_account,
               onChanged: (value) {
                 if (recipeNameError != null) {
                   setState(() {
@@ -249,7 +249,7 @@ class _CreateState extends State<Create> {
               textEditingController: _nameController,
             ),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.timer,
               onChanged: (value) {
                 if (cookTimeError != null) {
                   setState(() {
@@ -268,7 +268,7 @@ class _CreateState extends State<Create> {
               textEditingController: _cookTimeController,
             ),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.timer,
               onChanged: (value) {
                 if (totalTimeError != null) {
                   setState(() {
@@ -289,7 +289,7 @@ class _CreateState extends State<Create> {
             // const SizedBox(height: 20),
             getLevelItem(),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.restaurant_menu,
               onChanged: (value) {
                 if (categoryError != null) {
                   setState(() {
@@ -308,7 +308,7 @@ class _CreateState extends State<Create> {
               textEditingController: _categoryController,
             ),
             InputField(
-              prefixIcon: Icons.badge,
+              prefixIcon: Icons.description,
               onChanged: (value) {
                 if (descriptionError != null) {
                   setState(() {
@@ -346,7 +346,7 @@ class _CreateState extends State<Create> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  icon: const Icon(Icons.app_registration),
+                  icon: const Icon(Icons.ramen_dining),
                   label: const Text(
                     "Create",
                     textAlign: TextAlign.center,
@@ -521,7 +521,7 @@ class _CreateState extends State<Create> {
           ),
           const SizedBox(height: 10),
           InputField(
-            prefixIcon: Icons.badge,
+            prefixIcon: Icons.edit,
             onChanged: (value) {
               if (subjectError != null) {
                 setState(() {
@@ -541,7 +541,7 @@ class _CreateState extends State<Create> {
           ),
           InputField(
             maxLine: 5,
-            prefixIcon: Icons.badge,
+            prefixIcon: Icons.menu_book,
             onChanged: (value) {
               if (detailError != null) {
                 setState(() {
@@ -585,7 +585,7 @@ class _CreateState extends State<Create> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          icon: const Icon(Icons.app_registration),
+          icon: const Icon(Icons.add),
           label: const Text(
             "Add new step",
             textAlign: TextAlign.center,
@@ -617,7 +617,7 @@ class _CreateState extends State<Create> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-          icon: const Icon(Icons.app_registration),
+          icon: const Icon(Icons.add),
           label: const Text(
             "Add new ingredients",
             textAlign: TextAlign.center,
