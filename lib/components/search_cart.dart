@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../utils/app_ui.dart';
+
 class SearchCard extends StatelessWidget {
   final TextEditingController _searchControl = TextEditingController();
 
@@ -39,7 +41,11 @@ class SearchCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
             ),
             hintText: "Search...",
-            prefixIcon: Icon(Icons.search, color: Colors.white, size: 30),
+            prefixIcon: Transform.scale(
+              scale: 0.7,
+              child: Image.asset(UI.search),
+            ),
+            //Icon(Icons.search, color: Colors.white, size: 30),
             suffixIcon: Icon(
               Icons.filter_alt_outlined,
               color: Colors.white,
