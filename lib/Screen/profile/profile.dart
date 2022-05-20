@@ -94,12 +94,30 @@ class _ProfileState extends State<Profile> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                OutlinedButton(
-                  onPressed: editProfile,
-                  child: const Text(
-                    'Edit Profile',
-                    style: TextStyle(color: Colors.white),
-                    softWrap: true,
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 3, bottom: 3, left: 10, right: 10),
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton.icon(
+                      onPressed: editProfile,
+
+                      ///
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: UI.appColor,
+                        shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      icon: const Icon(Icons.app_registration),
+                      label: const Text(
+                        "Edit Profile",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 10),

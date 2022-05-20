@@ -5,13 +5,22 @@ class UI {
   static const String iconspath = 'assets/icons/';
   static const String imagespath = 'assets/images/';
 
+  //logo
   static const String appLogo = "assets/images/appLogo.png";
 
   static const String lib = "assets/icons/lib.png";
-  static const String search = "assets/icons/search.png";
-
+  static const String search = "assets/icons/gSearch.png";
   static const String setting = "assets/icons/setting.png";
-  static const String arrowRight = "assets/icons/arrowright.png";
+  static const String arrowRight = "assets/icons/gArrow-Right.png";
+  static const String minus = "assets/icons/g-Minus-Border.png";
+  static const String plus = "assets/icons/g-Plus-Border.png";
+  static const String more = "assets/icons/gMore.png";
+  static const String clock = "assets/icons/gClock.png";
+  static const String pen = "assets/icons/gEdit.png";
+  static const String star = "assets/icons/gStar.png";
+  static const String arrowLeft = "assets/icons/gLeft.png";
+  static const String detail = "assets/icons/gRecipe.png";
+
   static const Color appColor = Color(0xFF51B418);
   static const Color selectColor = Color.fromARGB(255, 46, 104, 13);
   static const TextStyle h1 =

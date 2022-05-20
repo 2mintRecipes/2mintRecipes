@@ -6,6 +6,7 @@ import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
+import '../../components/input.dart';
 import '../../utils/app_ui.dart';
 
 class Create extends StatefulWidget {
@@ -18,18 +19,55 @@ class Create extends StatefulWidget {
 
 class _CreateState extends State<Create> {
   int _numSteps = 0;
+  int _numIngredient = 0;
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
   final List<String> _levelItems = ['1', '2', '3', '4', '5'];
-  String? _selectedLevel;
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _servingsController = TextEditingController();
-  TextEditingController _cookTimeController = TextEditingController();
-  TextEditingController _totalTimeController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _categoryController = TextEditingController();
+  String? _selectedLevel,
+      recipeName,
+      serving,
+      cookTime,
+      totalTime,
+      description,
+      category,
+      subject,
+      detail;
+  String? recipeNameError,
+      servingError,
+      cookTimeError,
+      totalTimeError,
+      descriptionError,
+      categoryError,
+      subjectError,
+      detailError;
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _servingsController = TextEditingController();
+  final TextEditingController _cookTimeController = TextEditingController();
+  final TextEditingController _totalTimeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _detailController = TextEditingController();
 
   RecipesService recipesService = RecipesService();
+
+  @override
+  void initState() {
+    super.initState();
+    recipeName = "";
+    serving = "";
+    cookTime = "";
+    totalTime = "";
+    description = "";
+    category = "";
+
+    recipeNameError = null;
+    servingError = null;
+    cookTimeError = null;
+    totalTimeError = null;
+    descriptionError = null;
+    categoryError = null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,26 +113,31 @@ class _CreateState extends State<Create> {
     _totalTimeController.dispose();
     _descriptionController.dispose();
     _categoryController.dispose();
+    _subjectController.dispose();
     super.dispose();
   }
 
   Widget getBody() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        getTitleSection(),
-        getBannerSection(),
-        getBasicInfoSection(),
-        getStepsSection(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: UI.topPadding, left: 30, right: 30, bottom: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          getTitleSection(),
+          getBannerSection(),
+          getBasicInfoSection(),
+          //getIngredientSection(),
+          getStepsSection(),
+        ],
+      ),
     );
   }
 
   Widget getTitleSection() {
     return Padding(
-      padding: const EdgeInsets.only(
-          top: UI.topPadding, bottom: 20, left: 30, right: 30),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
@@ -146,158 +189,270 @@ class _CreateState extends State<Create> {
 
   Widget getBasicInfoSection() {
     return Container(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(left: 5, right: 5, top: 20),
+      margin: const EdgeInsets.only(top: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
       ),
       child: Form(
         key: _formKeyBasicInfo,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Basic Info",
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                "INFORMATION",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _nameController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.title_sharp),
-                  hintText: 'Name',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _servingsController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.people_sharp),
-                  hintText: 'Servings',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _cookTimeController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.timer_sharp),
-                  hintText: 'Cook time',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _totalTimeController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.timer_sharp),
-                  hintText: 'Total time',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              // const SizedBox(height: 20),
-              getLevelItem(),
-              TextFormField(
-                controller: _categoryController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.timer_sharp),
-                  hintText: 'Category',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _descriptionController,
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.timer_sharp),
-                  hintText: 'Description',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              OutlinedButton(
-                onPressed: () async {
-                  if (_formKeyBasicInfo.currentState!.validate()) {
-                    _formKeyBasicInfo.currentState!.save();
-                    _addRecipe();
-                  }
-                },
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: BorderSide(
-                        color: Colors.white.withOpacity(0.4),
-                        width: 2,
-                      ),
+            ),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (recipeNameError != null) {
+                  setState(() {
+                    recipeNameError = null;
+                  });
+                }
+                setState(() {
+                  recipeName = value;
+                });
+              },
+              labelText: "Recipe Name",
+              errorText: recipeNameError,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _nameController,
+            ),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (recipeNameError != null) {
+                  setState(() {
+                    recipeNameError = null;
+                  });
+                }
+                setState(() {
+                  recipeName = value;
+                });
+              },
+              labelText: "Serves",
+              errorText: recipeNameError,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _nameController,
+            ),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (cookTimeError != null) {
+                  setState(() {
+                    cookTimeError = null;
+                  });
+                }
+                setState(() {
+                  cookTime = value;
+                });
+              },
+              labelText: "Cook time",
+              errorText: cookTimeError,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _cookTimeController,
+            ),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (totalTimeError != null) {
+                  setState(() {
+                    totalTimeError = null;
+                  });
+                }
+                setState(() {
+                  totalTime = value;
+                });
+              },
+              labelText: "Total Time",
+              errorText: totalTimeError,
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _totalTimeController,
+            ),
+            // const SizedBox(height: 20),
+            getLevelItem(),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (categoryError != null) {
+                  setState(() {
+                    categoryError = null;
+                  });
+                }
+                setState(() {
+                  category = value;
+                });
+              },
+              labelText: "Category",
+              errorText: categoryError,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _categoryController,
+            ),
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (descriptionError != null) {
+                  setState(() {
+                    descriptionError = null;
+                  });
+                }
+                setState(() {
+                  description = value;
+                });
+              },
+              labelText: "Description",
+              errorText: descriptionError,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _descriptionController,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+              child: SizedBox(
+                height: 40,
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+
+                  ///
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: UI.appColor,
+                    shape: RoundedRectangleBorder(
+                      //to set border radius to button
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                ),
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                child: const Text(
-                  'Lưu',
-                  style: TextStyle(color: Colors.white),
+                  icon: const Icon(Icons.app_registration),
+                  label: const Text(
+                    "Create",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget getIngredientSection() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(top: 20, bottom: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white.withOpacity(.4),
+      ),
+      child: Form(
+        key: _formKeyIngredients,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "INGREDIENT",
+                style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+            /// Steps
+            GridView.count(
+              crossAxisCount: 1,
+              crossAxisSpacing: 10,
+              shrinkWrap: true,
+              controller: ScrollController(),
+              children: List.generate(
+                  _numIngredient, (index) => getIngredientItem(index + 1)),
+            ),
+
+            /// Add button
+            getAddNewIngredientButton(),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getIngredientItem(int index) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          InputField(
+            onChanged: (value) {
+              if (subjectError != null) {
+                setState(() {
+                  subjectError = null;
+                });
+              }
+              setState(() {
+                subject = value;
+              });
+            },
+            labelText: "Name",
+            errorText: subjectError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _subjectController,
+          ),
+          InputField(
+            onChanged: (value) {
+              if (detailError != null) {
+                setState(() {
+                  detailError = null;
+                });
+              }
+              setState(() {
+                detail = value;
+              });
+            },
+            labelText: "g",
+            errorText: detailError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _detailController,
+          ),
+        ],
       ),
     );
   }
@@ -305,42 +460,44 @@ class _CreateState extends State<Create> {
   Widget getStepsSection() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(left: 5, right: 5, top: 20),
+      margin: const EdgeInsets.only(top: 20, bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
       ),
       child: Form(
         key: _formKeyIngredients,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Steps",
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "STEP",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            ),
 
-              /// Steps
-              GridView.count(
-                crossAxisCount: 1,
-                crossAxisSpacing: 10,
-                shrinkWrap: true,
-                controller: ScrollController(),
-                children:
-                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
-              ),
+            /// Steps
+            GridView.count(
+              crossAxisCount: 1,
+              crossAxisSpacing: 10,
+              shrinkWrap: true,
+              controller: ScrollController(),
+              children:
+                  List.generate(_numSteps, (index) => getStepItem(index + 1)),
+            ),
 
-              /// Add button
-              getAddNewRecipeButton(),
-            ],
-          ),
+            /// Add button
+            getAddNewRecipeButton(),
+            const SizedBox(
+              height: 20,
+            ),
+          ],
         ),
       ),
     );
@@ -348,44 +505,59 @@ class _CreateState extends State<Create> {
 
   Widget getStepItem(int index) {
     return Container(
-      margin: const EdgeInsets.only(top: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Step #" + index.toString(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 20,
-              ),
-              prefixIcon: const Icon(Icons.title_sharp),
-              hintText: 'Subject',
-              hintStyle: const TextStyle(fontSize: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              'Step ' + index.toString(),
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
               ),
             ),
           ),
           const SizedBox(height: 10),
-          TextFormField(
-            maxLines: 5,
-            decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.only(top: 20, left: 30, right: 30),
-              prefixIcon: const Icon(Icons.description_sharp),
-              hintText: 'Detail',
-              hintStyle: const TextStyle(fontSize: 14),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+          InputField(
+            prefixIcon: Icons.badge,
+            onChanged: (value) {
+              if (subjectError != null) {
+                setState(() {
+                  subjectError = null;
+                });
+              }
+              setState(() {
+                subject = value;
+              });
+            },
+            labelText: "Subject",
+            errorText: subjectError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _subjectController,
+          ),
+          InputField(
+            maxLine: 5,
+            prefixIcon: Icons.badge,
+            onChanged: (value) {
+              if (detailError != null) {
+                setState(() {
+                  detailError = null;
+                });
+              }
+              setState(() {
+                detail = value;
+              });
+            },
+            labelText: "Detail",
+            errorText: detailError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _detailController,
           ),
         ],
       ),
@@ -393,39 +565,77 @@ class _CreateState extends State<Create> {
   }
 
   Widget getAddNewRecipeButton() {
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        OutlinedButton(
+    return Padding(
+      padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+      child: SizedBox(
+        height: 40,
+        child: ElevatedButton.icon(
           onPressed: () {
             setState(() {
               _numSteps += 1;
             });
           },
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(
-                  color: Colors.white.withOpacity(0.4),
-                  width: 2,
-                ),
-              ),
+
+          ///
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: UI.appColor,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: const Text(
-            'Add new step',
-            style: TextStyle(color: Colors.white),
+          icon: const Icon(Icons.app_registration),
+          label: const Text(
+            "Add new step",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, color: Colors.white),
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget getAddNewIngredientButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+      child: SizedBox(
+        height: 40,
+        child: ElevatedButton.icon(
+          onPressed: () {
+            setState(() {
+              _numIngredient += 1;
+            });
+          },
+
+          ///
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: UI.appColor,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          icon: const Icon(Icons.app_registration),
+          label: const Text(
+            "Add new ingredients",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 
   Widget getLevelItem() {
     return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5),
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(.2),
+          borderRadius: BorderRadius.circular(15)),
       child: Column(
         children: [
           DropdownButtonFormField2(
@@ -436,26 +646,32 @@ class _CreateState extends State<Create> {
               });
             },
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.people),
+              prefixIcon: Icon(
+                Icons.people,
+                color: Colors.white.withOpacity(.5),
+                size: 30,
+              ),
               //Add isDense true and zero Padding.
               //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
               isDense: true,
               // contentPadding: EdgeInsets.zero,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
+              border: InputBorder.none,
               //Add more decoration as you want here
               //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
             ),
             isExpanded: true,
 
-            hint: const Text(
-              'Level',
-              // style: TextStyle(fontSize: 14),
-            ),
-            icon: const Icon(
+            hint: Text('Level',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white.withOpacity(.5),
+                )
+                // style: TextStyle(fontSize: 14),
+                ),
+            icon: Icon(
               Icons.arrow_drop_down,
-              color: Colors.black45,
+              color: Colors.white.withOpacity(.5),
+              size: 30,
             ),
             // iconSize: 30,
             // buttonHeight: 60,
@@ -481,7 +697,7 @@ class _CreateState extends State<Create> {
                 .toList(),
             validator: (value) {
               if (value == null) {
-                return 'Chọn mức độ';
+                return 'Choose level';
               }
             },
             onSaved: (value) {

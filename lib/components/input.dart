@@ -14,6 +14,7 @@ class InputField extends StatelessWidget {
       this.obscureText = false,
       this.prefixIcon,
       this.textEditingController,
+      this.maxLine,
       Key? key})
       : super(key: key);
 
@@ -26,6 +27,7 @@ class InputField extends StatelessWidget {
   final bool autoFocus;
   final bool obscureText;
   final IconData? prefixIcon;
+  final int? maxLine;
   final TextEditingController? textEditingController;
 
   @override
@@ -42,6 +44,7 @@ class InputField extends StatelessWidget {
           controller: textEditingController,
           style: const TextStyle(color: Colors.white, fontSize: 20),
           autofocus: autoFocus,
+          maxLines: maxLine,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           keyboardType: keyboardType,
