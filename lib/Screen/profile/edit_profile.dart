@@ -10,6 +10,9 @@ import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 
+import '../../components/input.dart';
+import '../../utils/app_ui.dart';
+
 class EditProfile extends StatefulWidget {
   static const routeName = '/EditProfile';
   const EditProfile({Key? key}) : super(key: key);
@@ -19,17 +22,172 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  TextEditingController _fullnameController = TextEditingController();
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _phoneController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  late String fullName,
+      username,
+      sex,
+      phone,
+      address,
+      email,
+      password,
+      reEnterPassword;
+  String? fullNameError,
+      usernameError,
+      sexError,
+      phoneError,
+      addressError,
+      emailError,
+      passwordError,
+      reEnterPasswordError;
+
+  @override
+  void initState() {
+    super.initState();
+    _passwordVisible = false;
+    _confirmPasswordVisible = false;
+    fullName = "";
+    username = "";
+    sex = "";
+    phone = "";
+    address = "";
+    email = "";
+    password = "";
+    reEnterPassword = "";
+
+    fullNameError = null;
+    usernameError = null;
+    sexError = null;
+    phoneError = null;
+    addressError = null;
+    emailError = null;
+    passwordError = null;
+    reEnterPasswordError = null;
+  }
+
+  void resetErrorText() {
+    setState(() {
+      fullNameError = null;
+      usernameError = null;
+      sexError = null;
+      phoneError = null;
+      addressError = null;
+      emailError = null;
+      passwordError = null;
+      reEnterPasswordError = null;
+    });
+  }
+
+  bool validateProfileInfo() {
+    resetErrorText();
+    bool isValid = true;
+    if (fullName.isEmpty) {
+      setState(() {
+        fullNameError = "       Please enter a FullName";
+      });
+      isValid = false;
+    }
+    if (username.isEmpty) {
+      setState(() {
+        usernameError = "       Please enter a Username";
+      });
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  bool validateLoginInfo() {
+    resetErrorText();
+
+    bool isValid = true;
+
+    RegExp emailExp = RegExp(
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
+    if (username.isEmpty) {
+      setState(() {
+        usernameError = "       Please enter a Username";
+      });
+      isValid = false;
+    }
+    if (email.isEmpty) {
+      setState(() {
+        emailError = "       Please enter a Email";
+      });
+      isValid = false;
+    }
+    if (!emailExp.hasMatch(email)) {
+      setState(() {
+        emailError = "       Email is invalid";
+      });
+      isValid = false;
+    }
+
+    if (password.isEmpty) {
+      setState(() {
+        passwordError = "       Please enter a password";
+      });
+      isValid = false;
+    }
+    if (reEnterPassword.isEmpty) {
+      setState(() {
+        reEnterPassword = "       Please confirm password";
+      });
+      isValid = false;
+    }
+
+    if (password != reEnterPassword) {
+      setState(() {
+        reEnterPasswordError = "       Passwords do not match";
+      });
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  void submitLoginInfo() {
+    if (validateLoginInfo()) {
+      {
+        () {
+          if (_formKeyCreInfo.currentState!.validate()) {
+            _formKeyCreInfo.currentState!.save();
+          }
+        };
+      }
+    }
+  }
+
+  void submitProfileInfo() {
+    if (validateProfileInfo()) {
+      {
+        () async {
+          if (_formKeyUserInfo.currentState!.validate()) {
+            _formKeyUserInfo.currentState!.save();
+            await _updateUserInfo();
+          }
+        };
+      }
+    }
+  }
+
   String? _selectedGender;
   String? _avatar;
 
   final List<String> genderItems = ['Male', 'Female', 'Other'];
+  final List<IconData> genderIcons = [
+    Icons.male,
+    Icons.female,
+    Icons.more_horiz
+  ];
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
@@ -42,18 +200,10 @@ class _EditProfileState extends State<EditProfile> {
   String? _imagePath;
 
   @override
-  void initState() {
-    super.initState();
-    _passwordVisible = false;
-    _confirmPasswordVisible = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
+        backgroundColor: Colors.transparent,
+        body: Stack(children: [
           SafeArea(
             child: Container(
               decoration: BoxDecoration(
@@ -61,7 +211,7 @@ class _EditProfileState extends State<EditProfile> {
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.white.withOpacity(1),
+                    Colors.black.withOpacity(.6),
                     BlendMode.darken,
                   ),
                   image: const AssetImage("assets/images/bg.jpg"),
@@ -69,40 +219,37 @@ class _EditProfileState extends State<EditProfile> {
               ),
             ),
           ),
-          getBody(),
-        ],
-      ),
-    );
+          ClipRRect(
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: SingleChildScrollView(
+                  controller: ScrollController(),
+                  padding: const EdgeInsets.only(
+                      left: 30, right: 30, top: UI.topPadding, bottom: 20),
+                  child: getBody(),
+                )),
+          ),
+        ]));
   }
 
   Widget getBody() {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: SingleChildScrollView(
-          controller: ScrollController(),
-          padding:
-              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child: Column(
-            children: [
-              const Text(
-                "Cập nhật",
-                style: TextStyle(
-                  fontSize: 26,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              getBasicInfo(),
-              const SizedBox(height: 20),
-              getUserInfo(),
-              const SizedBox(height: 20),
-              getUserConfidentialInfo(),
-            ],
+    return Column(
+      children: [
+        const Text(
+          "Edit Profile",
+          style: TextStyle(
+            fontSize: 26,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
-      ),
+        const SizedBox(height: 20),
+        getBasicInfo(),
+        const SizedBox(height: 20),
+        getUserInfo(),
+        const SizedBox(height: 20),
+        getUserConfidentialInfo(),
+      ],
     );
   }
 
@@ -125,23 +272,63 @@ class _EditProfileState extends State<EditProfile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            OutlinedButton(
-              onPressed: () {
-                _getFromCamera();
-              },
-              child: const Text(
-                'Chụp ảnh',
-                style: TextStyle(color: Colors.white),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+              child: SizedBox(
+                height: 40,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    _getFromCamera();
+                  },
+
+                  ///
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: UI.appColor,
+                    shape: RoundedRectangleBorder(
+                      //to set border radius to button
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  icon: const Icon(Icons.add_a_photo),
+                  label: const Text(
+                    "Camera",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 10),
-            OutlinedButton(
-              onPressed: () {
-                _getFromGallery();
-              },
-              child: const Text(
-                'Thư viện',
-                style: TextStyle(color: Colors.white),
+            Padding(
+              padding:
+                  const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+              child: SizedBox(
+                height: 40,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _getFromGallery();
+                    });
+                  },
+
+                  ///
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: UI.appColor,
+                    shape: RoundedRectangleBorder(
+                      //to set border radius to button
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  icon: const Icon(Icons.photo_library),
+                  label: const Text(
+                    "Album",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                ),
               ),
             ),
           ],
@@ -152,104 +339,132 @@ class _EditProfileState extends State<EditProfile> {
 
   Widget getUserInfo() {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(bottom: 10, top: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
       ),
       child: Form(
         key: _formKeyUserInfo,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Thông tin cá nhân",
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "Personal Info",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _fullnameController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.account_circle_sharp),
-                  hintText: 'Họ tên',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.verified_user_sharp),
-                  hintText: 'Username',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField2(
+            ),
+            const SizedBox(height: 10),
+            // chỗ này
+            InputField(
+              prefixIcon: Icons.badge,
+              onChanged: (value) {
+                if (fullNameError != null) {
+                  setState(() {
+                    fullNameError = null;
+                  });
+                }
+                setState(() {
+                  fullName = value;
+                });
+              },
+              labelText: "FullName",
+              errorText: fullNameError,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _fullNameController,
+            ),
+            InputField(
+              prefixIcon: Icons.account_circle,
+              onChanged: (value) {
+                if (usernameError != null) {
+                  setState(() {
+                    usernameError = null;
+                  });
+                }
+                setState(() {
+                  username = value;
+                });
+              },
+              labelText: "Username",
+              errorText: usernameError,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _usernameController,
+            ),
+            Container(
+              padding:
+                  const EdgeInsets.only(left: 5, top: 10, bottom: 5, right: 10),
+              margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5),
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(.2),
+                  borderRadius: BorderRadius.circular(15)),
+              child: DropdownButtonFormField2(
                 value: _selectedGender,
+                style: const TextStyle(
+                  fontSize: 20,
+                  overflow: TextOverflow.ellipsis,
+                  color: Colors.white,
+                ),
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.people),
-                  //Add isDense true and zero Padding.
-                  //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                  isDense: true,
-                  // contentPadding: EdgeInsets.zero,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                  prefixIcon: Icon(
+                    Icons.people,
+                    color: Colors.white.withOpacity(.5),
+                    size: 30,
                   ),
-                  //Add more decoration as you want here
-                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                  isDense: true,
+                  border: InputBorder.none,
                 ),
                 isExpanded: true,
-                hint: const Text(
-                  'Giới tính',
-                  // style: TextStyle(fontSize: 14),
+                hint: Text(
+                  'Sex',
+                  style: TextStyle(
+                    fontSize: 20,
+                    overflow: TextOverflow.ellipsis,
+                    color: Colors.white.withOpacity(.5),
+                  ),
                 ),
-                icon: const Icon(
-                  Icons.arrow_drop_down,
-                  color: Colors.black45,
+                icon: Icon(
+                  Icons.expand_more,
+                  color: Colors.white.withOpacity(.5),
+                  size: 30,
                 ),
-                // iconSize: 30,
-                // buttonHeight: 60,
-                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
                 dropdownDecoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                ),
+                    color: Colors.black.withOpacity(.6),
+                    borderRadius: BorderRadius.circular(15)),
                 items: genderItems
                     .map(
                       (item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(
-                          item,
-                          // style: const TextStyle(
-                          //   fontSize: 14,
-                          // ),
-                        ),
-                      ),
+                          value: item,
+                          child: Row(
+                            children: [
+                              Text(
+                                item + "  ",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white.withOpacity(.5),
+                                    fontWeight: FontWeight.normal),
+                              ),
+                              Icon(
+                                genderIcons[genderItems.indexOf(item)],
+                                size: 30,
+                                color: Colors.white.withOpacity(.5),
+                              )
+                            ],
+                          )),
                     )
                     .toList(),
                 validator: (value) {
                   if (value == null) {
-                    return 'Chọn giới tính';
+                    return 'Choose a sex';
                   }
                 },
                 onChanged: (value) {
@@ -261,53 +476,52 @@ class _EditProfileState extends State<EditProfile> {
                   _selectedGender = value.toString();
                 },
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _phoneController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.phone),
-                  hintText: 'Số điện thoại',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.location_on),
-                  hintText: 'Địa chỉ',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              OutlinedButton(
-                onPressed: () async {
-                  if (_formKeyUserInfo.currentState!.validate()) {
-                    _formKeyUserInfo.currentState!.save();
-                    await _updateUserInfo();
-                  }
-                },
-                child: const Text(
-                  'Lưu',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+            ),
+
+            InputField(
+              prefixIcon: Icons.phone,
+              onChanged: (value) {
+                if (phoneError != null) {
+                  setState(() {
+                    phoneError = null;
+                  });
+                }
+                setState(() {
+                  phone = value;
+                });
+              },
+              labelText: "Phone",
+              errorText: phoneError,
+              keyboardType: TextInputType.phone,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _phoneController,
+            ),
+            InputField(
+              prefixIcon: Icons.location_on,
+              onChanged: (value) {
+                if (addressError != null) {
+                  setState(() {
+                    addressError = null;
+                  });
+                }
+                setState(() {
+                  address = value;
+                });
+              },
+              labelText: "Address",
+              errorText: addressError,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _addressController,
+            ),
+            const SizedBox(height: 10),
+            getUpdateProfileInfoButton(),
+            const SizedBox(
+              height: 20,
+            )
+          ],
         ),
       ),
     );
@@ -319,7 +533,7 @@ class _EditProfileState extends State<EditProfile> {
       print(_avatar);
 
       UserDto data = UserDto(
-        fullname: _fullnameController.text,
+        fullName: _fullNameController.text,
         username: _usernameController.text,
         address: _addressController.text,
         phone: _phoneController.text,
@@ -335,115 +549,148 @@ class _EditProfileState extends State<EditProfile> {
 
   Widget getUserConfidentialInfo() {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(top: 10, right: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
       ),
       child: Form(
         key: _formKeyCreInfo,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Thông tin đăng nhập",
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                "Confidential Info",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.alternate_email_outlined),
-                  hintText: 'Email',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: !_passwordVisible,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.verified_user_sharp),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                  ),
-                  hintText: 'Mật khẩu',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _confirmPasswordController,
-                obscureText: !_confirmPasswordVisible,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 20,
-                  ),
-                  prefixIcon: const Icon(Icons.verified_user_sharp),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _confirmPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _confirmPasswordVisible = !_confirmPasswordVisible;
-                      });
-                    },
-                  ),
-                  hintText: 'Nhập lại mật khẩu',
-                  hintStyle: const TextStyle(fontSize: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              OutlinedButton(
-                onPressed: () {
-                  if (_formKeyCreInfo.currentState!.validate()) {
-                    _formKeyCreInfo.currentState!.save();
-                  }
-                },
-                child: const Text(
-                  'Lưu',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
+            ),
+            const SizedBox(height: 10),
+            InputField(
+              prefixIcon: Icons.alternate_email,
+              onChanged: (value) {
+                if (emailError != null) {
+                  setState(() {
+                    emailError = null;
+                  });
+                }
+                setState(() {
+                  email = value;
+                });
+              },
+              labelText: "Email",
+              errorText: emailError,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _emailController,
+            ),
+            InputField(
+              prefixIcon: Icons.lock,
+              onChanged: (value) {
+                if (passwordError != null) {
+                  setState(() {
+                    passwordError = null;
+                  });
+                }
+                setState(() {
+                  password = value;
+                });
+              },
+              labelText: "Password",
+              errorText: passwordError,
+              keyboardType: TextInputType.visiblePassword,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _passwordController,
+            ),
+            InputField(
+              prefixIcon: Icons.lock,
+              onChanged: (value) {
+                if (reEnterPasswordError != null) {
+                  setState(() {
+                    reEnterPasswordError = null;
+                  });
+                }
+                setState(() {
+                  reEnterPassword = value;
+                });
+              },
+              labelText: "Confirm Password",
+              errorText: reEnterPasswordError,
+              keyboardType: TextInputType.visiblePassword,
+              textInputAction: TextInputAction.next,
+              autoFocus: true,
+              textEditingController: _confirmPasswordController,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            getUpdateLoginInfoButton(),
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getUpdateLoginInfoButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+      child: SizedBox(
+        height: 40,
+        child: ElevatedButton.icon(
+          onPressed: submitLoginInfo,
+
+          ///
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: UI.appColor,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          icon: const Icon(Icons.save),
+          label: const Text(
+            "Save",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getUpdateProfileInfoButton() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
+      child: SizedBox(
+        height: 40,
+        child: ElevatedButton.icon(
+          onPressed: submitProfileInfo,
+
+          ///
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: UI.appColor,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          icon: const Icon(Icons.save),
+          label: const Text(
+            "Save",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 15, color: Colors.white),
           ),
         ),
       ),

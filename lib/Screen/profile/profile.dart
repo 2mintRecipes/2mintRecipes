@@ -111,7 +111,7 @@ class _ProfileState extends State<Profile> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      icon: const Icon(Icons.app_registration),
+                      icon: const Icon(Icons.manage_accounts),
                       label: const Text(
                         "Edit Profile",
                         textAlign: TextAlign.center,
