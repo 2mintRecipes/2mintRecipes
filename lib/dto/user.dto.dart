@@ -1,5 +1,5 @@
 class UserDto {
-  String fullname;
+  String fullName;
   String? username;
   String? avatar;
   String? phone;
@@ -7,7 +7,7 @@ class UserDto {
   String? gender;
 
   UserDto(
-      {required this.fullname,
+      {required this.fullName,
       this.username,
       this.avatar,
       this.phone,
@@ -15,7 +15,7 @@ class UserDto {
       this.gender});
 
   factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
-        fullname: json["fullname"],
+        fullName: json["fullName"],
         username: json["username"],
         avatar: json["avatar"],
         phone: json["phone"],
@@ -24,7 +24,7 @@ class UserDto {
       );
 
   Map<String, dynamic> toJson() => {
-        "fullname": fullname,
+        "fullName": fullName,
         "username": username,
         "avatar": avatar,
         "phone": phone,

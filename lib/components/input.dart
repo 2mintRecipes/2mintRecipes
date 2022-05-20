@@ -32,7 +32,6 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.all(5),
@@ -42,14 +41,15 @@ class InputField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15)),
         child: TextField(
           controller: textEditingController,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-          autofocus: autoFocus,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              overflow: TextOverflow.ellipsis),
           maxLines: maxLine,
           onChanged: onChanged,
           onSubmitted: onSubmitted,
           keyboardType: keyboardType,
           textInputAction: textInputAction,
-          obscureText: obscureText,
           decoration: InputDecoration(
             prefixIcon: Icon(
               prefixIcon,
@@ -58,6 +58,7 @@ class InputField extends StatelessWidget {
             ),
             hintStyle: TextStyle(
               fontSize: 20,
+              overflow: TextOverflow.ellipsis,
               color: Colors.white.withOpacity(.5),
             ),
             border: InputBorder.none,

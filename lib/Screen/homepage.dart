@@ -190,29 +190,6 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // _sizedContainer(
-                          //   CachedNetworkImage(
-                          //     imageUrl: allRecipes[index]['image'],
-                          //     imageBuilder: (context, imageProvider) =>
-                          //         Container(
-                          //       decoration: BoxDecoration(
-                          //         image: DecorationImage(
-                          //           image: imageProvider,
-                          //           fit: BoxFit.cover,
-                          //           colorFilter: const ColorFilter.mode(
-                          //             Colors.red,
-                          //             BlendMode.colorBurn,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     placeholder: (context, url) =>
-                          //         const CircularProgressIndicator(),
-                          //     errorWidget: (context, url, error) =>
-                          //         const Icon(Icons.error),
-                          //   ),
-                          // ),
-
                           Container(
                             width: 250,
                             height: 150,
@@ -229,7 +206,6 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
-
                           const SizedBox(
                             height: 5,
                           ),
