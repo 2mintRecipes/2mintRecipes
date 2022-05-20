@@ -6,6 +6,8 @@ import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
+import '../../utils/app_ui.dart';
+
 class Create extends StatefulWidget {
   static const routeName = '/Create';
   const Create({Key? key}) : super(key: key);
@@ -42,7 +44,7 @@ class _CreateState extends State<Create> {
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
-                    Colors.white.withOpacity(1),
+                    Colors.black.withOpacity(.6),
                     BlendMode.darken,
                   ),
                   image: const AssetImage("assets/images/bg.jpg"),
@@ -50,7 +52,16 @@ class _CreateState extends State<Create> {
               ),
             ),
           ),
-          getBody(),
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ClipRRect(
+                // borderRadius: BorderRadius.circular(5),
+                child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: SingleChildScrollView(
+                      child: getBody(),
+                    ))),
+          )
         ],
       ),
     );
@@ -68,31 +79,22 @@ class _CreateState extends State<Create> {
   }
 
   Widget getBody() {
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: SingleChildScrollView(
-          controller: ScrollController(),
-          padding:
-              const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              getTitleSection(),
-              getBannerSection(),
-              getBasicInfoSection(),
-              getStepsSection(),
-            ],
-          ),
-        ),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        getTitleSection(),
+        getBannerSection(),
+        getBasicInfoSection(),
+        getStepsSection(),
+      ],
     );
   }
 
   Widget getTitleSection() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
+      padding: const EdgeInsets.only(
+          top: UI.topPadding, bottom: 20, left: 30, right: 30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
