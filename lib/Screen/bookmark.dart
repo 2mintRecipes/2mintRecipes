@@ -125,6 +125,7 @@ class _BookmarkState extends State<Bookmark> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    margin: const EdgeInsets.only(right: 20),
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.black.withOpacity(.1),
@@ -135,7 +136,7 @@ class _BookmarkState extends State<Bookmark> {
                           : Colors.black.withOpacity(.1),
                     ),
                     padding: const EdgeInsets.only(
-                        top: 7, bottom: 7, left: 15, right: 15),
+                        top: 5, bottom: 5, left: 10, right: 10),
                     child: Text(
                       song_type_1[index],
                       style: const TextStyle(
