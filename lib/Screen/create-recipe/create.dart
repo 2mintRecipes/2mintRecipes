@@ -22,6 +22,7 @@ class _CreateState extends State<Create> {
   int _numIngredient = 0;
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
+  final _formKeySteps = GlobalKey<FormState>();
   final List<String> _levelItems = ['1', '2', '3', '4', '5'];
   String? _selectedLevel,
       recipeName,
@@ -120,7 +121,11 @@ class _CreateState extends State<Create> {
   Widget getBody() {
     return Padding(
       padding: const EdgeInsets.only(
-          top: UI.topPadding, left: 30, right: 30, bottom: 20),
+        top: UI.topPadding,
+        // left: 30,
+        // right: 30,
+        bottom: 20,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,8 +133,9 @@ class _CreateState extends State<Create> {
           getTitleSection(),
           getBannerSection(),
           getBasicInfoSection(),
-          //getIngredientSection(),
+          getIngredientSection(),
           getStepsSection(),
+          getCreateWidget(),
         ],
       ),
     );
@@ -139,7 +145,7 @@ class _CreateState extends State<Create> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           Text(
             "Create recipe",
@@ -148,6 +154,7 @@ class _CreateState extends State<Create> {
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -200,7 +207,7 @@ class _CreateState extends State<Create> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.only(top: 20, bottom: 20),
               child: Text(
                 "INFORMATION",
                 style: TextStyle(
@@ -243,10 +250,10 @@ class _CreateState extends State<Create> {
               },
               labelText: "Serves",
               errorText: recipeNameError,
-              keyboardType: TextInputType.name,
+              keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               autoFocus: true,
-              textEditingController: _nameController,
+              textEditingController: _servingsController,
             ),
             InputField(
               prefixIcon: Icons.timer,
@@ -329,35 +336,6 @@ class _CreateState extends State<Create> {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
-              child: SizedBox(
-                height: 40,
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-
-                  ///
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: UI.appColor,
-                    shape: RoundedRectangleBorder(
-                      //to set border radius to button
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  icon: const Icon(Icons.ramen_dining),
-                  label: const Text(
-                    "Create",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            )
           ],
         ),
       ),
@@ -466,7 +444,7 @@ class _CreateState extends State<Create> {
         color: Colors.white.withOpacity(.4),
       ),
       child: Form(
-        key: _formKeyIngredients,
+        key: _formKeySteps,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -660,7 +638,10 @@ class _CreateState extends State<Create> {
               //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
             ),
             isExpanded: true,
-
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
             hint: Text('Level',
                 style: TextStyle(
                   fontSize: 20,
@@ -678,6 +659,7 @@ class _CreateState extends State<Create> {
             // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
             dropdownDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
+              color: Colors.grey.withOpacity(.95),
             ),
             items: _levelItems
                 .map(
@@ -709,6 +691,51 @@ class _CreateState extends State<Create> {
     );
   }
 
+  Widget getCreateWidget() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white.withOpacity(.4),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: SizedBox(
+              height: 50,
+              width: 200,
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await _addRecipe();
+                },
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: UI.appColor,
+                  shape: RoundedRectangleBorder(
+                    //to set border radius to button
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                icon: const Icon(Icons.ramen_dining),
+                label: const Text(
+                  "Create",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _clearText() {
     _nameController.clear();
     _descriptionController.clear();
@@ -719,7 +746,7 @@ class _CreateState extends State<Create> {
     _selectedLevel = null;
   }
 
-  _addRecipe() async {
+  Future _addRecipe() async {
     RecipeDto data = RecipeDto(
       name: _nameController.text,
       description: _descriptionController.text,

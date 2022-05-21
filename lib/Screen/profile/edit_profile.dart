@@ -256,8 +256,9 @@ class _EditProfileState extends State<EditProfile> {
   getAvatar() {
     return _image != null
         ? FileImage(_image!)
-        // : CloudinaryImage('https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
-        : const AssetImage("assets/images/avatar.jpg");
+        : const NetworkImage(
+            'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
+    // : const AssetImage("assets/images/avatar.jpg");
   }
 
   Widget getBasicInfo() {

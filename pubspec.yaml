@@ -49,6 +49,7 @@ dependencies:
   cloud_firestore: ^3.1.14
   cached_network_image: ^3.2.0
   cloudinary_public: ^0.11.0
+  rflutter_alert: ^2.0.4
 
 dev_dependencies:
   flutter_test:
