@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:x2mint_recipes/components/button.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
+import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
@@ -20,10 +24,16 @@ class Create extends StatefulWidget {
 class _CreateState extends State<Create> {
   int _numSteps = 0;
   int _numIngredient = 0;
+  final ImagePicker _picker = ImagePicker();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
   final _formKeySteps = GlobalKey<FormState>();
   final List<String> _levelItems = ['1', '2', '3', '4', '5'];
+  // late bool showEditButton;
+  File? _image;
+  String? _imagePath;
+  String? _imageUrl;
   String? _selectedLevel,
       recipeName,
       serving,
@@ -55,6 +65,8 @@ class _CreateState extends State<Create> {
   @override
   void initState() {
     super.initState();
+    // showEditButton = false;
+
     recipeName = "";
     serving = "";
     cookTime = "";
@@ -163,9 +175,6 @@ class _CreateState extends State<Create> {
 
   Widget getBannerSection() {
     return GestureDetector(
-      onTap: () {
-        print("pressed");
-      },
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -181,12 +190,42 @@ class _CreateState extends State<Create> {
               borderRadius: BorderRadius.circular(15.0),
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: AspectRatio(
-              aspectRatio: 16 / 9,
-              child: Image(
-                image: AssetImage(songs[0]['img']),
-                fit: BoxFit.cover,
-              ),
+            child: Stack(
+              children: <Widget>[
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: InkWell(
+                    // onTap: () => setState(() => showEditButton = true),
+                    child: Image(
+                      image: getBanner(), // AssetImage(songs[0]['img']),
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                      isAntiAlias: true,
+                    ),
+                  ),
+                ),
+                // if (showEditButton)
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.75),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: IconButton(
+                      onPressed: () async {
+                        await _getFromGallery();
+                      },
+                      icon: const Icon(Icons.edit),
+                      color: Colors.grey,
+                      iconSize: 24,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -194,9 +233,29 @@ class _CreateState extends State<Create> {
     );
   }
 
+  Future _getFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+        _imagePath = image.path;
+      });
+    }
+  }
+
+  getBanner() {
+    try {
+      return FileImage(_image!);
+    } catch (e) {
+      return const NetworkImage(
+          'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
+      // const AssetImage("assets/images/avatar.jpg");
+    }
+  }
+
   Widget getBasicInfoSection() {
     return Container(
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
@@ -217,6 +276,8 @@ class _CreateState extends State<Create> {
                 ),
               ),
             ),
+
+            /// Name
             InputField(
               prefixIcon: Icons.restaurant,
               onChanged: (value) {
@@ -229,13 +290,16 @@ class _CreateState extends State<Create> {
                   recipeName = value;
                 });
               },
-              labelText: "Recipe Name",
+              labelText: "Recipe name",
               errorText: recipeNameError,
               keyboardType: TextInputType.name,
               textInputAction: TextInputAction.next,
               autoFocus: true,
               textEditingController: _nameController,
             ),
+            const SizedBox(height: 15),
+
+            /// Servings
             InputField(
               prefixIcon: Icons.supervisor_account,
               onChanged: (value) {
@@ -248,13 +312,16 @@ class _CreateState extends State<Create> {
                   recipeName = value;
                 });
               },
-              labelText: "Serves",
+              labelText: "Servings",
               errorText: recipeNameError,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               autoFocus: true,
               textEditingController: _servingsController,
             ),
+            const SizedBox(height: 15),
+
+            /// Cook time
             InputField(
               prefixIcon: Icons.timer,
               onChanged: (value) {
@@ -274,6 +341,9 @@ class _CreateState extends State<Create> {
               autoFocus: true,
               textEditingController: _cookTimeController,
             ),
+            const SizedBox(height: 15),
+
+            /// Total time
             InputField(
               prefixIcon: Icons.timer,
               onChanged: (value) {
@@ -286,15 +356,16 @@ class _CreateState extends State<Create> {
                   totalTime = value;
                 });
               },
-              labelText: "Total Time",
+              labelText: "Total time",
               errorText: totalTimeError,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               autoFocus: true,
               textEditingController: _totalTimeController,
             ),
-            // const SizedBox(height: 20),
-            getLevelItem(),
+            const SizedBox(height: 15),
+
+            /// Category
             InputField(
               prefixIcon: Icons.restaurant_menu,
               onChanged: (value) {
@@ -314,6 +385,9 @@ class _CreateState extends State<Create> {
               autoFocus: true,
               textEditingController: _categoryController,
             ),
+            const SizedBox(height: 15),
+
+            /// Description
             InputField(
               prefixIcon: Icons.description,
               onChanged: (value) {
@@ -333,9 +407,9 @@ class _CreateState extends State<Create> {
               autoFocus: true,
               textEditingController: _descriptionController,
             ),
-            const SizedBox(
-              height: 10,
-            ),
+
+            /// Level
+            getLevelItem(),
           ],
         ),
       ),
@@ -747,6 +821,11 @@ class _CreateState extends State<Create> {
   }
 
   Future _addRecipe() async {
+    if (_imagePath != null) {
+      _imageUrl = await _cloudinaryService.uploadImage(_imagePath!);
+      print(_imageUrl);
+    }
+
     RecipeDto data = RecipeDto(
       name: _nameController.text,
       description: _descriptionController.text,
@@ -755,8 +834,7 @@ class _CreateState extends State<Create> {
       totalTime: double.tryParse(_totalTimeController.text),
       category: _categoryController.text,
       level: int.tryParse(_selectedLevel ?? "0"),
-      image:
-          "https://i.pinimg.com/564x/f4/c0/24/f4c024614b8806c25da375453924b577.jpg",
+      image: _imageUrl,
     );
     print(data.toJson());
 
