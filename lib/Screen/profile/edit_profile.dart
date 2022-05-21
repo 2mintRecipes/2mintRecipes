@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:x2mint_recipes/components/input.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
-
-import '../../components/input.dart';
-import '../../utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/EditProfile';
@@ -467,6 +466,7 @@ class _EditProfileState extends State<EditProfile> {
                   if (value == null) {
                     return 'Choose a sex';
                   }
+                  return null;
                 },
                 onChanged: (value) {
                   setState(() {

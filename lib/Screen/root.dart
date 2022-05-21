@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/create-recipe/create.dart';
+import 'package:x2mint_recipes/Screen/recipe/create.dart';
 import 'package:x2mint_recipes/Screen/homepage.dart';
 import 'package:x2mint_recipes/Screen/notification/notification.dart';
 import 'package:x2mint_recipes/Screen/profile/profile.dart';

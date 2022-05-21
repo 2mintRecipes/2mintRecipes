@@ -5,13 +5,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/components/button.dart';
+import 'package:x2mint_recipes/components/input.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/database.dart';
-
-import '../../components/input.dart';
-import '../../utils/app_ui.dart';
 
 class Create extends StatefulWidget {
   static const routeName = '/Create';
@@ -755,6 +754,7 @@ class _CreateState extends State<Create> {
               if (value == null) {
                 return 'Choose level';
               }
+              return null;
             },
             onSaved: (value) {
               _selectedLevel = value.toString();
