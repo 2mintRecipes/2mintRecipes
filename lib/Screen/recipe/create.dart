@@ -837,10 +837,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
       level: int.tryParse(_selectedLevel ?? "0"),
       image: _imageUrl,
     );
-    print(data.toJson());
+    //print(data.toJson());
 
     await recipesService.add(data).then((value) {
-      print(value);
+      //print(value);
       _clearText();
     }).onError((error, stackTrace) {
       print(error.toString());

@@ -22,9 +22,9 @@ class RecipesService {
     }
   }
 
-  Future getOne(String path) async {
+  Future getOne(String? id) async {
     try {
-      return await StorageService.get('recipes', path);
+      return await StorageService.get('recipes', id!);
     } catch (e) {
       print(e);
       return null;

@@ -450,7 +450,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Future _getRecipeDetail() async {
     try {
-      recipe = await recipesService.getOne();
+      recipe = await recipesService.getOne(recipe?.id);
       print(recipe?.toJson());
     } catch (e) {
       print(e);

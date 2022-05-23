@@ -35,11 +35,16 @@ class StorageService {
 
   static Future getAll(String collectionName) async {
     List<Map<String, dynamic>> result = [];
-
     await getCollection(collectionName).get().then((event) {
       event.docs.forEach((doc) {
         var value = doc.data();
         value['id'] = doc.id;
+        String cre = value['creator'].toString();
+        value['creator'] =
+            cre.substring(cre.indexOf('/') + 1, cre.indexOf(')'));
+        String cate = value['category'].toString();
+        value['category'] =
+            cate.substring(cate.indexOf('/') + 1, cate.indexOf(')'));
         result.add(value);
       });
     });
