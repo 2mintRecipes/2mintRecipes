@@ -13,6 +13,44 @@ class NotificationsService {
     }
   }
 
+  Future get(String path) async {
+    try {
+      return await StorageService.get('notifications', path);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future getByType(String typeValue) async {
+    try {
+      return await StorageService.search(
+        collectionName: 'notifications',
+        fieldName: 'type',
+        value: typeValue,
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future makeNotificationRead(String path) async {
+    try {
+      return await StorageService.update('notifications', path, {
+        'status': 'READ',
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future removeNotification(String path) async {
+    try {
+      return await StorageService.delete('notifications', path);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future getNotificationsByStatus(String status) async {
     try {
       List<Map<String, dynamic>> result = [];

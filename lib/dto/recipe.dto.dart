@@ -1,5 +1,6 @@
 class RecipeDto {
-  String name;
+  String? id;
+  String? name;
   String? description;
   String? image;
   String? category;
@@ -9,7 +10,8 @@ class RecipeDto {
   int? level;
 
   RecipeDto({
-    required this.name,
+    this.id,
+    this.name,
     this.description,
     this.category,
     this.cookTime,
@@ -21,6 +23,7 @@ class RecipeDto {
   });
 
   factory RecipeDto.fromJson(Map<String, dynamic> json) => RecipeDto(
+        id: json["id"],
         name: json["name"],
         description: json["description"],
         image: json["image"],
@@ -32,6 +35,7 @@ class RecipeDto {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "description": description,
         "image": image,

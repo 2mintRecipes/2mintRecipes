@@ -21,4 +21,70 @@ class RecipesService {
       print(e);
     }
   }
+
+  Future getOne(String path) async {
+    try {
+      return await StorageService.get('recipes', path);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future getByName(String value) async {
+    try {
+      return await StorageService.search(
+        collectionName: 'recipes',
+        fieldName: 'name',
+        value: value,
+      );
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future getByLevel(int value) async {
+    try {
+      return await StorageService.search(
+        collectionName: 'recipes',
+        fieldName: 'level',
+        value: value,
+      );
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future getByServing(int value) async {
+    try {
+      return await StorageService.search(
+        collectionName: 'recipes',
+        fieldName: 'serving',
+        value: value,
+      );
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future update(String path, RecipeDto data) async {
+    try {
+      return await StorageService.update('recipes', path, data.toJson());
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future remove(String path) async {
+    try {
+      return await StorageService.delete('recipes', path);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }
