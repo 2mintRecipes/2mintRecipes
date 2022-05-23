@@ -14,6 +14,15 @@ class UserService {
     }
   }
 
+  Future getOne(String id) async {
+    try {
+      return await StorageService.get('users', id);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future add(UserDto data) async {
     try {
       return await StorageService.add('users', data.toJson());

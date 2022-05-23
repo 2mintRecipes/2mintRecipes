@@ -7,6 +7,8 @@ import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/database.dart';
+
+import 'Widgets/trendingNow.dart';
 //import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePage extends StatefulWidget {
@@ -100,7 +102,7 @@ class _HomePageState extends State<HomePage> {
         ),
 
         /// Trending now
-        getTrendingNow(),
+        const TrendingNow(),
 
         /// Popular Category Bar
         getPopularCategory(),
@@ -136,119 +138,6 @@ class _HomePageState extends State<HomePage> {
       width: 300.0,
       height: 150.0,
       child: Center(child: child),
-    );
-  }
-
-  Widget getTrendingNow() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 30, right: 20, bottom: 10, top: 30),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Trending 💥",
-                style: TextStyle(
-                    color: Colors.white.withOpacity(.8),
-                    fontSize: 27,
-                    fontWeight: FontWeight.w600),
-              ),
-              TextButton.icon(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_forward,
-                  size: 25,
-                  color: Colors.white.withOpacity(.5),
-                ),
-                label: Text(
-                  'See all',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white.withOpacity(.5),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: Row(
-              children: List.generate(
-                _allRecipes.length,
-                (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 250,
-                            height: 150,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: Colors.white.withOpacity(.4),
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                  image:
-                                      NetworkImage(_allRecipes[index]['image']),
-                                  fit: BoxFit.cover),
-                              color: Colors.white.withOpacity(.4),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            _allRecipes[index]['name'],
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                color: UI.appColor,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: Colors.white.withOpacity(.5),
-                                child: const Text(
-                                  'MT',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.white),
-                                ),
-                              ),
-                              Text(
-                                '  By ',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white.withOpacity(.7),
-                                ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
