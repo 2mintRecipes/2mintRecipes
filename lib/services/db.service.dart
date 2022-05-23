@@ -17,10 +17,20 @@ class StorageService {
     return getInstance().collection(collectionName);
   }
 
+  static Future update(
+    String collectionName,
+    String path,
+    dynamic data,
+  ) async {
+    return await getCollection(collectionName).doc(path).update(data);
+  }
+
   static Future add(String collectionName, dynamic data) async {
-    return getCollection(collectionName)
-        .add(data)
-        .then((DocumentReference doc) => doc);
+    return await getCollection(collectionName).add(data);
+  }
+
+  static Future delete(String collectionName, String path) async {
+    return await getCollection(collectionName).doc(path).delete();
   }
 
   static Future getAll(String collectionName) async {
@@ -35,11 +45,38 @@ class StorageService {
     return result;
   }
 
-  static Future get(String collectionName) async {
-    await getCollection(collectionName).get().then((event) {
-      for (var doc in event.docs) {
-        //print("${doc.id} => ${doc.data()}");
-      }
+  static Future get(String collectionName, String path) async {
+    Map<String, dynamic>? result;
+
+    await getCollection(collectionName).doc(path).get().then((doc) {
+      result = doc.data();
     });
+
+    return result;
+  }
+
+  static Future search({
+    required String collectionName,
+    required String fieldName,
+    required dynamic value,
+    int limit = 10,
+    // int offset = 0,
+    bool descending = false,
+  }) async {
+    List<Map<String, dynamic>>? result = [];
+
+    await getCollection(collectionName)
+        .where(fieldName, isEqualTo: value)
+        .orderBy(fieldName, descending: descending)
+        .limit(limit)
+        // .startAt([offset])
+        .get()
+        .then((event) {
+      event.docs.forEach((doc) {
+        result.add(doc.data());
+      });
+    });
+
+    return result;
   }
 }
