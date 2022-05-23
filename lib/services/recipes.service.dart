@@ -21,4 +21,14 @@ class RecipesService {
       print(e);
     }
   }
+
+  Future<RecipeDto?> getOne() async {
+    try {
+      RecipeDto response = RecipeDto();
+      return response;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
 }

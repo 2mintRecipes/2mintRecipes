@@ -12,15 +12,15 @@ import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
-class Create extends StatefulWidget {
-  static const routeName = '/Create';
-  const Create({Key? key}) : super(key: key);
+class CreateRecipe extends StatefulWidget {
+  static const routeName = '/CreateRecipe';
+  const CreateRecipe({Key? key}) : super(key: key);
 
   @override
-  State<Create> createState() => _CreateState();
+  State<CreateRecipe> createState() => _CreateRecipeState();
 }
 
-class _CreateState extends State<Create> {
+class _CreateRecipeState extends State<CreateRecipe> {
   int _numSteps = 0;
   int _numIngredient = 0;
   final ImagePicker _picker = ImagePicker();
@@ -146,7 +146,7 @@ class _CreateState extends State<Create> {
           getBasicInfoSection(),
           getIngredientSection(),
           getStepsSection(),
-          getCreateWidget(),
+          getCreateRecipeWidget(),
         ],
       ),
     );
@@ -159,7 +159,7 @@ class _CreateState extends State<Create> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           Text(
-            "Create recipe",
+            "CreateRecipe recipe",
             style: TextStyle(
               fontSize: 30,
               color: Colors.white,
@@ -698,7 +698,7 @@ class _CreateState extends State<Create> {
             },
             decoration: InputDecoration(
               prefixIcon: Icon(
-                Icons.people,
+                Icons.star,
                 color: Colors.white.withOpacity(.5),
                 size: 30,
               ),
@@ -765,7 +765,7 @@ class _CreateState extends State<Create> {
     );
   }
 
-  Widget getCreateWidget() {
+  Widget getCreateRecipeWidget() {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       width: double.infinity,
@@ -784,6 +784,7 @@ class _CreateState extends State<Create> {
               child: ElevatedButton.icon(
                 onPressed: () async {
                   await _addRecipe();
+                  Navigator.pushNamed(context, '/RecipeDetail');
                 },
                 style: TextButton.styleFrom(
                   primary: Colors.white,
@@ -795,7 +796,7 @@ class _CreateState extends State<Create> {
                 ),
                 icon: const Icon(Icons.ramen_dining),
                 label: const Text(
-                  "Create",
+                  "CreateRecipe",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,

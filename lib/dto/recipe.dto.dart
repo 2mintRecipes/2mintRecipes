@@ -1,5 +1,5 @@
 class RecipeDto {
-  String name;
+  String? name;
   String? description;
   String? image;
   String? category;
@@ -9,7 +9,7 @@ class RecipeDto {
   int? level;
 
   RecipeDto({
-    required this.name,
+    this.name,
     this.description,
     this.category,
     this.cookTime,
