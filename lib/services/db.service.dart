@@ -38,7 +38,9 @@ class StorageService {
 
     await getCollection(collectionName).get().then((event) {
       event.docs.forEach((doc) {
-        result.add(doc.data());
+        var value = doc.data();
+        value['id'] = doc.id;
+        result.add(value);
       });
     });
 
@@ -50,6 +52,7 @@ class StorageService {
 
     await getCollection(collectionName).doc(path).get().then((doc) {
       result = doc.data();
+      result?['id'] = doc.id;
     });
 
     return result;
@@ -73,7 +76,9 @@ class StorageService {
         .get()
         .then((event) {
       event.docs.forEach((doc) {
-        result.add(doc.data());
+        var value = doc.data();
+        value['id'] = doc.id;
+        result.add(value);
       });
     });
 
