@@ -4,8 +4,8 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/login.dart';
-import 'package:x2mint_recipes/Screen/profile/edit_profile.dart';
+import 'package:x2mint_recipes/screens/login.dart';
+import 'package:x2mint_recipes/screens/profile/edit_profile.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:getwidget/getwidget.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/components/button.dart';
-import '../utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/widgets/button.dart';
 
 class Welcome extends StatelessWidget {
   const Welcome({Key? key}) : super(key: key);

@@ -1,15 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/screens/home/trendingNow.dart';
 import 'package:x2mint_recipes/services/db.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/components/search_cart.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/database.dart';
-
-import 'Widgets/trendingNow.dart';
-//import 'package:cached_network_image/cached_network_image.dart';
+import 'package:x2mint_recipes/widgets/search_cart.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -45,7 +43,7 @@ class _HomePageState extends State<HomePage> {
         AsyncSnapshot snapshot,
       ) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
         if (snapshot.hasData) {
           _allRecipes = snapshot.data;
@@ -193,13 +191,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(
-                                  left: 10, right: 10, bottom: 5),
+                                left: 10,
+                                right: 10,
+                                bottom: 5,
+                              ),
                               child: Text(
                                 song_type_1[index],
                                 style: const TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ),
                           )
@@ -246,9 +248,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image:
-                                      NetworkImage(_allRecipes[index]['image']),
-                                  fit: BoxFit.cover),
+                                image:
+                                    NetworkImage(_allRecipes[index]['image']),
+                                fit: BoxFit.cover,
+                              ),
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
@@ -270,9 +273,10 @@ class _HomePageState extends State<HomePage> {
                               maxLines: 3,
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white.withOpacity(.8),
-                                  fontWeight: FontWeight.w200),
+                                fontSize: 15,
+                                color: Colors.white.withOpacity(.8),
+                                fontWeight: FontWeight.w200,
+                              ),
                             ),
                           )
                         ],
@@ -306,9 +310,10 @@ class _HomePageState extends State<HomePage> {
               Text(
                 "Recent Recipes",
                 style: TextStyle(
-                    color: Colors.white.withOpacity(.8),
-                    fontSize: 27,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.white.withOpacity(.8),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               TextButton.icon(
                 onPressed: () {},
@@ -355,9 +360,10 @@ class _HomePageState extends State<HomePage> {
                               ),
                               borderRadius: BorderRadius.circular(15),
                               image: DecorationImage(
-                                  image:
-                                      NetworkImage(_allRecipes[index]['image']),
-                                  fit: BoxFit.cover),
+                                image:
+                                    NetworkImage(_allRecipes[index]['image']),
+                                fit: BoxFit.cover,
+                              ),
                               color: Colors.white.withOpacity(.4),
                             ),
                           ),
@@ -366,9 +372,10 @@ class _HomePageState extends State<HomePage> {
                             _allRecipes[index]['name'],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
-                                color: UI.appColor,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500),
+                              color: UI.appColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           const SizedBox(height: 3),
                           SizedBox(
@@ -378,9 +385,10 @@ class _HomePageState extends State<HomePage> {
                               maxLines: 3,
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.white.withOpacity(.8),
-                                  fontWeight: FontWeight.w200),
+                                fontSize: 15,
+                                color: Colors.white.withOpacity(.8),
+                                fontWeight: FontWeight.w200,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 5),
@@ -391,7 +399,9 @@ class _HomePageState extends State<HomePage> {
                                 child: const Text(
                                   'MT',
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.white),
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               Text(
@@ -429,9 +439,10 @@ class _HomePageState extends State<HomePage> {
               Text(
                 "Hot Creators",
                 style: TextStyle(
-                    color: Colors.white.withOpacity(.8),
-                    fontSize: 27,
-                    fontWeight: FontWeight.w600),
+                  color: Colors.white.withOpacity(.8),
+                  fontSize: 27,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               TextButton.icon(
                 onPressed: () {},
@@ -468,10 +479,11 @@ class _HomePageState extends State<HomePage> {
                           const Align(
                             alignment: Alignment.center,
                             child: CircleAvatar(
-                                backgroundImage:
-                                    AssetImage('assets/images/MIT2021.png'),
-                                radius: 50,
-                                backgroundColor: UI.appColor),
+                              backgroundImage:
+                                  AssetImage('assets/images/MIT2021.png'),
+                              radius: 50,
+                              backgroundColor: UI.appColor,
+                            ),
                           ),
                           const SizedBox(
                             height: 10,
@@ -479,13 +491,12 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             "Taylor Swift",
                             style: TextStyle(
-                                color: Colors.white.withOpacity(.7),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400),
+                              color: Colors.white.withOpacity(.7),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          )
+                          const SizedBox(height: 20)
                         ],
                       ),
                     ),

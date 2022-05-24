@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/recipe/create.dart';
-import 'package:x2mint_recipes/Screen/homepage.dart';
-import 'package:x2mint_recipes/Screen/notification/notification.dart';
-import 'package:x2mint_recipes/Screen/profile/profile.dart';
-import 'package:x2mint_recipes/Screen/bookmark.dart';
-import 'package:x2mint_recipes/components/nav_model.dart';
+import 'package:x2mint_recipes/screens/recipe/create.dart';
+import 'package:x2mint_recipes/screens/home/homepage.dart';
+import 'package:x2mint_recipes/screens/notification/notification.dart';
+import 'package:x2mint_recipes/screens/profile/profile.dart';
+import 'package:x2mint_recipes/screens/bookmark.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/widgets/nav_model.dart';
 
 class Root extends StatefulWidget {
   const Root({Key? key}) : super(key: key);
@@ -67,21 +67,20 @@ class _RootState extends State<Root> {
   }
 
   SizedBox iconBtn(int i) {
-    bool isActive = currentIndex == i ? true : false;
-
     return SizedBox(
-        child: Align(
-      alignment: Alignment.center,
-      child: Transform.scale(
-        scale: 0.7,
-        child: isActive
-            ? Image.asset(
-                navBtn[i + 5].imagePath,
-              )
-            : Image.asset(
-                navBtn[i].imagePath,
-              ),
+      child: Align(
+        alignment: Alignment.center,
+        child: Transform.scale(
+          scale: 0.7,
+          child: (currentIndex == i)
+              ? Image.asset(
+                  navBtn[i + 5].imagePath,
+                )
+              : Image.asset(
+                  navBtn[i].imagePath,
+                ),
+        ),
       ),
-    ));
+    );
   }
 }

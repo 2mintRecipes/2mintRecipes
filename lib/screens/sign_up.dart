@@ -1,10 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/components/button.dart';
-import 'package:x2mint_recipes/components/password.dart';
-import '../utils/app_ui.dart';
-import '../components/input.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/widgets/input.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -51,12 +49,12 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController reEnterPasswordController = TextEditingController();
 
-  late String fullName, username, email, password, reEnterPassword;
+  late String fullName, username, email, password, confirmPassword;
   String? fullNameError,
       usernameError,
       emailError,
       passwordError,
-      reEnterPasswordError;
+      confirmPasswordError;
 
   @override
   void initState() {
@@ -65,13 +63,13 @@ class _SignUpState extends State<SignUp> {
     username = "";
     email = "";
     password = "";
-    reEnterPassword = "";
+    confirmPassword = "";
 
     fullNameError = null;
     usernameError = null;
     emailError = null;
     passwordError = null;
-    reEnterPasswordError = null;
+    confirmPasswordError = null;
   }
 
   void resetErrorText() {
@@ -80,7 +78,7 @@ class _SignUpState extends State<SignUp> {
       usernameError = null;
       emailError = null;
       passwordError = null;
-      reEnterPasswordError = null;
+      confirmPasswordError = null;
     });
   }
 
@@ -123,15 +121,15 @@ class _SignUpState extends State<SignUp> {
       });
       isValid = false;
     }
-    if (reEnterPassword.isEmpty) {
+    if (confirmPassword.isEmpty) {
       setState(() {
-        reEnterPassword = "       Please confirm password";
+        confirmPassword = "       Please confirm password";
       });
       isValid = false;
     }
-    if (password != reEnterPassword) {
+    if (password != confirmPassword) {
       setState(() {
-        reEnterPasswordError = "       Passwords do not match";
+        confirmPasswordError = "       Passwords do not match";
       });
       isValid = false;
     }
@@ -193,6 +191,7 @@ class _SignUpState extends State<SignUp> {
                           Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                /// SignUp Title
                                 const Padding(
                                   padding: EdgeInsets.all(10),
                                   child: Text(
@@ -205,7 +204,7 @@ class _SignUpState extends State<SignUp> {
                                   ),
                                 ),
 
-                                /// here
+                                /// FullName
                                 InputField(
                                   prefixIcon: Icons.badge,
                                   onChanged: (value) {
@@ -225,6 +224,8 @@ class _SignUpState extends State<SignUp> {
                                   autoFocus: true,
                                   textEditingController: fullNameController,
                                 ),
+
+                                /// Username
                                 InputField(
                                   prefixIcon: Icons.account_circle,
                                   onChanged: (value) {
@@ -244,6 +245,8 @@ class _SignUpState extends State<SignUp> {
                                   autoFocus: true,
                                   textEditingController: usernameController,
                                 ),
+
+                                /// Email
                                 InputField(
                                   prefixIcon: Icons.alternate_email,
                                   onChanged: (value) {
@@ -263,6 +266,8 @@ class _SignUpState extends State<SignUp> {
                                   autoFocus: true,
                                   textEditingController: emailController,
                                 ),
+
+                                /// Password
                                 InputField(
                                   prefixIcon: Icons.lock,
                                   onChanged: (value) {
@@ -282,26 +287,30 @@ class _SignUpState extends State<SignUp> {
                                   autoFocus: true,
                                   textEditingController: passwordController,
                                 ),
+
+                                /// Confirm Password
                                 InputField(
                                   prefixIcon: Icons.lock,
                                   onChanged: (value) {
-                                    if (reEnterPasswordError != null) {
+                                    if (confirmPasswordError != null) {
                                       setState(() {
-                                        reEnterPasswordError = null;
+                                        confirmPasswordError = null;
                                       });
                                     }
                                     setState(() {
-                                      reEnterPassword = value;
+                                      confirmPassword = value;
                                     });
                                   },
                                   labelText: "Confirm Password",
-                                  errorText: reEnterPasswordError,
+                                  errorText: confirmPasswordError,
                                   keyboardType: TextInputType.visiblePassword,
                                   textInputAction: TextInputAction.next,
                                   autoFocus: true,
                                   textEditingController:
                                       reEnterPasswordController,
                                 ),
+
+                                /// SignUp Button
                                 Padding(
                                   padding: const EdgeInsets.all(10),
                                   child: SizedBox(
@@ -338,9 +347,7 @@ class _SignUpState extends State<SignUp> {
                                   TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           const Text(
                             "_____________  or _____________",
                             style: TextStyle(color: Colors.white, fontSize: 16),
