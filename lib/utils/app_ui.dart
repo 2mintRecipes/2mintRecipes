@@ -20,6 +20,7 @@ class UI {
   static const String star = "assets/icons/gStar.png";
   static const String arrowLeft = "assets/icons/gLeft.png";
   static const String detail = "assets/icons/gRecipe.png";
+  static const String welcome = "assets/images/welcome_bg.jpg";
 
   static const Color appColor = Color(0xFF51B418);
   static const Color selectColor = Color.fromARGB(255, 46, 104, 13);
