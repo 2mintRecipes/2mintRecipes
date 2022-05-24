@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
@@ -32,7 +32,7 @@ class _EditProfileState extends State<EditProfile> {
 
   late String fullName,
       username,
-      sex,
+      gender,
       phone,
       address,
       email,
@@ -40,7 +40,7 @@ class _EditProfileState extends State<EditProfile> {
       reEnterPassword;
   String? fullNameError,
       usernameError,
-      sexError,
+      genderError,
       phoneError,
       addressError,
       emailError,
@@ -54,7 +54,7 @@ class _EditProfileState extends State<EditProfile> {
     _confirmPasswordVisible = false;
     fullName = "";
     username = "";
-    sex = "";
+    gender = "";
     phone = "";
     address = "";
     email = "";
@@ -63,7 +63,7 @@ class _EditProfileState extends State<EditProfile> {
 
     fullNameError = null;
     usernameError = null;
-    sexError = null;
+    genderError = null;
     phoneError = null;
     addressError = null;
     emailError = null;
@@ -75,7 +75,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       fullNameError = null;
       usernameError = null;
-      sexError = null;
+      genderError = null;
       phoneError = null;
       addressError = null;
       emailError = null;
@@ -425,7 +425,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 isExpanded: true,
                 hint: Text(
-                  'Sex',
+                  'Gender',
                   style: TextStyle(
                     fontSize: 20,
                     overflow: TextOverflow.ellipsis,
@@ -464,7 +464,7 @@ class _EditProfileState extends State<EditProfile> {
                     .toList(),
                 validator: (value) {
                   if (value == null) {
-                    return 'Choose a sex';
+                    return 'Choose a gender';
                   }
                   return null;
                 },

@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/root.dart';
-import 'package:x2mint_recipes/components/button.dart';
+import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/widgets/button.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
-import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
@@ -123,64 +123,65 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: Text(
-                                "RETRIEVE PASSWORD",
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Text(
+                              "RETRIEVE PASSWORD",
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                            InputField(
-                              prefixIcon: Icons.alternate_email,
-                              onChanged: (value) {
-                                if (emailError != null) {
-                                  setState(() {
-                                    emailError = null;
-                                  });
-                                }
+                          ),
+                          InputField(
+                            prefixIcon: Icons.alternate_email,
+                            onChanged: (value) {
+                              if (emailError != null) {
                                 setState(() {
-                                  email = value;
+                                  emailError = null;
                                 });
-                              },
-                              labelText: "Email",
-                              errorText: emailError,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              autoFocus: true,
-                              textEditingController: emailController,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(15),
-                              child: SizedBox(
-                                height: 50,
-                                child: ElevatedButton.icon(
-                                  onPressed: submit,
-                                  style: TextButton.styleFrom(
-                                    primary: Colors.white,
-                                    backgroundColor: UI.appColor,
-                                    shape: RoundedRectangleBorder(
-                                      //to set border radius to button
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  icon: const Icon(Icons.login_sharp),
-                                  label: const Text(
-                                    "Send mail",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 20, color: Colors.white),
+                              }
+                              setState(() {
+                                email = value;
+                              });
+                            },
+                            labelText: "Email",
+                            errorText: emailError,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            autoFocus: true,
+                            textEditingController: emailController,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(15),
+                            child: SizedBox(
+                              height: 50,
+                              child: ElevatedButton.icon(
+                                onPressed: submit,
+                                style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: UI.appColor,
+                                  shape: RoundedRectangleBorder(
+                                    //to set border radius to button
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
+                                icon: const Icon(Icons.login_sharp),
+                                label: const Text(
+                                  "Send mail",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
                               ),
-                            )
-                          ]),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),

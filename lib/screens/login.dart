@@ -2,16 +2,12 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:x2mint_recipes/Screen/root.dart';
-import 'package:x2mint_recipes/components/button.dart';
+import 'package:x2mint_recipes/screens/root.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
-import '../utils/app_ui.dart';
-import '../components/password.dart';
-import '../components/input.dart';
-import 'package:x2mint_recipes/components/input.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/widgets/input.dart';
 
 class Login extends StatefulWidget {
   static const routeName = '/login';
@@ -191,7 +187,7 @@ class _LoginState extends State<Login> {
                               textEditingController: passwordController,
                             ),
                             Padding(
-                              padding: EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
                               child: SizedBox(
                                 height: 50,
                                 child: ElevatedButton.icon(
@@ -216,7 +212,7 @@ class _LoginState extends State<Login> {
                             )
                           ]),
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         width: MediaQuery.of(context).size.width * .7,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

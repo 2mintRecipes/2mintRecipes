@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/components/search_cart.dart';
+import 'package:x2mint_recipes/widgets/search_cart.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
 class Bookmark extends StatefulWidget {
@@ -54,12 +54,14 @@ class _BookmarkState extends State<Bookmark> {
           SizedBox(
             height: MediaQuery.of(context).size.height,
             child: ClipRRect(
-                // borderRadius: BorderRadius.circular(5),
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: SingleChildScrollView(
-                      child: getBody(),
-                    ))),
+              // borderRadius: BorderRadius.circular(5),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: SingleChildScrollView(
+                  child: getBody(),
+                ),
+              ),
+            ),
           )
         ],
       ),
@@ -97,7 +99,10 @@ class _BookmarkState extends State<Bookmark> {
           Text(
             "Bookmark",
             style: TextStyle(
-                fontSize: 30, color: Colors.white, fontWeight: FontWeight.bold),
+              fontSize: 30,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),

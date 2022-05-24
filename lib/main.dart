@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:x2mint_recipes/Screen/profile/forgot_password.dart';
-import 'package:x2mint_recipes/Screen/welcome.dart';
+import 'package:x2mint_recipes/firebase_options.dart';
+import 'package:x2mint_recipes/screens/profile/forgot_password.dart';
+import 'package:x2mint_recipes/screens/welcome.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
-import 'firebase_options.dart';
-import 'package:x2mint_recipes/Screen/bookmark.dart';
-import 'package:x2mint_recipes/Screen/root.dart';
-import 'package:x2mint_recipes/Screen/login.dart';
-import 'package:x2mint_recipes/Screen/sign_up.dart';
+import 'package:x2mint_recipes/screens/bookmark.dart';
+import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/screens/login.dart';
+import 'package:x2mint_recipes/screens/sign_up.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

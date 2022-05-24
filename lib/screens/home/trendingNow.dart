@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:x2mint_recipes/Screen/Widgets/creator.dart';
-import 'package:x2mint_recipes/Screen/recipe/detailRecipe.dart';
+import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
-
-import '../../utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/widgets/creator.dart';
 
 class TrendingNow extends StatefulWidget {
   const TrendingNow({Key? key}) : super(key: key);
@@ -63,16 +62,21 @@ class _TrendingNowState extends State<TrendingNow> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 30, right: 20, bottom: 10, top: 30),
+                    left: 30,
+                    right: 20,
+                    bottom: 10,
+                    top: 30,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Trending 💥",
                         style: TextStyle(
-                            color: Colors.white.withOpacity(.8),
-                            fontSize: 27,
-                            fontWeight: FontWeight.w600),
+                          color: Colors.white.withOpacity(.8),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       TextButton.icon(
                         onPressed: () {},
@@ -105,9 +109,10 @@ class _TrendingNowState extends State<TrendingNow> {
                             child: GestureDetector(
                               onTap: () {
                                 _pushScreen(
-                                    context: context,
-                                    screen:
-                                        RecipeDetail(_allRecipes[index]['id']));
+                                  context: context,
+                                  screen:
+                                      RecipeDetail(_allRecipes[index]['id']),
+                                );
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,22 +127,22 @@ class _TrendingNowState extends State<TrendingNow> {
                                       ),
                                       borderRadius: BorderRadius.circular(15),
                                       image: DecorationImage(
-                                          image: NetworkImage(
-                                              _allRecipes[index]['image']),
-                                          fit: BoxFit.cover),
+                                        image: NetworkImage(
+                                            _allRecipes[index]['image']),
+                                        fit: BoxFit.cover,
+                                      ),
                                       color: Colors.white.withOpacity(.4),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
+                                  const SizedBox(height: 5),
                                   Text(
                                     _allRecipes[index]['name'],
                                     textAlign: TextAlign.left,
                                     style: const TextStyle(
-                                        color: UI.appColor,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500),
+                                      color: UI.appColor,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   const SizedBox(
                                     height: 3,

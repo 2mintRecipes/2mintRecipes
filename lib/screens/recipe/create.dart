@@ -4,8 +4,8 @@ import 'dart:ui';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:x2mint_recipes/components/button.dart';
-import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/widgets/button.dart';
+import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
@@ -555,63 +555,61 @@ class _CreateRecipeState extends State<CreateRecipe> {
   }
 
   Widget getStepItem(int index) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text(
-              'Step ' + index.toString(),
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 30),
+          child: Text(
+            'Step ' + index.toString(),
+            style: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
             ),
           ),
-          const SizedBox(height: 10),
-          InputField(
-            prefixIcon: Icons.edit,
-            onChanged: (value) {
-              if (subjectError != null) {
-                setState(() {
-                  subjectError = null;
-                });
-              }
+        ),
+        const SizedBox(height: 10),
+        InputField(
+          prefixIcon: Icons.edit,
+          onChanged: (value) {
+            if (subjectError != null) {
               setState(() {
-                subject = value;
+                subjectError = null;
               });
-            },
-            labelText: "Subject",
-            errorText: subjectError,
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            autoFocus: true,
-            textEditingController: _subjectController,
-          ),
-          InputField(
-            maxLine: 5,
-            prefixIcon: Icons.menu_book,
-            onChanged: (value) {
-              if (detailError != null) {
-                setState(() {
-                  detailError = null;
-                });
-              }
+            }
+            setState(() {
+              subject = value;
+            });
+          },
+          labelText: "Subject",
+          errorText: subjectError,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+          autoFocus: true,
+          textEditingController: _subjectController,
+        ),
+        InputField(
+          maxLine: 5,
+          prefixIcon: Icons.menu_book,
+          onChanged: (value) {
+            if (detailError != null) {
               setState(() {
-                detail = value;
+                detailError = null;
               });
-            },
-            labelText: "Detail",
-            errorText: detailError,
-            keyboardType: TextInputType.name,
-            textInputAction: TextInputAction.next,
-            autoFocus: true,
-            textEditingController: _detailController,
-          ),
-        ],
-      ),
+            }
+            setState(() {
+              detail = value;
+            });
+          },
+          labelText: "Detail",
+          errorText: detailError,
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+          autoFocus: true,
+          textEditingController: _detailController,
+        ),
+      ],
     );
   }
 
@@ -796,7 +794,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                 ),
                 icon: const Icon(Icons.ramen_dining),
                 label: const Text(
-                  "CreateRecipe",
+                  "Detail",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
