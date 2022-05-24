@@ -2,37 +2,28 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/components/button.dart';
 import 'package:x2mint_recipes/components/input.dart';
+import 'package:x2mint_recipes/components/text_field.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
 class RecipeDetail extends StatefulWidget {
   static const routeName = '/RecipeDetail';
-  const RecipeDetail({Key? key}) : super(key: key);
+  final String id;
+  const RecipeDetail(this.id, {Key? key}) : super(key: key);
 
   @override
   State<RecipeDetail> createState() => _RecipeDetailState();
 }
 
 class _RecipeDetailState extends State<RecipeDetail> {
-  int _numSteps = 0;
-  int _numIngredient = 0;
-  final ImagePicker _picker = ImagePicker();
-  final CloudinaryService _cloudinaryService = CloudinaryService();
-  final _formKeyBasicInfo = GlobalKey<FormState>();
-  final _formKeyIngredients = GlobalKey<FormState>();
-  final _formKeySteps = GlobalKey<FormState>();
-
-  // late bool showEditButton;
-  File? _image;
-  String? _imagePath;
-  String? _imageUrl;
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _servingsController = TextEditingController();
   final TextEditingController _cookTimeController = TextEditingController();
@@ -43,61 +34,96 @@ class _RecipeDetailState extends State<RecipeDetail> {
   final TextEditingController _detailController = TextEditingController();
   final TextEditingController _levelController = TextEditingController();
 
-  RecipesService recipesService = RecipesService();
-  RecipeDto? recipe;
+  final ImagePicker _picker = ImagePicker();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
+
+  final _formKeyBasicInfo = GlobalKey<FormState>();
+  final _formKeyIngredients = GlobalKey<FormState>();
+  final _formKeySteps = GlobalKey<FormState>();
+  int _numSteps = 0;
+  int _numIngredient = 0;
+
+  // late bool showEditButton;
+  File? _image;
+  String? _imagePath;
+  String? _imageUrl;
+
+  SecureStorage secureStorage = SecureStorage();
+  final RecipesService _recipesService = RecipesService();
+  late Future _recipeFuture;
+  late Map<String, dynamic> _recipe;
+  late String id = widget.id;
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    await _getRecipeDetail();
+    init();
   }
+
+  Future init() async {
+    _recipeFuture = _recipesService.getOne(id);
+  }
+
+  Future _editRecipe() async {}
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(.6),
-                    BlendMode.darken,
+    return FutureBuilder(
+      future: _recipeFuture,
+      builder: (
+        BuildContext context,
+        AsyncSnapshot snapshot,
+      ) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (snapshot.hasData) {
+          _recipe = snapshot.data;
+          print(_recipe);
+          return Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                SafeArea(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        filterQuality: FilterQuality.low,
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(.6),
+                          BlendMode.darken,
+                        ),
+                        image: const AssetImage("assets/images/bg.jpg"),
+                      ),
+                    ),
                   ),
-                  image: const AssetImage("assets/images/bg.jpg"),
                 ),
-              ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: ClipRRect(
+                    // borderRadius: BorderRadius.circular(5),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: SingleChildScrollView(
+                        child: getBody(),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: ClipRRect(
-              // borderRadius: BorderRadius.circular(5),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                child: SingleChildScrollView(
-                  child: getBody(),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
+          );
+        }
+        return Container();
+      },
     );
   }
 
   Widget getBody() {
     return Padding(
       padding: const EdgeInsets.only(
-        top: UI.topPadding,
-        // left: 30,
-        // right: 30,
-        bottom: 20,
-      ),
+          top: UI.topPadding, bottom: 20, left: 30, right: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,22 +141,30 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getTitleSection() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Text(
-            "Recipe Detail",
-            style: TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
+        padding: const EdgeInsets.only(bottom: 20),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 60,
+                child: Text(
+                  _recipe['name'],
+                  maxLines: 5,
+                  softWrap: true,
+                  style: const TextStyle(
+                    fontSize: 30,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              )
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 
   Widget getBannerSection() {
@@ -139,7 +173,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Card(
-            // elevation: 3.0,
             borderOnForeground: true,
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -155,7 +188,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
                 AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Image(
-                    image: getBanner(),
+                    image: (_recipe['image'] == null)
+                        ? const NetworkImage(
+                            "https://unsplash.com/photos/Yn0l7uwBrpw")
+                        : NetworkImage(_recipe['image']),
                     fit: BoxFit.cover,
                     alignment: Alignment.center,
                     isAntiAlias: true,
@@ -167,16 +203,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
         ],
       ),
     );
-  }
-
-  getBanner() {
-    try {
-      return FileImage(_image!);
-    } catch (e) {
-      return const NetworkImage(
-          'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
-      // const AssetImage("assets/images/avatar.jpg");
-    }
   }
 
   Widget getBasicInfoSection() {
@@ -191,49 +217,33 @@ class _RecipeDetailState extends State<RecipeDetail> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
-              child: Text(
-                "INFORMATION",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+            const SizedBox(height: 20),
+            TextView(
+              text: _recipe['description'].toString(),
+              icon: Icons.description,
+              fontSize: 15,
+              maxLine: 5,
             ),
 
-            /// Name
-            InputField(
-              prefixIcon: Icons.restaurant,
-              labelText: "Recipe name",
-              textEditingController: _nameController,
+            const SizedBox(height: 10),
+            TextView(
+              text: 'Serving: ' + _recipe['serving'].toString(),
+              icon: Icons.supervisor_account,
+              fontSize: 15,
             ),
-            const SizedBox(height: 15),
-
-            /// Servings
-            InputField(
-              prefixIcon: Icons.supervisor_account,
-              labelText: "Servings",
-              textEditingController: _servingsController,
+            const SizedBox(height: 10),
+            TextView(
+              text: 'Cook Time: ' + _recipe['cookTime'].toString(),
+              icon: Icons.timer,
+              fontSize: 15,
             ),
-            const SizedBox(height: 15),
-
-            /// Cook time
-            InputField(
-              prefixIcon: Icons.timer,
-              labelText: "Cook time",
-              textEditingController: _cookTimeController,
+            const SizedBox(height: 10),
+            TextView(
+              text: 'Total Time: ' + _recipe['totalTime'].toString(),
+              icon: Icons.timer,
+              fontSize: 15,
             ),
-            const SizedBox(height: 15),
-
-            /// Total time
-            InputField(
-              prefixIcon: Icons.timer,
-              labelText: "Total time",
-              textEditingController: _totalTimeController,
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
 
             /// Category
             InputField(
@@ -241,22 +251,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
               labelText: "Category",
               textEditingController: _categoryController,
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
 
-            /// Description
-            InputField(
-              prefixIcon: Icons.description,
-              labelText: "Description",
-              textEditingController: _descriptionController,
+            TextView(
+              text: _recipe['level'].toString(),
+              icon: Icons.star,
+              fontSize: 15,
             ),
-
-            /// Level
-            InputField(
-              prefixIcon: Icons.star,
-              labelText: "Level",
-              textEditingController: _levelController,
-            ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
           ],
         ),
       ),
@@ -447,15 +449,4 @@ class _RecipeDetailState extends State<RecipeDetail> {
       ),
     );
   }
-
-  Future _getRecipeDetail() async {
-    try {
-      recipe = await recipesService.getOne(recipe?.id);
-      print(recipe?.toJson());
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future _editRecipe() async {}
 }

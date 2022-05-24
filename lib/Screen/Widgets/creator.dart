@@ -47,19 +47,25 @@ class _CreatorState extends State<Creator> {
             //print(_user);
             return Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white.withOpacity(.5),
-                  child: const Text(
-                    'MT',
-                    style: TextStyle(fontSize: 15, color: Colors.white),
+                ClipOval(
+                  child: Image.network(
+                    _user["avatar"],
+                    width: 35,
+                    height: 35,
+                    fit: BoxFit.cover,
                   ),
                 ),
+                Text('  By ',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.white.withOpacity(.7),
+                    )),
                 Text(
-                  '  By ' + _user['fullname'],
+                  _user['fullname'],
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white.withOpacity(.7),
-                  ),
+                      fontSize: 15,
+                      color: Colors.white.withOpacity(.7),
+                      fontWeight: FontWeight.bold),
                 )
               ],
             );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:x2mint_recipes/Screen/Widgets/creator.dart';
+import 'package:x2mint_recipes/Screen/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
@@ -18,7 +19,7 @@ class TrendingNow extends StatefulWidget {
 class _TrendingNowState extends State<TrendingNow> {
   SecureStorage secureStorage = SecureStorage();
   RecipesService recipesService = RecipesService();
-  UserService userService = UserService();
+  //UserService userService = UserService();
   late Future _allRecipesFuture;
 
   List<Map<String, dynamic>> _allRecipes = [];
@@ -31,6 +32,16 @@ class _TrendingNowState extends State<TrendingNow> {
 
   Future init() async {
     _allRecipesFuture = recipesService.getAll();
+  }
+
+  void _pushScreen({required BuildContext context, required Widget screen}) {
+    ThemeData themeData = Theme.of(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Theme(data: themeData, child: screen),
+      ),
+    );
   }
 
   @override
@@ -92,7 +103,12 @@ class _TrendingNowState extends State<TrendingNow> {
                           return Padding(
                             padding: const EdgeInsets.only(left: 30),
                             child: GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                _pushScreen(
+                                    context: context,
+                                    screen:
+                                        RecipeDetail(_allRecipes[index]['id']));
+                              },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
