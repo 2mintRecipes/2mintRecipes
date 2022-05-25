@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:x2mint_recipes/screens/recipe/seeAllRecipesPage.dart';
 import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
@@ -9,7 +10,10 @@ import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/creator.dart';
 
 class TrendingNow extends StatefulWidget {
-  const TrendingNow({Key? key}) : super(key: key);
+  final String tittle = "Trending Now";
+  const TrendingNow({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<TrendingNow> createState() => _TrendingNowState();
@@ -79,7 +83,14 @@ class _TrendingNowState extends State<TrendingNow> {
                         ),
                       ),
                       TextButton.icon(
-                        onPressed: () {},
+                        onPressed: () {
+                          _pushScreen(
+                              context: context,
+                              screen: SeeAllPage(
+                                data: _allRecipes,
+                                tittle: "Trending 💥",
+                              ));
+                        },
                         icon: Icon(
                           Icons.arrow_forward,
                           size: 25,

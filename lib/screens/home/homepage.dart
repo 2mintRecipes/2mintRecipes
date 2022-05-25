@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/screens/profile/seeAllHotCreators.dart';
+import 'package:x2mint_recipes/screens/recipe/seeAllRecipesPage.dart';
 import 'package:x2mint_recipes/screens/home/trendingNow.dart';
 import 'package:x2mint_recipes/services/db.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
@@ -32,6 +34,16 @@ class _HomePageState extends State<HomePage> {
 
   Future init() async {
     _allRecipesFuture = recipesService.getAll();
+  }
+
+  void _pushScreen({required BuildContext context, required Widget screen}) {
+    ThemeData themeData = Theme.of(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Theme(data: themeData, child: screen),
+      ),
+    );
   }
 
   @override
@@ -316,7 +328,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _pushScreen(
+                      context: context,
+                      screen: SeeAllPage(
+                        data: _allRecipes,
+                        tittle: "Recent Recipes",
+                      ));
+                },
                 icon: Icon(
                   Icons.arrow_forward,
                   size: 25,
@@ -445,7 +464,12 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               TextButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  _pushScreen(
+                      context: context,
+                      screen: SeeAllHotCreatorPage(
+                          data: _allRecipes, tittle: "Hot Creator"));
+                },
                 icon: Icon(
                   Icons.arrow_forward,
                   size: 25,
