@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/widgets/button.dart';
+import 'package:x2mint_recipes/widgets/creator.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/widgets/text_field.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
@@ -141,21 +142,33 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getTitleSection() {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.only(bottom: 15),
         child: SizedBox(
           width: MediaQuery.of(context).size.width - 60,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // IconButton(
+              //     onPressed: () {},
+              //     icon: const SizedBox(
+              //       child: Icon(
+              //         Icons.arrow_back_outlined,
+              //         size: 30,
+              //         color: Colors.white,
+              //       ),
+              //     )),
+              // const SizedBox(
+              //   width: 10,
+              // ),
               SizedBox(
-                width: MediaQuery.of(context).size.width - 60,
+                width: MediaQuery.of(context).size.width - 120,
                 child: Text(
                   _recipe['name'],
                   maxLines: 5,
                   softWrap: true,
                   style: const TextStyle(
-                    fontSize: 30,
+                    fontSize: 25,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -169,6 +182,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getBannerSection() {
     return GestureDetector(
+        child: Container(
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(.2),
+          borderRadius: BorderRadius.circular(15)),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -184,48 +201,111 @@ class _RecipeDetailState extends State<RecipeDetail> {
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: Stack(
+              alignment: Alignment.bottomLeft,
               children: <Widget>[
                 AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: Image(
-                    image: (_recipe['image'] == null)
-                        ? const NetworkImage(
-                            "https://unsplash.com/photos/Yn0l7uwBrpw")
-                        : NetworkImage(_recipe['image']),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                    isAntiAlias: true,
+                  child: Container(
+                    width: 250,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.white.withOpacity(.4),
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: (_recipe['image'] == null)
+                            ? const NetworkImage(
+                                "https://cdn.quantrinhahang.edu.vn/wp-content/uploads/2019/06/fast-food-la-gi.jpg")
+                            : NetworkImage(_recipe['image']),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Colors.white.withOpacity(.4),
+                    ),
                   ),
                 ),
+                Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const SizedBox(
+                                    child: Icon(
+                                      Icons.favorite_border_outlined,
+                                      size: 30,
+                                      color: Colors.red,
+                                    ),
+                                  )),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(_recipe['like'].toString())
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const SizedBox(
+                                    child: Icon(
+                                      Icons.timer,
+                                      size: 30,
+                                      color: Colors.red,
+                                    ),
+                                  )),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(_recipe['totalTime'].toString() + " mins")
+                            ],
+                          ),
+                        ]))
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Creator(_recipe['creator']),
+          ),
+          TextView(
+            text: _recipe['description'],
+            fontSize: 15,
+            color: Colors.transparent,
+            maxLine: 15,
+            border: const BorderRadius.only(
+              topLeft: Radius.zero,
+              topRight: Radius.zero,
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          )
         ],
       ),
-    );
+    ));
   }
 
   Widget getBasicInfoSection() {
     return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white.withOpacity(.4),
-      ),
+      // margin: const EdgeInsets.only(top: 20, bottom: 20),
+      // decoration: BoxDecoration(
+      //   borderRadius: BorderRadius.circular(8),
+      //   color: Colors.white.withOpacity(.4),
+      // ),
       child: Form(
         key: _formKeyBasicInfo,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            TextView(
-              text: _recipe['description'].toString(),
-              icon: Icons.description,
-              fontSize: 15,
-              maxLine: 5,
-            ),
-
-            const SizedBox(height: 10),
             TextView(
               text: 'Serving: ' + _recipe['serving'].toString(),
               icon: Icons.supervisor_account,
@@ -234,12 +314,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
             const SizedBox(height: 10),
             TextView(
               text: 'Cook Time: ' + _recipe['cookTime'].toString(),
-              icon: Icons.timer,
-              fontSize: 15,
-            ),
-            const SizedBox(height: 10),
-            TextView(
-              text: 'Total Time: ' + _recipe['totalTime'].toString(),
               icon: Icons.timer,
               fontSize: 15,
             ),
