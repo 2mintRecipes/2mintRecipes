@@ -12,7 +12,7 @@ import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/sign_up.dart';
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

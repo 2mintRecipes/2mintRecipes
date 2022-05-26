@@ -42,7 +42,7 @@ class _CreatorState extends State<Creator> {
         }
         if (snapshot.hasData) {
           _user = snapshot.data;
-          //print(_user);
+          print(_user);
           return Row(
             children: [
               ClipOval(

@@ -7,24 +7,25 @@ import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 import 'package:x2mint_recipes/widgets/creator.dart';
 
-class TrendingNow extends StatefulWidget {
+class PopularRecipe extends StatefulWidget {
   final String tittle = "Trending Now";
-  const TrendingNow({
+
+  const PopularRecipe({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TrendingNow> createState() => _TrendingNowState();
+  State<PopularRecipe> createState() => _PopularRecipeState();
 }
 
-class _TrendingNowState extends State<TrendingNow> {
+class _PopularRecipeState extends State<PopularRecipe> {
+  int activeMenu = 0;
   SecureStorage secureStorage = SecureStorage();
   RecipesService recipesService = RecipesService();
-  //UserService userService = UserService();
   late Future _allRecipesFuture;
-
   List<Map<String, dynamic>> _allRecipes = [];
 
   @override
@@ -61,71 +62,101 @@ class _TrendingNowState extends State<TrendingNow> {
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
             return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 30,
-                    right: 20,
-                    bottom: 10,
-                    top: 30,
-                  ),
+                      left: 30, right: 20, bottom: 10, top: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Trending 💥",
+                        "Popular Category",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(.8),
-                          fontSize: 27,
-                          fontWeight: FontWeight.w600,
-                        ),
+                            color: Colors.white.withOpacity(.8),
+                            fontSize: 27,
+                            fontWeight: FontWeight.w600),
                       ),
-                      TextButton.icon(
-                        onPressed: () {
-                          _pushScreen(
-                              context: context,
-                              screen: SeeAllPage(
-                                data: _allRecipes,
-                                tittle: "Trending 💥",
-                              ));
-                        },
-                        icon: Icon(
-                          Icons.arrow_forward,
-                          size: 25,
-                          color: Colors.white.withOpacity(.5),
-                        ),
-                        label: Text(
-                          'See all',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white.withOpacity(.5),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
+                SingleChildScrollView(
+                  //lists with kind tags
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30, top: 20),
+                    child: Row(
+                      children: List.generate(
+                        category.length,
+                        (index) {
+                          ////////// list tags
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 25),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  activeMenu = index;
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.black.withOpacity(.1),
+                                      ),
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: activeMenu == index
+                                          ? UI.appColor
+                                          : Colors.black.withOpacity(.1),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        bottom: 5,
+                                      ),
+                                      child: Text(
+                                        category[index],
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                /// View Popular Category
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 5),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: List.generate(
                         _allRecipes.length,
                         (index) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 30),
                             child: GestureDetector(
-                              onTap: () {
-                                _pushScreen(
-                                  context: context,
-                                  screen:
-                                      RecipeDetail(_allRecipes[index]['id']),
-                                );
-                              },
+                              onTap: () {},
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -155,11 +186,20 @@ class _TrendingNowState extends State<TrendingNow> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 3,
-                                  ),
-                                  Creator(_allRecipes[index]['creator']),
-                                  //Text(_allRecipes[index]['creator']),
+                                  const SizedBox(height: 3),
+                                  SizedBox(
+                                    width: 250,
+                                    child: Text(
+                                      _allRecipes[index]['description'],
+                                      maxLines: 3,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.white.withOpacity(.8),
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
@@ -168,6 +208,10 @@ class _TrendingNowState extends State<TrendingNow> {
                       ),
                     ),
                   ),
+                ),
+
+                const SizedBox(
+                  height: 20,
                 ),
               ],
             );

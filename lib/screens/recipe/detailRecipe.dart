@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/widgets/button.dart';
+import 'package:x2mint_recipes/widgets/creator.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/widgets/text_field.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
@@ -53,10 +56,12 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late Future _recipeFuture;
   late Map<String, dynamic> _recipe;
   late String id = widget.id;
+  late bool like = false;
 
   @override
   void initState() {
     super.initState();
+    like = false;
     init();
   }
 
@@ -121,146 +126,260 @@ class _RecipeDetailState extends State<RecipeDetail> {
   }
 
   Widget getBody() {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: UI.topPadding, bottom: 20, left: 30, right: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          getTitleSection(),
-          getBannerSection(),
-          getBasicInfoSection(),
-          getIngredientSection(),
-          getStepsSection(),
-          getEditWidget(),
-        ],
-      ),
+    return Column(
+      children: [
+        getBannerSection(),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getBasicInfoSection(),
+              getIngredientSection(),
+              getStepsSection(),
+              getEditWidget(),
+            ],
+          ),
+        )
+      ],
     );
   }
 
   Widget getTitleSection() {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width - 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 60,
-                child: Text(
-                  _recipe['name'],
-                  maxLines: 5,
-                  softWrap: true,
-                  style: const TextStyle(
-                    fontSize: 30,
+      padding: const EdgeInsets.only(top: UI.topPadding),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width - 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+                onPressed: () {
+                  //Navigator.pushNamed(context, '/');
+                },
+                icon: const SizedBox(
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: 30,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
                   ),
-                  textAlign: TextAlign.start,
+                )),
+            const SizedBox(
+              width: 5,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 120,
+              child: Text(
+                _recipe['name'],
+                maxLines: 5,
+                softWrap: true,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-              )
-            ],
-          ),
-        ));
-  }
-
-  Widget getBannerSection() {
-    return GestureDetector(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Card(
-            borderOnForeground: true,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: Colors.white.withOpacity(0.4),
-                width: 2.5,
+                textAlign: TextAlign.start,
               ),
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Stack(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image(
-                    image: (_recipe['image'] == null)
-                        ? const NetworkImage(
-                            "https://unsplash.com/photos/Yn0l7uwBrpw")
-                        : NetworkImage(_recipe['image']),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.center,
-                    isAntiAlias: true,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget getBasicInfoSection() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20),
+  Widget getBannerSection() {
+    return GestureDetector(
+        child: Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white.withOpacity(.4),
+          color: Colors.black.withOpacity(.2),
+          borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              AspectRatio(
+                aspectRatio: 4 / 3,
+                child: Container(
+                  width: 250,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.transparent,
+                    ),
+                    image: ((_recipe['image'] == '')
+                        ? const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('assets/images/welcome_bg.jpg'))
+                        : DecorationImage(
+                            image: NetworkImage(_recipe['image']),
+                            fit: BoxFit.cover,
+                          )),
+                    borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)),
+                  ),
+                ),
+              ),
+              SizedBox(
+                  height: MediaQuery.of(context).size.width * .75,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      getTitleSection(),
+                      getFavoriteAndTimeSection(),
+                    ],
+                  ))
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Creator(_recipe['creator']),
+          ),
+          TextView(
+            text: _recipe['description'],
+            fontSize: 15,
+            width: MediaQuery.of(context).size.width - 20,
+            color: Colors.transparent,
+            maxLine: 15,
+            border: const BorderRadius.only(
+              topLeft: Radius.zero,
+              topRight: Radius.zero,
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          )
+        ],
       ),
-      child: Form(
-        key: _formKeyBasicInfo,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            TextView(
-              text: _recipe['description'].toString(),
-              icon: Icons.description,
-              fontSize: 15,
-              maxLine: 5,
-            ),
+    ));
+  }
 
-            const SizedBox(height: 10),
-            TextView(
-              text: 'Serving: ' + _recipe['serving'].toString(),
-              icon: Icons.supervisor_account,
-              fontSize: 15,
-            ),
-            const SizedBox(height: 10),
-            TextView(
-              text: 'Cook Time: ' + _recipe['cookTime'].toString(),
-              icon: Icons.timer,
-              fontSize: 15,
-            ),
-            const SizedBox(height: 10),
-            TextView(
-              text: 'Total Time: ' + _recipe['totalTime'].toString(),
-              icon: Icons.timer,
-              fontSize: 15,
-            ),
-            const SizedBox(height: 10),
+  Widget getFavoriteAndTimeSection() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: ClipRRect(
+          // borderRadius: BorderRadius.circular(5),
+          child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 0, sigmaY: 3),
+              child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: 'Like',
+                                onPressed: () {
+                                  setState(() {
+                                    if (like == true) {
+                                      _recipe['like'] -= 1;
+                                      like = false;
+                                    } else {
+                                      like = true;
+                                      _recipe['like'] += 1;
+                                    }
+                                  });
+                                },
+                                icon: SizedBox(
+                                  child: Icon(
+                                    ((like == true)
+                                        ? Icons.favorite
+                                        : Icons.favorite_border_outlined),
+                                    size: 30,
+                                    color: (like == true)
+                                        ? Colors.red
+                                        : Colors.white,
+                                  ),
+                                )),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(_recipe['like'].toString(),
+                                style: TextStyle(
+                                    color: (like == true)
+                                        ? Colors.red
+                                        : Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: "Total Time",
+                                onPressed: () {},
+                                icon: const SizedBox(
+                                  child: Icon(
+                                    Icons.timer,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                )),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              _recipe['totalTime'].toString() + " mins",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ])))),
+    );
+  }
 
-            /// Category
-            InputField(
-              prefixIcon: Icons.restaurant_menu,
-              labelText: "Category",
-              textEditingController: _categoryController,
-            ),
-            const SizedBox(height: 10),
+  Widget getBasicInfoSection() {
+    return Form(
+      key: _formKeyBasicInfo,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextView(
+                text: _recipe['serving'].toString(),
+                icon: Icons.supervisor_account,
+                fontSize: 20,
+                width: MediaQuery.of(context).size.width * .1,
+              ),
+              TextView(
+                text: _recipe['level'].toString(),
+                icon: Icons.star,
+                fontSize: 20,
+                width: MediaQuery.of(context).size.width * .1,
+              ),
+              TextView(
+                text: _recipe['cookTime'].toString() + ' mins',
+                icon: Icons.schedule,
+                fontSize: 20,
+                width: MediaQuery.of(context).size.width * .2,
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
 
-            TextView(
-              text: _recipe['level'].toString(),
-              icon: Icons.star,
-              fontSize: 15,
-            ),
-            const SizedBox(height: 10),
-          ],
-        ),
+          /// Category
+          InputField(
+            prefixIcon: Icons.restaurant_menu,
+            labelText: "Category",
+            textEditingController: _categoryController,
+          ),
+          const SizedBox(height: 10),
+        ],
       ),
     );
   }

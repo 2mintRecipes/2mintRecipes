@@ -160,6 +160,7 @@ class _LoginState extends State<Login> {
                                   email = value;
                                 });
                               },
+                              maxLine: 1,
                               labelText: "Email",
                               errorText: emailError,
                               keyboardType: TextInputType.emailAddress,
