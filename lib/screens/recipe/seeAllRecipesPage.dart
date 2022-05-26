@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:x2mint_recipes/screens/home/homepage.dart';
+import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 
 import '../../utils/app_ui.dart';
 
@@ -18,6 +20,16 @@ class SeeAllPage extends StatefulWidget {
 
   @override
   State<SeeAllPage> createState() => _SeeAllPageState();
+}
+
+void _pushScreen({required BuildContext context, required Widget screen}) {
+  ThemeData themeData = Theme.of(context);
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => Theme(data: themeData, child: screen),
+    ),
+  );
 }
 
 class _SeeAllPageState extends State<SeeAllPage> {
@@ -66,14 +78,7 @@ class _SeeAllPageState extends State<SeeAllPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          getTitleSection(),
-          // getBannerSection(),
-          // getBasicInfoSection(),
-          // getIngredientSection(),
-          // getStepsSection(),
-          // getEditWidget(),
-        ],
+        children: [getTitleSection(), getListItems()],
       ),
     );
   }
@@ -87,8 +92,22 @@ class _SeeAllPageState extends State<SeeAllPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/');
+                  },
+                  icon: const SizedBox(
+                    child: Icon(
+                      Icons.arrow_back,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  )),
+              const SizedBox(
+                width: 5,
+              ),
               SizedBox(
-                width: MediaQuery.of(context).size.width - 120,
+                width: MediaQuery.of(context).size.width - 150,
                 child: Text(
                   widget.tittle,
                   maxLines: 5,
@@ -104,5 +123,81 @@ class _SeeAllPageState extends State<SeeAllPage> {
             ],
           ),
         ));
+  }
+
+  Widget getListItems() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      controller: ScrollController(),
+      child: Column(
+        children: List.generate(
+          widget.data.length,
+          (index) {
+            return GestureDetector(
+              onTap: () {
+                _pushScreen(
+                    context: context,
+                    screen: RecipeDetail(widget.data[index]['id']));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width - 60,
+                    height: MediaQuery.of(context).size.width * .5,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 2,
+                        color: Colors.white.withOpacity(.4),
+                      ),
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                          image: NetworkImage(widget.data[index]['image']),
+                          fit: BoxFit.cover),
+                      color: Colors.white.withOpacity(.4),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    widget.data[index]['name'],
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        color: UI.appColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white.withOpacity(.5),
+                        child: const Text(
+                          'MT',
+                          style: TextStyle(fontSize: 15, color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        '  By ',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white.withOpacity(.7),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
