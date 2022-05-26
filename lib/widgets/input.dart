@@ -43,6 +43,7 @@ class InputField extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: TextField(
+        //obscureText: true,
         controller: textEditingController,
         style: TextStyle(
           color: Colors.white,

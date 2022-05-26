@@ -11,11 +11,13 @@ class TextView extends StatelessWidget {
     this.icon,
     this.maxLine,
     this.border,
+    this.width,
     this.textEditingController,
     this.color,
     Key? key,
   }) : super(key: key);
   final Color? color;
+  final double? width;
   final BorderRadius? border;
   final String? text;
   final int? maxLine;
@@ -54,8 +56,7 @@ class TextView extends StatelessWidget {
               width: 10,
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width -
-                  ((icon == null) ? 80 : 120),
+              width: width,
               child: Text(
                 text!,
                 maxLines: maxLine,

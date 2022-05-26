@@ -117,7 +117,7 @@ class _BookmarkState extends State<Bookmark> {
       padding: const EdgeInsets.only(left: 30, right: 30, top: 20, bottom: 20),
       child: Row(
         children: List.generate(
-          song_type_1.length,
+          category.length,
           (index) {
             ////////// list tags
             return GestureDetector(
@@ -143,7 +143,7 @@ class _BookmarkState extends State<Bookmark> {
                     padding: const EdgeInsets.only(
                         top: 5, bottom: 5, left: 10, right: 10),
                     child: Text(
-                      song_type_1[index],
+                      category[index],
                       style: const TextStyle(
                           fontSize: 20,
                           color: Colors.white,
