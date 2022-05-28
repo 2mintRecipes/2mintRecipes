@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 
@@ -20,6 +22,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController reEnterPasswordController = TextEditingController();
+  SecureStorage secureStorage = SecureStorage();
 
   late String fullName, username, email, password, confirmPassword;
   String? fullNameError,
@@ -368,7 +371,10 @@ class _SignUpState extends State<SignUp> {
           ),
           TextButton(
             onPressed: () async {
-              await signInWithGoogle();
+              var re = await signInWithGoogle();
+              if (re != null) {
+                Navigator.pushNamed(context, Root.routeName);
+              }
             },
             child: const Text(
               'Sign In',
@@ -380,7 +386,7 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<UserCredential?> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -395,8 +401,14 @@ class _SignUpState extends State<SignUp> {
     );
 
     print(credential);
+    secureStorage.writeSecureData('uid', googleAuth?.idToken);
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    try {
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

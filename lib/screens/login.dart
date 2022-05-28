@@ -262,7 +262,7 @@ class _LoginState extends State<Login> {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      // print(value);
+      print(value);
 
       if (value.user != null) {
         secureStorage.writeSecureData('uid', value.user!.uid);
