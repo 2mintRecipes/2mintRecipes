@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:x2mint_recipes/firebase_options.dart';
 import 'package:x2mint_recipes/screens/profile/forgot_password.dart';
 import 'package:x2mint_recipes/screens/welcome.dart';
@@ -10,6 +11,16 @@ import 'package:x2mint_recipes/screens/bookmark.dart';
 import 'package:x2mint_recipes/screens/root.dart';
 import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/sign_up.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  clientId:
+      '530052324208-rb5u4trnudh55i2valn562cd81qnhs91.apps.googleusercontent.com',
+  scopes: <String>[
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
 
 void main() async {
   //WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -35,27 +46,28 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AuthClass authClass = AuthClass();
-  Widget currentPage = const Welcome();
+  Widget? currentPage; // = const Welcome();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  GoogleSignInAccount? _currentUser;
 
   @override
   void initState() {
     super.initState();
-    // currentPage = const Welcome();
+    currentPage = const Welcome();
     checkLogin();
-    // Create a new user with a first and last name
-    // final user = <String, dynamic>{
-    //   "first": "Ada",
-    //   "last": "Lovelace",
-    //   "born": 1815,
-    // };
-
-    // // Add a new document with a generated ID
-    // firestore.collection("users").add(user).then((DocumentReference doc) =>
-    //     print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
   checkLogin() async {
+    // _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+    //   print("============================");
+    //   print(account);
+    //   setState(() {
+    //     _currentUser = account;
+    //   });
+    //   currentPage = _currentUser != null ? const Root() : const Login();
+    // });
+    // _googleSignIn.signInSilently();
+
     String? token = await authClass.getToken();
 
     setState(() {

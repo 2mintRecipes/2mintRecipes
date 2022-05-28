@@ -1,6 +1,10 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 
@@ -12,42 +16,13 @@ class SignUp extends StatefulWidget {
   State<SignUp> createState() => _SignUpState();
 }
 
-Widget signInWith(String icon) {
-  return Container(
-    margin: const EdgeInsets.all(5),
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: Colors.grey.withOpacity(0),
-        width: 0,
-      ),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ImageIcon(
-          AssetImage(icon),
-          size: 24,
-          color: Colors.white,
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'Sign In',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
 class _SignUpState extends State<SignUp> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController reEnterPasswordController = TextEditingController();
+  SecureStorage secureStorage = SecureStorage();
 
   late String fullName, username, email, password, confirmPassword;
   String? fullNameError,
@@ -374,5 +349,66 @@ class _SignUpState extends State<SignUp> {
         ],
       ),
     );
+  }
+
+  Widget signInWith(String icon) {
+    return Container(
+      margin: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey.withOpacity(0),
+          width: 0,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ImageIcon(
+            AssetImage(icon),
+            size: 24,
+            color: Colors.white,
+          ),
+          TextButton(
+            onPressed: () async {
+              var re = await signInWithGoogle();
+              if (re != null) {
+                Navigator.pushNamed(context, Root.routeName);
+              }
+            },
+            child: const Text(
+              'Sign In',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    print(credential);
+    secureStorage.writeSecureData('uid', googleAuth?.idToken);
+
+    // Once signed in, return the UserCredential
+    try {
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e);
+      return null;
+    }
   }
 }

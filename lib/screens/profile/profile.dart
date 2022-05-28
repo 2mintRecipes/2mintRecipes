@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/profile/edit_profile.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
@@ -124,6 +125,11 @@ class _ProfileState extends State<Profile> {
                 OutlinedButton(
                   onPressed: () async {
                     await authClass.signOut();
+                    try {
+                      await GoogleSignIn().disconnect();
+                    } catch (e) {
+                      print(e);
+                    }
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (builder) => const Login()),
@@ -348,7 +354,8 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void logout() {
+  void logout() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signOut();
     FirebaseAuth.instance.signOut();
     secureStorage.deleteSecureData('uid');
 

@@ -62,6 +62,7 @@ class AuthClass {
   }
 
   Future getToken() async {
+    //idToken accessToken
     return await storage.read(key: "uid");
   }
 

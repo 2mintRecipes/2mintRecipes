@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "530052324208-rb5u4trnudh55i2valn562cd81qnhs91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.x2mint_recipes",
+            "certificate_hash": "391887d8909cc24c65db28fbedcd5133aee1a7bb"
+          }
+        },
+        {
           "client_id": "530052324208-ioct4vm38dn8r4ku42d93d31h7bf4l8p.apps.googleusercontent.com",
           "client_type": 3
         }
