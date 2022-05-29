@@ -324,22 +324,6 @@ class _SignUpState extends State<SignUp> {
                                   TextStyle(color: Colors.white, fontSize: 15),
                             ),
                           ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            "_____________  or _____________",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            width: 300,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                signInWith('assets/icons/google.png'),
-                                signInWith('assets/icons/facebook.png'),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -348,41 +332,6 @@ class _SignUpState extends State<SignUp> {
               ],
             ),
           )
-        ],
-      ),
-    );
-  }
-
-  Widget signInWith(String icon) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey.withOpacity(0),
-          width: 0,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ImageIcon(
-            AssetImage(icon),
-            size: 24,
-            color: Colors.white,
-          ),
-          TextButton(
-            onPressed: () async {
-              var re = await authClass.signInWithGoogle();
-              if (re != null) {
-                Navigator.pushNamed(context, Root.routeName);
-              }
-            },
-            child: const Text(
-              'Sign In',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
         ],
       ),
     );
