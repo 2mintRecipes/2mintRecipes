@@ -66,6 +66,45 @@ class AuthClass {
     return await storage.read(key: "uid");
   }
 
+  Future<UserCredential?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    print(credential);
+    await storage.write(key: 'uid', value: googleAuth?.idToken);
+
+    // Once signed in, return the UserCredential
+    try {
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<bool> loginWithUsernamePassword(String email, String password) async {
+    var value = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+
+    print(value);
+
+    if (value.user != null) {
+      await storage.write(key: 'uid', value: value.user!.uid);
+      return true;
+    }
+    return false;
+  }
+
   // Future<void> verifyPhoneNumber(
   //     String phoneNumber, BuildContext context, Function setData) async {
   //   PhoneVerificationCompleted verificationCompleted =

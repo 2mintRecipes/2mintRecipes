@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
@@ -23,6 +25,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController reEnterPasswordController = TextEditingController();
   SecureStorage secureStorage = SecureStorage();
+  AuthClass authClass = AuthClass();
 
   late String fullName, username, email, password, confirmPassword;
   String? fullNameError,
@@ -146,7 +149,7 @@ class _SignUpState extends State<SignUp> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * .1,
+                  height: MediaQuery.of(context).size.height * .25,
                   child: Transform.scale(
                     scale: 0.5,
                     child: Image.asset(UI.appLogo),
@@ -158,7 +161,7 @@ class _SignUpState extends State<SignUp> {
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.85,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -182,16 +185,7 @@ class _SignUpState extends State<SignUp> {
                                 /// FullName
                                 InputField(
                                   prefixIcon: Icons.badge,
-                                  onChanged: (value) {
-                                    if (fullNameError != null) {
-                                      setState(() {
-                                        fullNameError = null;
-                                      });
-                                    }
-                                    setState(() {
-                                      fullName = value;
-                                    });
-                                  },
+                                  onChanged: onFullnameChanged,
                                   labelText: "FullName",
                                   errorText: fullNameError,
                                   keyboardType: TextInputType.name,
@@ -203,16 +197,7 @@ class _SignUpState extends State<SignUp> {
                                 /// Username
                                 InputField(
                                   prefixIcon: Icons.account_circle,
-                                  onChanged: (value) {
-                                    if (usernameError != null) {
-                                      setState(() {
-                                        usernameError = null;
-                                      });
-                                    }
-                                    setState(() {
-                                      username = value;
-                                    });
-                                  },
+                                  onChanged: onUsernameChanged,
                                   labelText: "Username",
                                   errorText: usernameError,
                                   keyboardType: TextInputType.text,
@@ -224,16 +209,7 @@ class _SignUpState extends State<SignUp> {
                                 /// Email
                                 InputField(
                                   prefixIcon: Icons.alternate_email,
-                                  onChanged: (value) {
-                                    if (emailError != null) {
-                                      setState(() {
-                                        emailError = null;
-                                      });
-                                    }
-                                    setState(() {
-                                      email = value;
-                                    });
-                                  },
+                                  onChanged: onEmailChanged,
                                   labelText: "Email",
                                   errorText: emailError,
                                   keyboardType: TextInputType.emailAddress,
@@ -245,16 +221,7 @@ class _SignUpState extends State<SignUp> {
                                 /// Password
                                 InputField(
                                   prefixIcon: Icons.lock,
-                                  onChanged: (value) {
-                                    if (passwordError != null) {
-                                      setState(() {
-                                        passwordError = null;
-                                      });
-                                    }
-                                    setState(() {
-                                      password = value;
-                                    });
-                                  },
+                                  onChanged: onPasswordChanged,
                                   labelText: "Password",
                                   errorText: passwordError,
                                   keyboardType: TextInputType.visiblePassword,
@@ -266,16 +233,7 @@ class _SignUpState extends State<SignUp> {
                                 /// Confirm Password
                                 InputField(
                                   prefixIcon: Icons.lock,
-                                  onChanged: (value) {
-                                    if (confirmPasswordError != null) {
-                                      setState(() {
-                                        confirmPasswordError = null;
-                                      });
-                                    }
-                                    setState(() {
-                                      confirmPassword = value;
-                                    });
-                                  },
+                                  onChanged: onConfirmPasswordChanged,
                                   labelText: "Confirm Password",
                                   errorText: confirmPasswordError,
                                   keyboardType: TextInputType.visiblePassword,
@@ -286,58 +244,9 @@ class _SignUpState extends State<SignUp> {
                                 ),
 
                                 /// SignUp Button
-                                Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: SizedBox(
-                                    height: 50,
-                                    child: ElevatedButton.icon(
-                                      onPressed: submit,
-                                      style: TextButton.styleFrom(
-                                        primary: Colors.white,
-                                        backgroundColor: UI.appColor,
-                                        shape: RoundedRectangleBorder(
-                                          //to set border radius to button
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      icon: const Icon(Icons.app_registration),
-                                      label: const Text(
-                                        "Sign Up",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 20, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                getSignUpButton(),
                               ]),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/login');
-                            },
-                            child: const Text(
-                              'You have an already Account? Log In',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 15),
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          const Text(
-                            "_____________  or _____________",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            width: 300,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                signInWith('assets/icons/google.png'),
-                                signInWith('assets/icons/facebook.png'),
-                              ],
-                            ),
-                          )
+                          alreadyHaveAccount(context),
                         ],
                       ),
                     ),
@@ -351,64 +260,105 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget signInWith(String icon) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey.withOpacity(0),
-          width: 0,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ImageIcon(
-            AssetImage(icon),
-            size: 24,
-            color: Colors.white,
-          ),
-          TextButton(
-            onPressed: () async {
-              var re = await signInWithGoogle();
-              if (re != null) {
-                Navigator.pushNamed(context, Root.routeName);
-              }
-            },
-            child: const Text(
-              'Sign In',
-              style: TextStyle(color: Colors.white),
+  onUsernameChanged(value) {
+    if (usernameError != null) {
+      setState(() {
+        usernameError = null;
+      });
+    }
+    setState(() {
+      username = value;
+    });
+  }
+
+  onFullnameChanged(value) {
+    if (fullNameError != null) {
+      setState(() {
+        fullNameError = null;
+      });
+    }
+    setState(() {
+      fullName = value;
+    });
+  }
+
+  onEmailChanged(value) {
+    if (emailError != null) {
+      setState(() {
+        emailError = null;
+      });
+    }
+    setState(() {
+      email = value;
+    });
+  }
+
+  onPasswordChanged(value) {
+    if (passwordError != null) {
+      setState(() {
+        passwordError = null;
+      });
+    }
+    setState(() {
+      password = value;
+    });
+  }
+
+  onConfirmPasswordChanged(value) {
+    if (confirmPasswordError != null) {
+      setState(() {
+        confirmPasswordError = null;
+      });
+    }
+    setState(() {
+      confirmPassword = value;
+    });
+  }
+
+  Widget getSignUpButton() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: SizedBox(
+        height: 50,
+        child: ElevatedButton.icon(
+          onPressed: submit,
+          style: TextButton.styleFrom(
+            primary: Colors.white,
+            backgroundColor: UI.appColor,
+            shape: RoundedRectangleBorder(
+              //to set border radius to button
+              borderRadius: BorderRadius.circular(10),
             ),
           ),
-        ],
+          icon: const Icon(Icons.app_registration),
+          label: const Text(
+            "Sign Up",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
       ),
     );
   }
 
-  Future<UserCredential?> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth =
-        await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
+  Widget alreadyHaveAccount(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 20),
+        const Text(
+          'You already have an account?',
+          style: TextStyle(color: Colors.white, fontSize: 15),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, Login.routeName);
+          },
+          child: const Text(
+            'Log In',
+            style: TextStyle(color: Colors.white, fontSize: 15),
+          ),
+        ),
+      ],
     );
-
-    print(credential);
-    secureStorage.writeSecureData('uid', googleAuth?.idToken);
-
-    // Once signed in, return the UserCredential
-    try {
-      return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch (e) {
-      print(e);
-      return null;
-    }
   }
 }
