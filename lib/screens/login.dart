@@ -68,12 +68,12 @@ class _LoginState extends State<Login> {
     return isValid;
   }
 
-  void submit() {
-    if (validate()) {
-      {
-        loginWithUsernamePassword();
-      }
+  void submit() async {
+    var isValid = validate();
+    if (!isValid) {
+      return;
     }
+    await loginWithUsernamePassword();
   }
 
   SecureStorage secureStorage = SecureStorage();
@@ -256,25 +256,15 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void loginWithUsernamePassword() {
+  Future loginWithUsernamePassword() async {
     var email = emailController.text;
     var password = passwordController.text;
-
-    FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      print(value);
-
-      if (value.user != null) {
-        secureStorage.writeSecureData('uid', value.user!.uid);
-      }
-
+    var isLoggedIn = await authClass.loginWithUsernamePassword(email, password);
+    if (isLoggedIn) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const Root()),
       );
-    }).onError((error, stackTrace) {
-      print("Error ${error.toString()}");
-    });
+    }
   }
 }
