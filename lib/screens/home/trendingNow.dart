@@ -7,6 +7,7 @@ import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
+import 'package:x2mint_recipes/utils/screen_utils.dart';
 import 'package:x2mint_recipes/widgets/creator.dart';
 
 class TrendingNow extends StatefulWidget {
@@ -35,16 +36,6 @@ class _TrendingNowState extends State<TrendingNow> {
 
   Future init() async {
     _allRecipesFuture = recipesService.getAll();
-  }
-
-  void _pushScreen({required BuildContext context, required Widget screen}) {
-    ThemeData themeData = Theme.of(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => Theme(data: themeData, child: screen),
-      ),
-    );
   }
 
   @override
@@ -84,7 +75,7 @@ class _TrendingNowState extends State<TrendingNow> {
                       ),
                       TextButton.icon(
                         onPressed: () {
-                          _pushScreen(
+                          ScreenUtils.pushScreen(
                               context: context,
                               screen: SeeAllPage(
                                 data: _allRecipes,
@@ -119,7 +110,7 @@ class _TrendingNowState extends State<TrendingNow> {
                             padding: const EdgeInsets.only(left: 30),
                             child: GestureDetector(
                               onTap: () {
-                                _pushScreen(
+                                ScreenUtils.pushScreen(
                                   context: context,
                                   screen:
                                       RecipeDetail(_allRecipes[index]['id']),
@@ -158,7 +149,7 @@ class _TrendingNowState extends State<TrendingNow> {
                                   const SizedBox(
                                     height: 3,
                                   ),
-                                  Creator(_allRecipes[index]['creator']),
+                                  Creator(_allRecipes[index]['creator'].id),
                                   //Text(_allRecipes[index]['creator']),
                                 ],
                               ),

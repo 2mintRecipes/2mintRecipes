@@ -239,7 +239,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ),
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Creator(_recipe['creator']),
+            child: Creator(_recipe['creator'].id),
           ),
           TextView(
             text: _recipe['description'],
