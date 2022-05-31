@@ -5,9 +5,11 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/profile/edit_profile.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
+import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
@@ -25,6 +27,24 @@ class _ProfileState extends State<Profile> {
   int activeMenu1 = 0;
   SecureStorage secureStorage = SecureStorage();
   AuthClass authClass = AuthClass();
+  UserService userService = UserService();
+  late String uid;
+  UserDto? user;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future init() async {
+    var _uid = await secureStorage.readSecureData('uid');
+    var _user = await userService.getUserByUid(_uid);
+    setState(() {
+      uid = _uid;
+      user = _user;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +88,21 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: [
           getBasicInfo(),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           getOverview(),
           getGallery(),
         ],
       ),
     );
+  }
+
+  getAvatar() {
+    if (user != null) {
+      if (user!.avatar != null) {
+        return NetworkImage(user!.avatar!);
+      }
+    }
+    return const AssetImage("assets/images/MIT2021.png");
   }
 
   Widget getBasicInfo() {
@@ -86,8 +113,8 @@ class _ProfileState extends State<Profile> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const GFAvatar(
-              backgroundImage: AssetImage("assets/images/MIT2021.png"),
+            GFAvatar(
+              backgroundImage: getAvatar(),
               shape: GFAvatarShape.circle,
               size: 72,
             ),

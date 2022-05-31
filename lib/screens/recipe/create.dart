@@ -841,7 +841,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
     await recipesService.add(data).then((value) {
       _clearText();
 
-      ScreenUtils.pushScreen(context: context, screen: RecipeDetail(value.id));
+      ScreenUtils.pushScreen(context: context, screen: RecipeDetail(value.uid));
     }).onError((error, stackTrace) {
       print(error.toString());
     });

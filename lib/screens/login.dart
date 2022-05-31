@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/root.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
+import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 
@@ -308,12 +310,7 @@ class _LoginState extends State<Login> {
             color: Colors.white,
           ),
           TextButton(
-            onPressed: () async {
-              var re = await authClass.signInWithGoogle();
-              if (re != null) {
-                Navigator.pushNamed(context, Root.routeName);
-              }
-            },
+            onPressed: loginWithGoogle,
             child: const Text(
               'Sign In',
               style: TextStyle(color: Colors.white),
@@ -322,6 +319,25 @@ class _LoginState extends State<Login> {
         ],
       ),
     );
+  }
+
+  Future loginWithGoogle() async {
+    var re = await authClass.signInWithGoogle();
+    if (re != null) {
+      print(re);
+      UserService userService = UserService();
+      if (re.user != null) {
+        var userInfo = await userService.getUserByUid(re.user!.uid);
+        SecureStorage secureStorage = SecureStorage();
+        if (userInfo == null) {
+          var newUser = await userService.add(UserDto.fromRawUser(re.user!));
+          secureStorage.writeSecureData('uid', newUser.id);
+        } else {
+          secureStorage.writeSecureData('uid', userInfo.uid);
+        }
+      }
+      Navigator.pushNamed(context, Root.routeName);
+    }
   }
 
   Future loginWithUsernamePassword() async {

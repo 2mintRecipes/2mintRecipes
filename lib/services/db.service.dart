@@ -67,18 +67,17 @@ class StorageService {
   }) async {
     List<Map<String, dynamic>>? result = [];
 
-    await getCollection(collectionName)
+    var snapshot = await getCollection(collectionName)
         .where(fieldName, isEqualTo: value)
-        .orderBy(fieldName, descending: descending)
+        // .orderBy(fieldName, descending: descending)
         .limit(limit)
         // .startAt([offset])
-        .get()
-        .then((event) {
-      event.docs.forEach((doc) {
-        var value = doc.data();
-        value['id'] = doc.id;
-        result.add(value);
-      });
+        .get();
+
+    snapshot.docs.forEach((doc) {
+      var value = doc.data();
+      value['id'] = doc.id;
+      result.add(value);
     });
 
     return result;

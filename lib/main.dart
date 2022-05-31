@@ -68,10 +68,10 @@ class _MyAppState extends State<MyApp> {
     // });
     // _googleSignIn.signInSilently();
 
-    String? token = await authClass.getToken();
+    String? uid = await authClass.getUid();
 
     setState(() {
-      currentPage = token != null ? const Root() : const Login();
+      currentPage = uid != null ? const Root() : const Login();
     });
   }
 
