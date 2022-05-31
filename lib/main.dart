@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:x2mint_recipes/firebase_options.dart';
+import 'package:x2mint_recipes/screens/home/homepage.dart';
 import 'package:x2mint_recipes/screens/profile/forgot_password.dart';
 import 'package:x2mint_recipes/screens/welcome.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
@@ -84,6 +85,7 @@ class _MyAppState extends State<MyApp> {
       home: currentPage,
       routes: {
         Welcome.routeName: (context) => const Welcome(),
+        //HomePage.routeName: (context) => const HomePage(),
         Login.routeName: (context) => const Login(),
         SignUp.routeName: (context) => const SignUp(),
         Root.routeName: (context) => const Root(),

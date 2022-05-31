@@ -7,7 +7,6 @@ class RecipesService {
     try {
       List<Map<String, dynamic>> result =
           await StorageService.getAll('recipes');
-
       return result;
     } catch (e) {
       print(e);

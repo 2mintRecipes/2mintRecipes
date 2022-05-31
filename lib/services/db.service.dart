@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageService {
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
-
   static FirebaseFirestore getInstance() {
     if (_db == null) {
       return FirebaseFirestore.instance;
     } else {
+      //print(_db);
       return _db;
     }
   }
