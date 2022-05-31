@@ -54,15 +54,11 @@ class StorageService {
 
   static Future get(String collectionName, String path) async {
     Map<String, dynamic>? result;
+
     await getCollection(collectionName).doc(path).get().then((doc) {
       result = doc.data();
       result?['id'] = doc.id;
-      String type = result!['category'].toString();
-      result!['category'] =
-          type.substring(type.indexOf('/') + 1, type.indexOf(')'));
     });
-    String cre = result!['creator'].toString();
-    result!['creator'] = cre.substring(cre.indexOf('/') + 1, cre.indexOf(')'));
 
     return result;
   }
