@@ -81,12 +81,14 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: ClipRRect(
-                      // borderRadius: BorderRadius.circular(5),
-                      child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                          child: SingleChildScrollView(
-                            child: getBody(),
-                          ))),
+                    // borderRadius: BorderRadius.circular(5),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: SingleChildScrollView(
+                        child: getBody(),
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -177,7 +179,7 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.only(left: 30, top: 20),
             child: Row(
               children: List.generate(
-                song_type_1.length,
+                recipeCategories.length,
                 (index) {
                   ////////// list tags
                   return Padding(
@@ -208,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                                 bottom: 5,
                               ),
                               child: Text(
-                                song_type_1[index],
+                                recipeCategories[index],
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,

@@ -304,12 +304,12 @@ class _ProfileState extends State<Profile> {
                           border: Border.all(width: 2, color: Colors.white),
                           borderRadius: BorderRadius.circular(15),
                           image: DecorationImage(
-                              image: AssetImage(songs[index]['img']),
+                              image: AssetImage(mockRecipes[index]['img']),
                               fit: BoxFit.cover),
                           color: Colors.white),
                     ),
                     Text(
-                      songs[index]['title'],
+                      mockRecipes[index]['title'],
                       style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,

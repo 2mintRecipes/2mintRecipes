@@ -4,6 +4,8 @@ import 'dart:ui';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
+import 'package:x2mint_recipes/utils/screen_utils.dart';
 import 'package:x2mint_recipes/widgets/button.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
@@ -159,7 +161,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
           Text(
-            "CreateRecipe recipe",
+            "Create recipe",
             style: TextStyle(
               fontSize: 30,
               color: Colors.white,
@@ -681,7 +683,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5),
+      margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 5),
       decoration: BoxDecoration(
           color: Colors.black.withOpacity(.2),
           borderRadius: BorderRadius.circular(15)),
@@ -782,7 +784,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
               child: ElevatedButton.icon(
                 onPressed: () async {
                   await _addRecipe();
-                  Navigator.pushNamed(context, '/RecipeDetail');
                 },
                 style: TextButton.styleFrom(
                   primary: Colors.white,
@@ -794,7 +795,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                 ),
                 icon: const Icon(Icons.ramen_dining),
                 label: const Text(
-                  "Detail",
+                  "Create",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -838,8 +839,9 @@ class _CreateRecipeState extends State<CreateRecipe> {
     //print(data.toJson());
 
     await recipesService.add(data).then((value) {
-      //print(value);
       _clearText();
+
+      ScreenUtils.pushScreen(context: context, screen: RecipeDetail(value.id));
     }).onError((error, stackTrace) {
       print(error.toString());
     });
