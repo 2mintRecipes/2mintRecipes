@@ -431,14 +431,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
               ),
             ),
 
-            /// Steps
-            GridView.count(
-              crossAxisCount: 1,
-              crossAxisSpacing: 10,
-              shrinkWrap: true,
+            /// Ingredient
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               controller: ScrollController(),
-              children: List.generate(
-                  _numIngredient, (index) => getIngredientItem(index + 1)),
+              child: Column(
+                children: List.generate(
+                    _numIngredient, (index) => getIngredientItem(index + 1)),
+              ),
             ),
 
             /// Add button
@@ -459,6 +459,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
         children: [
           const SizedBox(height: 10),
           InputField(
+            prefixIcon: Icons.edit,
             onChanged: (value) {
               if (subjectError != null) {
                 setState(() {
@@ -477,6 +478,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             textEditingController: _subjectController,
           ),
           InputField(
+            prefixIcon: Icons.line_weight,
             onChanged: (value) {
               if (detailError != null) {
                 setState(() {
@@ -525,13 +527,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
             ),
 
             /// Steps
-            GridView.count(
-              crossAxisCount: 1,
-              crossAxisSpacing: 10,
-              shrinkWrap: true,
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               controller: ScrollController(),
-              children:
-                  List.generate(_numSteps, (index) => getStepItem(index + 1)),
+              child: Column(
+                children:
+                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
+              ),
             ),
 
             /// Add button
@@ -581,7 +583,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
           textEditingController: _subjectController,
         ),
         InputField(
-          maxLine: 5,
           prefixIcon: Icons.menu_book,
           onChanged: (value) {
             if (detailError != null) {

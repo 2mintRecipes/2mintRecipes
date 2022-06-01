@@ -43,7 +43,7 @@ class _CreatorState extends State<Creator> {
         }
         if (snapshot.hasData) {
           _user = UserDto.fromJson(snapshot.data);
-          print(_user);
+
           return Row(
             children: [
               ClipOval(
@@ -62,14 +62,14 @@ class _CreatorState extends State<Creator> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _user.fullName ?? "",
+                      _user.fullName ?? " ",
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white.withOpacity(.7),
                       ),
                     ),
                     Text(
-                      _user.username ?? '',
+                      _user.username ?? ' ',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.white.withOpacity(.7),
