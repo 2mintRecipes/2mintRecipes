@@ -46,7 +46,7 @@ class StorageService {
     return result;
   }
 
-  static Future get(String collectionName, String path) async {
+  static Future getOne(String collectionName, String path) async {
     Map<String, dynamic>? result;
 
     await getCollection(collectionName).doc(path).get().then((doc) {
@@ -55,6 +55,10 @@ class StorageService {
     });
 
     return result;
+  }
+
+  static Future getDocRef(String collectionName, String path) async {
+    return getCollection(collectionName).doc(path);
   }
 
   static Future search({

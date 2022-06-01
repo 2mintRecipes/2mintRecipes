@@ -15,7 +15,7 @@ class NotificationsService {
 
   Future get(String path) async {
     try {
-      return await StorageService.get('notifications', path);
+      return await StorageService.getOne('notifications', path);
     } catch (e) {
       print(e);
     }

@@ -6,10 +6,10 @@ class RecipeDto {
   String? category;
   double? totalTime;
   double? cookTime;
-  double? servings;
+  double? serving;
   int? level;
   int? like;
-  Map<String, dynamic>? creator;
+  dynamic creator;
   Map<String, dynamic>? ingredients;
 
   RecipeDto({
@@ -19,7 +19,7 @@ class RecipeDto {
     this.category,
     this.cookTime,
     this.totalTime,
-    this.servings,
+    this.serving,
     this.level,
     this.image,
     this.like,
@@ -35,21 +35,20 @@ class RecipeDto {
       category: json["category"],
       totalTime: json["totalTime"].toDouble(),
       cookTime: json["cookTime"].toDouble(),
-      servings: json["servings"].toDouble(),
+      serving: json["serving"].toDouble(),
       level: json["level"],
       like: json["like"],
       creator: json["creator"],
       ingredients: json["ingredients"]);
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "name": name,
         "description": description,
         "image": image,
         "category": category,
         "totalTime": totalTime,
         "cookTime": cookTime,
-        "servings": servings,
+        "serving": serving,
         "level": level,
         "like": like,
         "creator": creator,

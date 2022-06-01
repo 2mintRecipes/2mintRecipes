@@ -373,9 +373,9 @@ class _RecipeDetailState extends State<RecipeDetail> {
           const SizedBox(height: 15),
 
           /// Category
-          InputField(
-            prefixIcon: Icons.restaurant_menu,
-            labelText: "Category",
+          TextView(
+            icon: Icons.restaurant_menu,
+            text: _recipe['category'] ?? '',
             textEditingController: _categoryController,
           ),
           const SizedBox(height: 10),

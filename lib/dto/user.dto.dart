@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserDto {
+  String? id;
   String? uid;
   String? fullName; // displayName
   String? username;
@@ -11,6 +12,7 @@ class UserDto {
   String? gender;
 
   UserDto({
+    this.id,
     this.uid,
     this.fullName,
     this.username,
@@ -22,6 +24,7 @@ class UserDto {
   });
 
   factory UserDto.fromJson(Map<String, dynamic> json) => UserDto(
+        id: json["id"],
         uid: json["uid"],
         fullName: json["fullName"],
         username: json["username"],
@@ -33,6 +36,7 @@ class UserDto {
       );
 
   factory UserDto.fromRawUser(User user) => UserDto(
+        id: null,
         uid: user.uid,
         fullName: user.displayName,
         username: null,
@@ -44,6 +48,7 @@ class UserDto {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "uid": uid,
         "fullName": fullName,
         "username": username,

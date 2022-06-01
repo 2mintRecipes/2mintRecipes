@@ -16,7 +16,7 @@ class UserService {
 
   Future getOne(String id) async {
     try {
-      return await StorageService.get('users', id);
+      return await StorageService.getOne('users', id);
     } catch (e) {
       print(e);
       return null;
@@ -33,6 +33,25 @@ class UserService {
 
       if (users.length > 0) {
         return UserDto.fromJson(users[0]);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future getUserDocRefByUid(String uid) async {
+    try {
+      var users = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+
+      if (users.length > 0) {
+        return StorageService.getDocRef("users", users[0]['id']);
       } else {
         return null;
       }
