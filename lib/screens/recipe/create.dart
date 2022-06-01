@@ -37,9 +37,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final SecureStorage _secureStorage = SecureStorage();
   // late bool showEditButton;
   File? _image;
-  String? _imagePath;
-  String? _imageUrl;
-  String? _selectedLevel,
+  String? _imagePath,
+      _imageUrl,
+      _selectedLevel,
+      _selectedCategory,
       recipeName,
       serving,
       cookTime,
@@ -370,28 +371,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
             ),
             const SizedBox(height: 15),
 
-            /// Category
-            InputField(
-              prefixIcon: Icons.restaurant_menu,
-              onChanged: (value) {
-                if (categoryError != null) {
-                  setState(() {
-                    categoryError = null;
-                  });
-                }
-                setState(() {
-                  category = value;
-                });
-              },
-              labelText: "Category",
-              errorText: categoryError,
-              keyboardType: TextInputType.text,
-              textInputAction: TextInputAction.next,
-              autoFocus: true,
-              textEditingController: _categoryController,
-            ),
-            const SizedBox(height: 15),
-
             /// Description
             InputField(
               prefixIcon: Icons.description,
@@ -412,9 +391,15 @@ class _CreateRecipeState extends State<CreateRecipe> {
               autoFocus: true,
               textEditingController: _descriptionController,
             ),
+            const SizedBox(height: 15),
 
             /// Level
             getLevelItem(),
+            const SizedBox(height: 10),
+
+            /// Category
+            getCategoryItem(),
+            const SizedBox(height: 15),
           ],
         ),
       ),
@@ -683,6 +668,92 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
+  Widget getCategoryItem() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(left: 30, right: 30, bottom: 5, top: 5),
+      decoration: BoxDecoration(
+          color: Colors.black.withOpacity(.2),
+          borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        children: [
+          DropdownButtonFormField2(
+            value: _selectedCategory,
+            onChanged: (value) {
+              setState(() {
+                _selectedCategory = value as String;
+              });
+            },
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.restaurant_menu,
+                color: Colors.white.withOpacity(.5),
+                size: 30,
+              ),
+              //Add isDense true and zero Padding.
+              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+              isDense: true,
+              // contentPadding: EdgeInsets.zero,
+              border: InputBorder.none,
+              //Add more decoration as you want here
+              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+            ),
+            isExpanded: true,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+            hint: Text('Category',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white.withOpacity(.5),
+                )
+                // style: TextStyle(fontSize: 14),
+                ),
+            icon: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white.withOpacity(.5),
+              size: 30,
+            ),
+            // iconSize: 30,
+            // buttonHeight: 60,
+            // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.grey.withOpacity(.95),
+            ),
+            items: recipeCategories
+                .map(
+                  (item) => DropdownMenuItem<String>(
+                      value: item,
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          item,
+                          // style: const TextStyle(
+                          //   fontSize: 14,
+                          // ),
+                          // textAlign: TextAlign.center,
+                        ),
+                      )),
+                )
+                .toList(),
+            validator: (value) {
+              if (value == null) {
+                return 'Choose category';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              _selectedCategory = value.toString();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget getLevelItem() {
     return Container(
       alignment: Alignment.center,
@@ -797,7 +868,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                icon: const Icon(Icons.ramen_dining),
+                icon: const Icon(Icons.restaurant_menu),
                 label: const Text(
                   "Create",
                   textAlign: TextAlign.center,
@@ -837,13 +908,14 @@ class _CreateRecipeState extends State<CreateRecipe> {
       RecipeDto data = RecipeDto(
         name: _nameController.text,
         description: _descriptionController.text,
-        servings: double.tryParse(_servingsController.text),
+        serving: double.tryParse(_servingsController.text),
         cookTime: double.tryParse(_cookTimeController.text),
         totalTime: double.tryParse(_totalTimeController.text),
         category: _categoryController.text,
         level: int.tryParse(_selectedLevel ?? "0"),
         image: _imageUrl,
         creator: value,
+        like: 0,
       );
 
       await recipesService.add(data).then((value) {

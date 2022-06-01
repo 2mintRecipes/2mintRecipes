@@ -6,7 +6,7 @@ class RecipeDto {
   String? category;
   double? totalTime;
   double? cookTime;
-  double? servings;
+  double? serving;
   int? level;
   int? like;
   dynamic creator;
@@ -19,7 +19,7 @@ class RecipeDto {
     this.category,
     this.cookTime,
     this.totalTime,
-    this.servings,
+    this.serving,
     this.level,
     this.image,
     this.like,
@@ -35,7 +35,7 @@ class RecipeDto {
       category: json["category"],
       totalTime: json["totalTime"].toDouble(),
       cookTime: json["cookTime"].toDouble(),
-      servings: json["servings"].toDouble(),
+      serving: json["serving"].toDouble(),
       level: json["level"],
       like: json["like"],
       creator: json["creator"],
@@ -48,7 +48,7 @@ class RecipeDto {
         "category": category,
         "totalTime": totalTime,
         "cookTime": cookTime,
-        "servings": servings,
+        "serving": serving,
         "level": level,
         "like": like,
         "creator": creator,
