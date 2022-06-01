@@ -7,7 +7,10 @@ class RecipesService {
     try {
       List<Map<String, dynamic>> result =
           await StorageService.getAll('recipes');
-
+      result.forEach((element) async {
+        element['creator'] =
+            await StorageService.getOne("users", element['creator']);
+      });
       return result;
     } catch (e) {
       print(e);
@@ -24,7 +27,7 @@ class RecipesService {
 
   Future getOne(String? id) async {
     try {
-      return await StorageService.get('recipes', id!);
+      return await StorageService.getOne('recipes', id!);
     } catch (e) {
       print(e);
       return null;

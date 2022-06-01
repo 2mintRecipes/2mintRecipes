@@ -9,7 +9,7 @@ class RecipeDto {
   double? servings;
   int? level;
   int? like;
-  Map<String, dynamic>? creator;
+  dynamic creator;
   Map<String, dynamic>? ingredients;
 
   RecipeDto({
@@ -42,7 +42,6 @@ class RecipeDto {
       ingredients: json["ingredients"]);
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "name": name,
         "description": description,
         "image": image,

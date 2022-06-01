@@ -61,7 +61,7 @@ class _CreatorState extends State<Creator> {
                 ),
               ),
               Text(
-                _user['fullname'],
+                _user['fullname'] ?? '',
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.white.withOpacity(.7),

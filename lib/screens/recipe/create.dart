@@ -5,6 +5,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
+import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
 import 'package:x2mint_recipes/widgets/button.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
@@ -27,10 +29,12 @@ class _CreateRecipeState extends State<CreateRecipe> {
   int _numIngredient = 0;
   final ImagePicker _picker = ImagePicker();
   final CloudinaryService _cloudinaryService = CloudinaryService();
+  final UserService _userService = UserService();
   final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
   final _formKeySteps = GlobalKey<FormState>();
   final List<String> _levelItems = ['1', '2', '3', '4', '5'];
+  final SecureStorage _secureStorage = SecureStorage();
   // late bool showEditButton;
   File? _image;
   String? _imagePath;
@@ -826,24 +830,29 @@ class _CreateRecipeState extends State<CreateRecipe> {
       print(_imageUrl);
     }
 
-    RecipeDto data = RecipeDto(
-      name: _nameController.text,
-      description: _descriptionController.text,
-      servings: double.tryParse(_servingsController.text),
-      cookTime: double.tryParse(_cookTimeController.text),
-      totalTime: double.tryParse(_totalTimeController.text),
-      category: _categoryController.text,
-      level: int.tryParse(_selectedLevel ?? "0"),
-      image: _imageUrl,
-    );
-    //print(data.toJson());
+    var uid = await _secureStorage.readSecureData('uid');
 
-    await recipesService.add(data).then((value) {
-      _clearText();
+    await _userService.getUserDocRefByUid(uid).then((value) async {
+      print(value);
+      RecipeDto data = RecipeDto(
+        name: _nameController.text,
+        description: _descriptionController.text,
+        servings: double.tryParse(_servingsController.text),
+        cookTime: double.tryParse(_cookTimeController.text),
+        totalTime: double.tryParse(_totalTimeController.text),
+        category: _categoryController.text,
+        level: int.tryParse(_selectedLevel ?? "0"),
+        image: _imageUrl,
+        creator: value,
+      );
 
-      ScreenUtils.pushScreen(context: context, screen: RecipeDetail(value.uid));
-    }).onError((error, stackTrace) {
-      print(error.toString());
+      await recipesService.add(data).then((value) {
+        _clearText();
+        print(value);
+
+        ScreenUtils.pushScreen(
+            context: context, screen: RecipeDetail(value.id));
+      });
     });
   }
 }

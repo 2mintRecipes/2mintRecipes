@@ -25,7 +25,7 @@ class CategoryService {
 
   Future getOne(String? id) async {
     try {
-      return await StorageService.get('categories', id!);
+      return await StorageService.getOne('categories', id!);
     } catch (e) {
       print(e);
       return null;
