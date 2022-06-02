@@ -87,7 +87,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                     padding: const EdgeInsets.only(left: 30, top: 20),
                     child: Row(
                       children: List.generate(
-                        song_type_1.length,
+                        category.length,
                         (index) {
                           ////////// list tags
                           return Padding(
@@ -118,7 +118,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                                         bottom: 5,
                                       ),
                                       child: Text(
-                                        song_type_1[index],
+                                        category[index],
                                         style: const TextStyle(
                                           fontSize: 20,
                                           color: Colors.white,
