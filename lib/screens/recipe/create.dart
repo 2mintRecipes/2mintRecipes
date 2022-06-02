@@ -17,7 +17,8 @@ import 'package:x2mint_recipes/utils/database.dart';
 
 class CreateRecipe extends StatefulWidget {
   static const routeName = '/CreateRecipe';
-  const CreateRecipe({Key? key}) : super(key: key);
+  final String id;
+  const CreateRecipe(this.id, {Key? key}) : super(key: key);
 
   @override
   State<CreateRecipe> createState() => _CreateRecipeState();
@@ -44,21 +45,54 @@ class _CreateRecipeState extends State<CreateRecipe> {
       subjectError,
       detailError;
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _servingsController = TextEditingController();
+  final TextEditingController _servingController = TextEditingController();
   final TextEditingController _cookTimeController = TextEditingController();
   final TextEditingController _totalTimeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-  final List<TextEditingController> _ingredientNamesController = [];
-  final List<TextEditingController> _ingredientQuantitiesController = [];
-  final List<TextEditingController> _stepTitlesController = [];
-  final List<TextEditingController> _stepDetailsController = [];
-
+  final List<TextEditingController> _ingredientNameControllers = [];
+  final List<TextEditingController> _ingredientAmountControllers = [];
+  final List<TextEditingController> _stepTitleControllers = [];
+  final List<TextEditingController> _stepDetailControllers = [];
   RecipesService recipesService = RecipesService();
 
   @override
   void initState() {
     super.initState();
+    init();
+  }
+
+  Future init() async {
+    if (widget.id.isNotEmpty) {
+      final recipe = await recipesService.getOne(widget.id);
+      _nameController.text = recipe['name'];
+      _servingController.text = recipe['serving'].toString();
+      _cookTimeController.text = recipe['cookTime'].toString();
+      _totalTimeController.text = recipe['totalTime'].toString();
+      _descriptionController.text = recipe['description'].toString();
+      _selectedLevel = recipe['level'].toString();
+      _selectedCategory = recipe['category'].toString();
+      _imageUrl = recipe['image'];
+      if (recipe['ingredients'] != null) {
+        for (var ingredient in recipe['ingredients']) {
+          _ingredientNameControllers.add(TextEditingController(
+            text: ingredient['name'],
+          ));
+          _ingredientAmountControllers.add(TextEditingController(
+            text: ingredient['amount'],
+          ));
+        }
+      }
+      if (recipe['steps'] != null) {
+        for (var step in recipe['steps']) {
+          _stepTitleControllers.add(TextEditingController(
+            text: step['title'],
+          ));
+          _stepDetailControllers.add(TextEditingController(
+            text: step['detail'],
+          ));
+        }
+      }
+    }
   }
 
   @override
@@ -125,10 +159,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            "Create recipe",
-            style: TextStyle(
+            widget.id != null ? "Edit recipe" : "Create recipe",
+            style: const TextStyle(
               fontSize: 30,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -212,7 +246,12 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   getBanner() {
     try {
-      return FileImage(_image!);
+      if (_image != null) {
+        return FileImage(_image!);
+      }
+      if (_imageUrl != null) {
+        return NetworkImage(_imageUrl!);
+      }
     } catch (e) {
       return const NetworkImage(
           'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
@@ -278,7 +317,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               autoFocus: true,
-              textEditingController: _servingsController,
+              textEditingController: _servingController,
             ),
             const SizedBox(height: 15),
 
@@ -382,7 +421,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children: List.generate(_ingredientNamesController.length,
+                children: List.generate(_ingredientNameControllers.length,
                     (index) => getIngredientItem(index + 1)),
               ),
             ),
@@ -430,7 +469,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _ingredientNamesController[index - 1],
+            textEditingController: _ingredientNameControllers[index - 1],
           ),
           InputField(
             prefixIcon: Icons.line_weight,
@@ -446,7 +485,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _ingredientQuantitiesController[index - 1],
+            textEditingController: _ingredientAmountControllers[index - 1],
           ),
         ],
       ),
@@ -483,7 +522,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children: List.generate(_stepTitlesController.length,
+                children: List.generate(_stepTitleControllers.length,
                     (index) => getStepItem(index + 1)),
               ),
             ),
@@ -531,7 +570,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _stepTitlesController[index - 1],
+            textEditingController: _stepTitleControllers[index - 1],
           ),
           InputField(
             prefixIcon: Icons.menu_book,
@@ -547,7 +586,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _stepDetailsController[index - 1],
+            textEditingController: _stepDetailControllers[index - 1],
           ),
         ],
       ),
@@ -582,8 +621,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   void onPressedAddNewStep() {
     setState(() {
-      _stepDetailsController.add(TextEditingController());
-      _stepTitlesController.add(TextEditingController());
+      _stepDetailControllers.add(TextEditingController());
+      _stepTitleControllers.add(TextEditingController());
     });
   }
 
@@ -614,8 +653,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   void onPressedAddNewIngredient() {
     setState(() {
-      _ingredientNamesController.add(TextEditingController());
-      _ingredientQuantitiesController.add(TextEditingController());
+      _ingredientNameControllers.add(TextEditingController());
+      _ingredientAmountControllers.add(TextEditingController());
     });
   }
 
@@ -838,10 +877,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   List<Map<String, dynamic>> getIngredientsList() {
     List<Map<String, dynamic>> ingredientsList = [];
-    for (var i = 0; i < _ingredientNamesController.length; i++) {
+    for (var i = 0; i < _ingredientNameControllers.length; i++) {
       ingredientsList.add({
-        'name': _ingredientNamesController[i].text,
-        'quantity': _ingredientQuantitiesController[i].text,
+        'name': _ingredientNameControllers[i].text,
+        'amount': _ingredientAmountControllers[i].text,
       });
     }
     return ingredientsList;
@@ -849,10 +888,11 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   List<Map<String, dynamic>> getStepsList() {
     List<Map<String, dynamic>> getStepsList = [];
-    for (var i = 0; i < _stepTitlesController.length; i++) {
+    for (var i = 0; i < _stepTitleControllers.length; i++) {
       getStepsList.add({
-        'title': _stepTitlesController[i].text,
-        'detail': _stepDetailsController[i].text,
+        'order': i,
+        'title': _stepTitleControllers[i].text,
+        'detail': _stepDetailControllers[i].text,
       });
     }
     return getStepsList;
@@ -862,6 +902,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
     if (_imagePath != null) {
       _imageUrl = await _cloudinaryService.uploadImage(_imagePath!);
       print(_imageUrl);
+    } else {
+      _imageUrl = defaultRecipeImage;
     }
 
     var uid = await _secureStorage.readSecureData('uid');
@@ -871,9 +913,9 @@ class _CreateRecipeState extends State<CreateRecipe> {
       RecipeDto data = RecipeDto(
         name: _nameController.text,
         description: _descriptionController.text,
-        serving: double.tryParse(_servingsController.text),
-        cookTime: double.tryParse(_cookTimeController.text),
-        totalTime: double.tryParse(_totalTimeController.text),
+        serving: double.tryParse(_servingController.text) ?? 0,
+        cookTime: double.tryParse(_cookTimeController.text) ?? 0,
+        totalTime: double.tryParse(_totalTimeController.text) ?? 0,
         category: _selectedCategory,
         level: int.tryParse(_selectedLevel ?? "1"),
         image: _imageUrl,

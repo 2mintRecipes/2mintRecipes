@@ -8,10 +8,10 @@ class RecipeDto {
   double? cookTime;
   double? serving;
   int? level;
-  int? like;
+  int like;
   dynamic creator;
-  List<Map<String, dynamic>>? ingredients;
-  List<Map<String, dynamic>>? steps;
+  dynamic ingredients;
+  dynamic steps;
 
   RecipeDto({
     this.id,
@@ -23,7 +23,7 @@ class RecipeDto {
     this.serving,
     this.level,
     this.image,
-    this.like,
+    this.like = 0,
     this.creator,
     this.ingredients,
     this.steps,
