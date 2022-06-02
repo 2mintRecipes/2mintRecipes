@@ -23,9 +23,7 @@ class TrendingNow extends StatefulWidget {
 class _TrendingNowState extends State<TrendingNow> {
   SecureStorage secureStorage = SecureStorage();
   RecipesService recipesService = RecipesService();
-  //UserService userService = UserService();
   late Future _allRecipesFuture;
-
   List<Map<String, dynamic>> _allRecipes = [];
 
   @override
@@ -51,6 +49,7 @@ class _TrendingNowState extends State<TrendingNow> {
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
+            //print(_allRecipes);
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
