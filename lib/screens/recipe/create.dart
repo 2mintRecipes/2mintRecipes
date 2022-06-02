@@ -252,10 +252,9 @@ class _CreateRecipeState extends State<CreateRecipe> {
       if (_imageUrl != null) {
         return NetworkImage(_imageUrl!);
       }
+      return const NetworkImage(defaultRecipeImage);
     } catch (e) {
-      return const NetworkImage(
-          'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
-      // const AssetImage("assets/images/avatar.jpg");
+      return const NetworkImage(defaultRecipeImage);
     }
   }
 
@@ -859,10 +858,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   ),
                 ),
                 icon: const Icon(Icons.restaurant_menu),
-                label: const Text(
-                  "Create",
+                label: Text(
+                  widget.id.isEmpty ? "Create" : "Update",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
@@ -925,12 +924,21 @@ class _CreateRecipeState extends State<CreateRecipe> {
         steps: getStepsList(),
       );
 
-      await recipesService.add(data).then((value) {
-        print(value);
+      if (widget.id.isEmpty) {
+        await recipesService.add(data).then((value) {
+          print(value);
 
-        ScreenUtils.pushScreen(
-            context: context, screen: RecipeDetail(value.id));
-      });
+          ScreenUtils.pushScreen(
+              context: context, screen: RecipeDetail(value.id));
+        });
+      } else {
+        await recipesService.update('recipes/' + widget.id, data).then((value) {
+          print(value);
+
+          ScreenUtils.pushScreen(
+              context: context, screen: RecipeDetail(value.id));
+        });
+      }
     });
   }
 }
