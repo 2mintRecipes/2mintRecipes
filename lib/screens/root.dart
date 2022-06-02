@@ -59,7 +59,7 @@ class _RootState extends State<Root> {
       children: const [
         HomePage(),
         Bookmark(),
-        CreateRecipe(),
+        CreateRecipe(''),
         MyNotification(),
         Profile(),
       ],

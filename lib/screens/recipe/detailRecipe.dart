@@ -1,21 +1,16 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:x2mint_recipes/widgets/button.dart';
-import 'package:x2mint_recipes/widgets/creator.dart';
-import 'package:x2mint_recipes/widgets/input.dart';
-import 'package:x2mint_recipes/widgets/text_field.dart';
-import 'package:x2mint_recipes/dto/recipe.dto.dart';
+import 'package:x2mint_recipes/screens/recipe/create.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
-import 'package:x2mint_recipes/utils/database.dart';
+import 'package:x2mint_recipes/utils/screen_utils.dart';
+import 'package:x2mint_recipes/widgets/creator.dart';
+import 'package:x2mint_recipes/widgets/text_field.dart';
 
 class RecipeDetail extends StatefulWidget {
   static const routeName = '/RecipeDetail';
@@ -27,49 +22,14 @@ class RecipeDetail extends StatefulWidget {
 }
 
 class _RecipeDetailState extends State<RecipeDetail> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _servingsController = TextEditingController();
-  final TextEditingController _cookTimeController = TextEditingController();
-  final TextEditingController _totalTimeController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _detailController = TextEditingController();
-  final TextEditingController _levelController = TextEditingController();
-
-  final ImagePicker _picker = ImagePicker();
-  final CloudinaryService _cloudinaryService = CloudinaryService();
-
-  final _formKeyBasicInfo = GlobalKey<FormState>();
   final _formKeyIngredients = GlobalKey<FormState>();
   final _formKeySteps = GlobalKey<FormState>();
-  int _numSteps = 0;
-  int _numIngredient = 0;
-
-  // late bool showEditButton;
-  File? _image;
-  String? _imagePath;
-  String? _imageUrl;
-
   SecureStorage secureStorage = SecureStorage();
   final RecipesService _recipesService = RecipesService();
   late Future _recipeFuture;
   late Map<String, dynamic> _recipe;
   late String id = widget.id;
   late bool like = false;
-
-  @override
-  void initState() {
-    super.initState();
-    like = false;
-    init();
-  }
-
-  Future init() async {
-    _recipeFuture = _recipesService.getOne(id);
-  }
-
-  Future _editRecipe() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -122,71 +82,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
         }
         return Container();
       },
-    );
-  }
-
-  Widget getBody() {
-    return Column(
-      children: [
-        getBannerSection(),
-        Padding(
-          padding:
-              const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              getBasicInfoSection(),
-              getIngredientSection(),
-              getStepsSection(),
-              getEditWidget(),
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget getTitleSection() {
-    return Padding(
-      padding: const EdgeInsets.only(top: UI.topPadding),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width - 60,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/');
-                },
-                icon: const SizedBox(
-                  child: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                    color: Colors.white,
-                  ),
-                )),
-            const SizedBox(
-              width: 5,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 120,
-              child: Text(
-                _recipe['name'],
-                maxLines: 5,
-                softWrap: true,
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 
@@ -254,12 +149,115 @@ class _RecipeDetailState extends State<RecipeDetail> {
               bottomRight: Radius.circular(15),
             ),
           ),
-          const SizedBox(
-            height: 5,
-          )
+          const SizedBox(height: 5)
         ],
       ),
     ));
+  }
+
+  Widget getBasicInfoSection() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            TextView(
+              text: _recipe['serving'].toString(),
+              icon: Icons.supervisor_account,
+              fontSize: 20,
+              width: MediaQuery.of(context).size.width * .1,
+            ),
+            const SizedBox(height: 10),
+            TextView(
+              text: _recipe['level'].toString(),
+              icon: Icons.star,
+              fontSize: 20,
+              width: MediaQuery.of(context).size.width * .1,
+            ),
+            TextView(
+              text: _recipe['cookTime'].toString() + ' mins',
+              icon: Icons.schedule,
+              fontSize: 20,
+              width: MediaQuery.of(context).size.width * .2,
+            ),
+          ],
+        ),
+        const SizedBox(height: 15),
+
+        /// Category
+        TextView(
+          icon: Icons.restaurant_menu,
+          text: _recipe['category'] ?? '',
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget getBody() {
+    return Column(
+      children: [
+        getBannerSection(),
+        Padding(
+          padding:
+              const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getBasicInfoSection(),
+              getIngredientSection(),
+              getStepsSection(),
+              getEditWidget(),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget getEditWidget() {
+    return Container(
+      margin: const EdgeInsets.only(top: 20),
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.white.withOpacity(.4),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: SizedBox(
+              height: 50,
+              width: 200,
+              child: ElevatedButton.icon(
+                onPressed: _editRecipe,
+                style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: UI.appColor,
+                  shape: RoundedRectangleBorder(
+                    //to set border radius to button
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                icon: const Icon(Icons.ramen_dining),
+                label: const Text(
+                  "Edit",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget getFavoriteAndTimeSection() {
@@ -341,44 +339,35 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
-  Widget getBasicInfoSection() {
-    return Form(
-      key: _formKeyBasicInfo,
+  Widget getIngredientItem(int index) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextView(
-                text: _recipe['serving'].toString(),
-                icon: Icons.supervisor_account,
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              "Ingredient $index",
+              style: const TextStyle(
                 fontSize: 20,
-                width: MediaQuery.of(context).size.width * .1,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
               ),
-              TextView(
-                text: _recipe['level'].toString(),
-                icon: Icons.star,
-                fontSize: 20,
-                width: MediaQuery.of(context).size.width * .1,
-              ),
-              TextView(
-                text: _recipe['cookTime'].toString() + ' mins',
-                icon: Icons.schedule,
-                fontSize: 20,
-                width: MediaQuery.of(context).size.width * .2,
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
-
-          /// Category
-          TextView(
-            icon: Icons.restaurant_menu,
-            text: _recipe['category'] ?? '',
-            textEditingController: _categoryController,
+            ),
           ),
           const SizedBox(height: 10),
+          TextView(
+            icon: Icons.edit,
+            text: _recipe["ingredients"][index - 1]["name"] ?? '',
+            fontSize: 20,
+          ),
+          const SizedBox(height: 10),
+          TextView(
+            icon: Icons.line_weight,
+            text: _recipe["ingredients"][index - 1]["amount"] ?? '',
+            fontSize: 20,
+          ),
         ],
       ),
     );
@@ -410,13 +399,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
             ),
 
             /// Steps
-            GridView.count(
-              crossAxisCount: 1,
-              crossAxisSpacing: 10,
-              shrinkWrap: true,
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               controller: ScrollController(),
-              children: List.generate(
-                  _numIngredient, (index) => getIngredientItem(index + 1)),
+              child: Column(
+                children: List.generate(
+                    _recipe["ingredients"] != null
+                        ? _recipe["ingredients"].length
+                        : 0,
+                    (index) => getStepItem(index + 1)),
+              ),
             ),
           ],
         ),
@@ -424,26 +416,37 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
-  Widget getIngredientItem(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 10),
-        InputField(
-          labelText: "Name",
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _subjectController,
-        ),
-        InputField(
-          labelText: "g",
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _detailController,
-        ),
-      ],
+  Widget getStepItem(int index) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              'Step ' + index.toString(),
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          TextView(
+            icon: Icons.edit,
+            text: _recipe["steps"][index - 1]["title"] ?? '',
+            fontSize: 20,
+          ),
+          const SizedBox(height: 10),
+          TextView(
+            icon: Icons.menu_book,
+            text: _recipe["steps"][index - 1]["detail"] ?? '',
+            fontSize: 20,
+          ),
+        ],
+      ),
     );
   }
 
@@ -473,13 +476,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
             ),
 
             /// Steps
-            GridView.count(
-              crossAxisCount: 1,
-              crossAxisSpacing: 10,
-              shrinkWrap: true,
+            SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               controller: ScrollController(),
-              children:
-                  List.generate(_numSteps, (index) => getStepItem(index + 1)),
+              child: Column(
+                children: List.generate(
+                    _recipe["steps"] != null ? _recipe["steps"].length : 0,
+                    (index) => getStepItem(index + 1)),
+              ),
             ),
           ],
         ),
@@ -487,85 +491,61 @@ class _RecipeDetailState extends State<RecipeDetail> {
     );
   }
 
-  Widget getStepItem(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: Text(
-            'Step ' + index.toString(),
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.normal,
+  Widget getTitleSection() {
+    return Padding(
+      padding: const EdgeInsets.only(top: UI.topPadding),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width - 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+                onPressed: () {
+                  //Navigator.pushNamed(context, '/');
+                },
+                icon: const SizedBox(
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                )),
+            const SizedBox(
+              width: 5,
             ),
-          ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 120,
+              child: Text(
+                _recipe['name'],
+                maxLines: 5,
+                softWrap: true,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            )
+          ],
         ),
-        const SizedBox(height: 10),
-        InputField(
-          prefixIcon: Icons.edit,
-          labelText: "Subject",
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _subjectController,
-        ),
-        InputField(
-          maxLine: 5,
-          prefixIcon: Icons.menu_book,
-          labelText: "Detail",
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _detailController,
-        ),
-      ],
+      ),
     );
   }
 
-  Widget getEditWidget() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white.withOpacity(.4),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: SizedBox(
-              height: 50,
-              width: 200,
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  await _editRecipe();
-                },
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: UI.appColor,
-                  shape: RoundedRectangleBorder(
-                    //to set border radius to button
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                icon: const Icon(Icons.ramen_dining),
-                label: const Text(
-                  "Edit",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  Future init() async {
+    _recipeFuture = _recipesService.getOne(id);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    like = false;
+    init();
+  }
+
+  void _editRecipe() {
+    ScreenUtils.pushScreen(context: context, screen: CreateRecipe(widget.id));
   }
 }

@@ -8,7 +8,6 @@ import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
-import 'package:x2mint_recipes/widgets/button.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
@@ -18,15 +17,14 @@ import 'package:x2mint_recipes/utils/database.dart';
 
 class CreateRecipe extends StatefulWidget {
   static const routeName = '/CreateRecipe';
-  const CreateRecipe({Key? key}) : super(key: key);
+  final String id;
+  const CreateRecipe(this.id, {Key? key}) : super(key: key);
 
   @override
   State<CreateRecipe> createState() => _CreateRecipeState();
 }
 
 class _CreateRecipeState extends State<CreateRecipe> {
-  int _numSteps = 0;
-  int _numIngredient = 0;
   final ImagePicker _picker = ImagePicker();
   final CloudinaryService _cloudinaryService = CloudinaryService();
   final UserService _userService = UserService();
@@ -37,18 +35,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final SecureStorage _secureStorage = SecureStorage();
   // late bool showEditButton;
   File? _image;
-  String? _imagePath,
-      _imageUrl,
-      _selectedLevel,
-      _selectedCategory,
-      recipeName,
-      serving,
-      cookTime,
-      totalTime,
-      description,
-      category,
-      subject,
-      detail;
+  String? _imagePath, _imageUrl, _selectedLevel, _selectedCategory;
   String? recipeNameError,
       servingError,
       cookTimeError,
@@ -58,34 +45,54 @@ class _CreateRecipeState extends State<CreateRecipe> {
       subjectError,
       detailError;
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _servingsController = TextEditingController();
+  final TextEditingController _servingController = TextEditingController();
   final TextEditingController _cookTimeController = TextEditingController();
   final TextEditingController _totalTimeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _detailController = TextEditingController();
-
+  final List<TextEditingController> _ingredientNameControllers = [];
+  final List<TextEditingController> _ingredientAmountControllers = [];
+  final List<TextEditingController> _stepTitleControllers = [];
+  final List<TextEditingController> _stepDetailControllers = [];
   RecipesService recipesService = RecipesService();
 
   @override
   void initState() {
     super.initState();
-    // showEditButton = false;
+    init();
+  }
 
-    recipeName = "";
-    serving = "";
-    cookTime = "";
-    totalTime = "";
-    description = "";
-    category = "";
-
-    recipeNameError = null;
-    servingError = null;
-    cookTimeError = null;
-    totalTimeError = null;
-    descriptionError = null;
-    categoryError = null;
+  Future init() async {
+    if (widget.id.isNotEmpty) {
+      final recipe = await recipesService.getOne(widget.id);
+      _nameController.text = recipe['name'];
+      _servingController.text = recipe['serving'].toString();
+      _cookTimeController.text = recipe['cookTime'].toString();
+      _totalTimeController.text = recipe['totalTime'].toString();
+      _descriptionController.text = recipe['description'].toString();
+      _selectedLevel = recipe['level'].toString();
+      _selectedCategory = recipe['category'].toString();
+      _imageUrl = recipe['image'];
+      if (recipe['ingredients'] != null) {
+        for (var ingredient in recipe['ingredients']) {
+          _ingredientNameControllers.add(TextEditingController(
+            text: ingredient['name'],
+          ));
+          _ingredientAmountControllers.add(TextEditingController(
+            text: ingredient['amount'],
+          ));
+        }
+      }
+      if (recipe['steps'] != null) {
+        for (var step in recipe['steps']) {
+          _stepTitleControllers.add(TextEditingController(
+            text: step['title'],
+          ));
+          _stepDetailControllers.add(TextEditingController(
+            text: step['detail'],
+          ));
+        }
+      }
+    }
   }
 
   @override
@@ -124,18 +131,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _servingsController.dispose();
-    _cookTimeController.dispose();
-    _totalTimeController.dispose();
-    _descriptionController.dispose();
-    _categoryController.dispose();
-    _subjectController.dispose();
-    super.dispose();
-  }
-
   Widget getBody() {
     return Padding(
       padding: const EdgeInsets.only(
@@ -164,10 +159,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
+        children: [
           Text(
-            "Create recipe",
-            style: TextStyle(
+            widget.id != null ? "Edit recipe" : "Create recipe",
+            style: const TextStyle(
               fontSize: 30,
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -251,11 +246,15 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   getBanner() {
     try {
-      return FileImage(_image!);
+      if (_image != null) {
+        return FileImage(_image!);
+      }
+      if (_imageUrl != null) {
+        return NetworkImage(_imageUrl!);
+      }
+      return const NetworkImage(defaultRecipeImage);
     } catch (e) {
-      return const NetworkImage(
-          'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
-      // const AssetImage("assets/images/avatar.jpg");
+      return const NetworkImage(defaultRecipeImage);
     }
   }
 
@@ -292,9 +291,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     recipeNameError = null;
                   });
                 }
-                setState(() {
-                  recipeName = value;
-                });
               },
               labelText: "Recipe name",
               errorText: recipeNameError,
@@ -314,16 +310,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     recipeNameError = null;
                   });
                 }
-                setState(() {
-                  recipeName = value;
-                });
               },
               labelText: "Servings",
               errorText: recipeNameError,
               keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               autoFocus: true,
-              textEditingController: _servingsController,
+              textEditingController: _servingController,
             ),
             const SizedBox(height: 15),
 
@@ -336,9 +329,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     cookTimeError = null;
                   });
                 }
-                setState(() {
-                  cookTime = value;
-                });
               },
               labelText: "Cook time",
               errorText: cookTimeError,
@@ -358,9 +348,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     totalTimeError = null;
                   });
                 }
-                setState(() {
-                  totalTime = value;
-                });
               },
               labelText: "Total time",
               errorText: totalTimeError,
@@ -380,9 +367,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     descriptionError = null;
                   });
                 }
-                setState(() {
-                  description = value;
-                });
               },
               labelText: "Description",
               errorText: descriptionError,
@@ -436,8 +420,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children: List.generate(
-                    _numIngredient, (index) => getIngredientItem(index + 1)),
+                children: List.generate(_ingredientNameControllers.length,
+                    (index) => getIngredientItem(index + 1)),
               ),
             ),
 
@@ -454,9 +438,21 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   Widget getIngredientItem(int index) {
     return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              "Ingredient $index",
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
           const SizedBox(height: 10),
           InputField(
             prefixIcon: Icons.edit,
@@ -466,16 +462,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   subjectError = null;
                 });
               }
-              setState(() {
-                subject = value;
-              });
             },
             labelText: "Name",
             errorText: subjectError,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _subjectController,
+            textEditingController: _ingredientNameControllers[index - 1],
           ),
           InputField(
             prefixIcon: Icons.line_weight,
@@ -485,16 +478,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   detailError = null;
                 });
               }
-              setState(() {
-                detail = value;
-              });
             },
             labelText: "g",
             errorText: detailError,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _detailController,
+            textEditingController: _ingredientAmountControllers[index - 1],
           ),
         ],
       ),
@@ -531,8 +521,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children:
-                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
+                children: List.generate(_stepTitleControllers.length,
+                    (index) => getStepItem(index + 1)),
               ),
             ),
 
@@ -548,60 +538,57 @@ class _CreateRecipeState extends State<CreateRecipe> {
   }
 
   Widget getStepItem(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: Text(
-            'Step ' + index.toString(),
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.normal,
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              'Step $index',
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        InputField(
-          prefixIcon: Icons.edit,
-          onChanged: (value) {
-            if (subjectError != null) {
-              setState(() {
-                subjectError = null;
-              });
-            }
-            setState(() {
-              subject = value;
-            });
-          },
-          labelText: "Subject",
-          errorText: subjectError,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _subjectController,
-        ),
-        InputField(
-          prefixIcon: Icons.menu_book,
-          onChanged: (value) {
-            if (detailError != null) {
-              setState(() {
-                detailError = null;
-              });
-            }
-            setState(() {
-              detail = value;
-            });
-          },
-          labelText: "Detail",
-          errorText: detailError,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _detailController,
-        ),
-      ],
+          const SizedBox(height: 10),
+          InputField(
+            prefixIcon: Icons.edit,
+            onChanged: (value) {
+              if (subjectError != null) {
+                setState(() {
+                  subjectError = null;
+                });
+              }
+            },
+            labelText: "Subject",
+            errorText: subjectError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _stepTitleControllers[index - 1],
+          ),
+          InputField(
+            prefixIcon: Icons.menu_book,
+            onChanged: (value) {
+              if (detailError != null) {
+                setState(() {
+                  detailError = null;
+                });
+              }
+            },
+            labelText: "Detail",
+            errorText: detailError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _stepDetailControllers[index - 1],
+          ),
+        ],
+      ),
     );
   }
 
@@ -611,13 +598,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
       child: SizedBox(
         height: 40,
         child: ElevatedButton.icon(
-          onPressed: () {
-            setState(() {
-              _numSteps += 1;
-            });
-          },
-
-          ///
+          onPressed: onPressedAddNewStep,
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: UI.appColor,
@@ -637,24 +618,24 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
+  void onPressedAddNewStep() {
+    setState(() {
+      _stepDetailControllers.add(TextEditingController());
+      _stepTitleControllers.add(TextEditingController());
+    });
+  }
+
   Widget getAddNewIngredientButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
       child: SizedBox(
         height: 40,
         child: ElevatedButton.icon(
-          onPressed: () {
-            setState(() {
-              _numIngredient += 1;
-            });
-          },
-
-          ///
+          onPressed: onPressedAddNewIngredient,
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: UI.appColor,
             shape: RoundedRectangleBorder(
-              //to set border radius to button
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -667,6 +648,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
         ),
       ),
     );
+  }
+
+  void onPressedAddNewIngredient() {
+    setState(() {
+      _ingredientNameControllers.add(TextEditingController());
+      _ingredientAmountControllers.add(TextEditingController());
+    });
   }
 
   Widget getCategoryItem() {
@@ -870,10 +858,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   ),
                 ),
                 icon: const Icon(Icons.restaurant_menu),
-                label: const Text(
-                  "Create",
+                label: Text(
+                  widget.id.isEmpty ? "Create" : "Update",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 20,
                     color: Colors.white,
                   ),
@@ -886,20 +874,35 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
-  void _clearText() {
-    _nameController.clear();
-    _descriptionController.clear();
-    _categoryController.clear();
-    _cookTimeController.clear();
-    _totalTimeController.clear();
-    _servingsController.clear();
-    _selectedLevel = null;
+  List<Map<String, dynamic>> getIngredientsList() {
+    List<Map<String, dynamic>> ingredientsList = [];
+    for (var i = 0; i < _ingredientNameControllers.length; i++) {
+      ingredientsList.add({
+        'name': _ingredientNameControllers[i].text,
+        'amount': _ingredientAmountControllers[i].text,
+      });
+    }
+    return ingredientsList;
+  }
+
+  List<Map<String, dynamic>> getStepsList() {
+    List<Map<String, dynamic>> getStepsList = [];
+    for (var i = 0; i < _stepTitleControllers.length; i++) {
+      getStepsList.add({
+        'order': i,
+        'title': _stepTitleControllers[i].text,
+        'detail': _stepDetailControllers[i].text,
+      });
+    }
+    return getStepsList;
   }
 
   Future _addRecipe() async {
     if (_imagePath != null) {
       _imageUrl = await _cloudinaryService.uploadImage(_imagePath!);
       print(_imageUrl);
+    } else {
+      _imageUrl = defaultRecipeImage;
     }
 
     var uid = await _secureStorage.readSecureData('uid');
@@ -909,23 +912,33 @@ class _CreateRecipeState extends State<CreateRecipe> {
       RecipeDto data = RecipeDto(
         name: _nameController.text,
         description: _descriptionController.text,
-        serving: double.tryParse(_servingsController.text),
-        cookTime: double.tryParse(_cookTimeController.text),
-        totalTime: double.tryParse(_totalTimeController.text),
-        category: _categoryController.text,
-        level: int.tryParse(_selectedLevel ?? "0"),
+        serving: double.tryParse(_servingController.text) ?? 0,
+        cookTime: double.tryParse(_cookTimeController.text) ?? 0,
+        totalTime: double.tryParse(_totalTimeController.text) ?? 0,
+        category: _selectedCategory,
+        level: int.tryParse(_selectedLevel ?? "1"),
         image: _imageUrl,
         creator: value,
         like: 0,
+        ingredients: getIngredientsList(),
+        steps: getStepsList(),
       );
 
-      await recipesService.add(data).then((value) {
-        _clearText();
-        print(value);
+      if (widget.id.isEmpty) {
+        await recipesService.add(data).then((value) {
+          print(value);
 
-        ScreenUtils.pushScreen(
-            context: context, screen: RecipeDetail(value.id));
-      });
+          ScreenUtils.pushScreen(
+              context: context, screen: RecipeDetail(value.id));
+        });
+      } else {
+        await recipesService.update('recipes/' + widget.id, data).then((value) {
+          print(value);
+
+          ScreenUtils.pushScreen(
+              context: context, screen: RecipeDetail(value.id));
+        });
+      }
     });
   }
 }

@@ -28,6 +28,9 @@ const List recipeCategories = [
   "Đồ chay"
 ];
 
+const String defaultRecipeImage =
+    "https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png";
+
 const List mockRecipes = [
   {
     "img": "assets/images/MIT2021.png",
