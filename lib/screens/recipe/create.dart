@@ -8,7 +8,6 @@ import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
-import 'package:x2mint_recipes/widgets/button.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
@@ -25,8 +24,6 @@ class CreateRecipe extends StatefulWidget {
 }
 
 class _CreateRecipeState extends State<CreateRecipe> {
-  int _numSteps = 0;
-  int _numIngredient = 0;
   final ImagePicker _picker = ImagePicker();
   final CloudinaryService _cloudinaryService = CloudinaryService();
   final UserService _userService = UserService();
@@ -37,18 +34,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final SecureStorage _secureStorage = SecureStorage();
   // late bool showEditButton;
   File? _image;
-  String? _imagePath,
-      _imageUrl,
-      _selectedLevel,
-      _selectedCategory,
-      recipeName,
-      serving,
-      cookTime,
-      totalTime,
-      description,
-      category,
-      subject,
-      detail;
+  String? _imagePath, _imageUrl, _selectedLevel, _selectedCategory;
   String? recipeNameError,
       servingError,
       cookTimeError,
@@ -63,29 +49,16 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final TextEditingController _totalTimeController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _subjectController = TextEditingController();
-  final TextEditingController _detailController = TextEditingController();
+  final List<TextEditingController> _ingredientNamesController = [];
+  final List<TextEditingController> _ingredientQuantitiesController = [];
+  final List<TextEditingController> _stepTitlesController = [];
+  final List<TextEditingController> _stepDetailsController = [];
 
   RecipesService recipesService = RecipesService();
 
   @override
   void initState() {
     super.initState();
-    // showEditButton = false;
-
-    recipeName = "";
-    serving = "";
-    cookTime = "";
-    totalTime = "";
-    description = "";
-    category = "";
-
-    recipeNameError = null;
-    servingError = null;
-    cookTimeError = null;
-    totalTimeError = null;
-    descriptionError = null;
-    categoryError = null;
   }
 
   @override
@@ -122,18 +95,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _servingsController.dispose();
-    _cookTimeController.dispose();
-    _totalTimeController.dispose();
-    _descriptionController.dispose();
-    _categoryController.dispose();
-    _subjectController.dispose();
-    super.dispose();
   }
 
   Widget getBody() {
@@ -292,9 +253,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     recipeNameError = null;
                   });
                 }
-                setState(() {
-                  recipeName = value;
-                });
               },
               labelText: "Recipe name",
               errorText: recipeNameError,
@@ -314,9 +272,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     recipeNameError = null;
                   });
                 }
-                setState(() {
-                  recipeName = value;
-                });
               },
               labelText: "Servings",
               errorText: recipeNameError,
@@ -336,9 +291,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     cookTimeError = null;
                   });
                 }
-                setState(() {
-                  cookTime = value;
-                });
               },
               labelText: "Cook time",
               errorText: cookTimeError,
@@ -358,9 +310,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     totalTimeError = null;
                   });
                 }
-                setState(() {
-                  totalTime = value;
-                });
               },
               labelText: "Total time",
               errorText: totalTimeError,
@@ -380,9 +329,6 @@ class _CreateRecipeState extends State<CreateRecipe> {
                     descriptionError = null;
                   });
                 }
-                setState(() {
-                  description = value;
-                });
               },
               labelText: "Description",
               errorText: descriptionError,
@@ -436,8 +382,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children: List.generate(
-                    _numIngredient, (index) => getIngredientItem(index + 1)),
+                children: List.generate(_ingredientNamesController.length,
+                    (index) => getIngredientItem(index + 1)),
               ),
             ),
 
@@ -454,9 +400,21 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   Widget getIngredientItem(int index) {
     return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              "Ingredient $index",
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
           const SizedBox(height: 10),
           InputField(
             prefixIcon: Icons.edit,
@@ -466,16 +424,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   subjectError = null;
                 });
               }
-              setState(() {
-                subject = value;
-              });
             },
             labelText: "Name",
             errorText: subjectError,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _subjectController,
+            textEditingController: _ingredientNamesController[index - 1],
           ),
           InputField(
             prefixIcon: Icons.line_weight,
@@ -485,16 +440,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   detailError = null;
                 });
               }
-              setState(() {
-                detail = value;
-              });
             },
             labelText: "g",
             errorText: detailError,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
             autoFocus: true,
-            textEditingController: _detailController,
+            textEditingController: _ingredientQuantitiesController[index - 1],
           ),
         ],
       ),
@@ -531,8 +483,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children:
-                    List.generate(_numSteps, (index) => getStepItem(index + 1)),
+                children: List.generate(_stepTitlesController.length,
+                    (index) => getStepItem(index + 1)),
               ),
             ),
 
@@ -548,60 +500,57 @@ class _CreateRecipeState extends State<CreateRecipe> {
   }
 
   Widget getStepItem(int index) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: Text(
-            'Step ' + index.toString(),
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.normal,
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 30),
+            child: Text(
+              'Step $index',
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        InputField(
-          prefixIcon: Icons.edit,
-          onChanged: (value) {
-            if (subjectError != null) {
-              setState(() {
-                subjectError = null;
-              });
-            }
-            setState(() {
-              subject = value;
-            });
-          },
-          labelText: "Subject",
-          errorText: subjectError,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _subjectController,
-        ),
-        InputField(
-          prefixIcon: Icons.menu_book,
-          onChanged: (value) {
-            if (detailError != null) {
-              setState(() {
-                detailError = null;
-              });
-            }
-            setState(() {
-              detail = value;
-            });
-          },
-          labelText: "Detail",
-          errorText: detailError,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          autoFocus: true,
-          textEditingController: _detailController,
-        ),
-      ],
+          const SizedBox(height: 10),
+          InputField(
+            prefixIcon: Icons.edit,
+            onChanged: (value) {
+              if (subjectError != null) {
+                setState(() {
+                  subjectError = null;
+                });
+              }
+            },
+            labelText: "Subject",
+            errorText: subjectError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _stepTitlesController[index - 1],
+          ),
+          InputField(
+            prefixIcon: Icons.menu_book,
+            onChanged: (value) {
+              if (detailError != null) {
+                setState(() {
+                  detailError = null;
+                });
+              }
+            },
+            labelText: "Detail",
+            errorText: detailError,
+            keyboardType: TextInputType.name,
+            textInputAction: TextInputAction.next,
+            autoFocus: true,
+            textEditingController: _stepDetailsController[index - 1],
+          ),
+        ],
+      ),
     );
   }
 
@@ -611,13 +560,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
       child: SizedBox(
         height: 40,
         child: ElevatedButton.icon(
-          onPressed: () {
-            setState(() {
-              _numSteps += 1;
-            });
-          },
-
-          ///
+          onPressed: onPressedAddNewStep,
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: UI.appColor,
@@ -637,24 +580,24 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
+  void onPressedAddNewStep() {
+    setState(() {
+      _stepDetailsController.add(TextEditingController());
+      _stepTitlesController.add(TextEditingController());
+    });
+  }
+
   Widget getAddNewIngredientButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 3, bottom: 3, left: 10, right: 10),
       child: SizedBox(
         height: 40,
         child: ElevatedButton.icon(
-          onPressed: () {
-            setState(() {
-              _numIngredient += 1;
-            });
-          },
-
-          ///
+          onPressed: onPressedAddNewIngredient,
           style: TextButton.styleFrom(
             primary: Colors.white,
             backgroundColor: UI.appColor,
             shape: RoundedRectangleBorder(
-              //to set border radius to button
               borderRadius: BorderRadius.circular(10),
             ),
           ),
@@ -667,6 +610,13 @@ class _CreateRecipeState extends State<CreateRecipe> {
         ),
       ),
     );
+  }
+
+  void onPressedAddNewIngredient() {
+    setState(() {
+      _ingredientNamesController.add(TextEditingController());
+      _ingredientQuantitiesController.add(TextEditingController());
+    });
   }
 
   Widget getCategoryItem() {
@@ -886,14 +836,26 @@ class _CreateRecipeState extends State<CreateRecipe> {
     );
   }
 
-  void _clearText() {
-    _nameController.clear();
-    _descriptionController.clear();
-    _categoryController.clear();
-    _cookTimeController.clear();
-    _totalTimeController.clear();
-    _servingsController.clear();
-    _selectedLevel = null;
+  List<Map<String, dynamic>> getIngredientsList() {
+    List<Map<String, dynamic>> ingredientsList = [];
+    for (var i = 0; i < _ingredientNamesController.length; i++) {
+      ingredientsList.add({
+        'name': _ingredientNamesController[i].text,
+        'quantity': _ingredientQuantitiesController[i].text,
+      });
+    }
+    return ingredientsList;
+  }
+
+  List<Map<String, dynamic>> getStepsList() {
+    List<Map<String, dynamic>> getStepsList = [];
+    for (var i = 0; i < _stepTitlesController.length; i++) {
+      getStepsList.add({
+        'title': _stepTitlesController[i].text,
+        'detail': _stepDetailsController[i].text,
+      });
+    }
+    return getStepsList;
   }
 
   Future _addRecipe() async {
@@ -912,15 +874,16 @@ class _CreateRecipeState extends State<CreateRecipe> {
         serving: double.tryParse(_servingsController.text),
         cookTime: double.tryParse(_cookTimeController.text),
         totalTime: double.tryParse(_totalTimeController.text),
-        category: _categoryController.text,
-        level: int.tryParse(_selectedLevel ?? "0"),
+        category: _selectedCategory,
+        level: int.tryParse(_selectedLevel ?? "1"),
         image: _imageUrl,
         creator: value,
         like: 0,
+        ingredients: getIngredientsList(),
+        steps: getStepsList(),
       );
 
       await recipesService.add(data).then((value) {
-        _clearText();
         print(value);
 
         ScreenUtils.pushScreen(

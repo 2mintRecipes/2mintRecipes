@@ -10,7 +10,8 @@ class RecipeDto {
   int? level;
   int? like;
   dynamic creator;
-  Map<String, dynamic>? ingredients;
+  List<Map<String, dynamic>>? ingredients;
+  List<Map<String, dynamic>>? steps;
 
   RecipeDto({
     this.id,
@@ -25,6 +26,7 @@ class RecipeDto {
     this.like,
     this.creator,
     this.ingredients,
+    this.steps,
   });
 
   factory RecipeDto.fromJson(Map<String, dynamic> json) => RecipeDto(
@@ -39,7 +41,8 @@ class RecipeDto {
       level: json["level"],
       like: json["like"],
       creator: json["creator"],
-      ingredients: json["ingredients"]);
+      ingredients: json["ingredients"],
+      steps: json["steps"]);
 
   Map<String, dynamic> toJson() => {
         "name": name,
@@ -52,6 +55,7 @@ class RecipeDto {
         "level": level,
         "like": like,
         "creator": creator,
-        "ingredients": ingredients
+        "ingredients": ingredients,
+        "steps": steps,
       };
 }
