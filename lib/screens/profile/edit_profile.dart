@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:x2mint_recipes/utils/database.dart';
 import 'package:x2mint_recipes/widgets/input.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
@@ -14,7 +15,8 @@ import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class EditProfile extends StatefulWidget {
   static const routeName = '/EditProfile';
-  const EditProfile({Key? key}) : super(key: key);
+  final String uid;
+  const EditProfile(this.uid, {Key? key}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -29,15 +31,7 @@ class _EditProfileState extends State<EditProfile> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
-  late String fullName,
-      username,
-      gender,
-      phone,
-      address,
-      email,
-      password,
-      reEnterPassword;
+  UserDto? user;
   String? fullNameError,
       usernameError,
       genderError,
@@ -45,30 +39,52 @@ class _EditProfileState extends State<EditProfile> {
       addressError,
       emailError,
       passwordError,
-      reEnterPasswordError;
+      confirmPasswordError;
+  String? _selectedGender, _avatar;
+
+  final List<String> genderItems = ['Male', 'Female', 'Other'];
+  final List<IconData> genderIcons = [
+    Icons.male,
+    Icons.female,
+    Icons.more_horiz
+  ];
+
+  bool _passwordVisible = false;
+  bool _confirmPasswordVisible = false;
+  final _formKeyUserInfo = GlobalKey<FormState>();
+  final _formKeyCreInfo = GlobalKey<FormState>();
+  final ImagePicker _picker = ImagePicker();
+  final UserService _userService = UserService();
+  final CloudinaryService _cloudinaryService = CloudinaryService();
+  dynamic recipeImage = const NetworkImage(defaultRecipeImage);
+  File? _image;
+  String? _imagePath;
+  late dynamic myContext;
 
   @override
   void initState() {
     super.initState();
-    _passwordVisible = false;
-    _confirmPasswordVisible = false;
-    fullName = "";
-    username = "";
-    gender = "";
-    phone = "";
-    address = "";
-    email = "";
-    password = "";
-    reEnterPassword = "";
 
-    fullNameError = null;
-    usernameError = null;
-    genderError = null;
-    phoneError = null;
-    addressError = null;
-    emailError = null;
-    passwordError = null;
-    reEnterPasswordError = null;
+    init();
+  }
+
+  Future init() async {
+    user = await _userService.getUserByUid(widget.uid);
+    setState(() {
+      _passwordVisible = false;
+      _confirmPasswordVisible = false;
+
+      _fullNameController.text = user?.fullName ?? '';
+      _usernameController.text = user?.username ?? '';
+      _phoneController.text = user?.phone ?? '';
+      _addressController.text = user?.address ?? '';
+      _emailController.text = user?.email ?? '';
+      _selectedGender = user?.gender ?? 'Other';
+
+      _imagePath = user?.avatar;
+    });
+
+    getAvatar();
   }
 
   void resetErrorText() {
@@ -80,22 +96,22 @@ class _EditProfileState extends State<EditProfile> {
       addressError = null;
       emailError = null;
       passwordError = null;
-      reEnterPasswordError = null;
+      confirmPasswordError = null;
     });
   }
 
   bool validateProfileInfo() {
     resetErrorText();
     bool isValid = true;
-    if (fullName.isEmpty) {
+    if (_fullNameController.text.isEmpty) {
       setState(() {
-        fullNameError = "       Please enter a FullName";
+        fullNameError = "Please enter a FullName";
       });
       isValid = false;
     }
-    if (username.isEmpty) {
+    if (_usernameController.text.isEmpty) {
       setState(() {
-        usernameError = "       Please enter a Username";
+        usernameError = "Please enter a Username";
       });
       isValid = false;
     }
@@ -111,41 +127,41 @@ class _EditProfileState extends State<EditProfile> {
     RegExp emailExp = RegExp(
         r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-    if (username.isEmpty) {
+    if (_usernameController.text.isEmpty) {
       setState(() {
-        usernameError = "       Please enter a Username";
+        usernameError = "Please enter a Username";
       });
       isValid = false;
     }
-    if (email.isEmpty) {
+    if (_emailController.text.isEmpty) {
       setState(() {
-        emailError = "       Please enter a Email";
+        emailError = "Please enter a Email";
       });
       isValid = false;
     }
-    if (!emailExp.hasMatch(email)) {
+    if (!emailExp.hasMatch(_emailController.text)) {
       setState(() {
-        emailError = "       Email is invalid";
-      });
-      isValid = false;
-    }
-
-    if (password.isEmpty) {
-      setState(() {
-        passwordError = "       Please enter a password";
-      });
-      isValid = false;
-    }
-    if (reEnterPassword.isEmpty) {
-      setState(() {
-        reEnterPassword = "       Please confirm password";
+        emailError = "Email is invalid";
       });
       isValid = false;
     }
 
-    if (password != reEnterPassword) {
+    if (_passwordController.text.isEmpty) {
       setState(() {
-        reEnterPasswordError = "       Passwords do not match";
+        passwordError = "Please enter a password";
+      });
+      isValid = false;
+    }
+    if (_confirmPasswordController.text.isEmpty) {
+      setState(() {
+        confirmPasswordError = "Please confirm password";
+      });
+      isValid = false;
+    }
+
+    if (!_passwordController.text.contains(_confirmPasswordController.text)) {
+      setState(() {
+        confirmPasswordError = "Passwords do not match";
       });
       isValid = false;
     }
@@ -165,41 +181,20 @@ class _EditProfileState extends State<EditProfile> {
     }
   }
 
-  void submitProfileInfo() {
-    if (validateProfileInfo()) {
-      {
-        () async {
-          if (_formKeyUserInfo.currentState!.validate()) {
-            _formKeyUserInfo.currentState!.save();
-            await _updateUserInfo();
-          }
-        };
-      }
+  void submitProfileInfo() async {
+    var isValid = validateProfileInfo();
+    if (!isValid) {
+      return;
+    }
+    if (_formKeyUserInfo.currentState!.validate()) {
+      _formKeyUserInfo.currentState!.save();
+      await _updateUserInfo();
     }
   }
 
-  String? _selectedGender;
-  String? _avatar;
-
-  final List<String> genderItems = ['Male', 'Female', 'Other'];
-  final List<IconData> genderIcons = [
-    Icons.male,
-    Icons.female,
-    Icons.more_horiz
-  ];
-
-  bool _passwordVisible = false;
-  bool _confirmPasswordVisible = false;
-  final _formKeyUserInfo = GlobalKey<FormState>();
-  final _formKeyCreInfo = GlobalKey<FormState>();
-  final ImagePicker _picker = ImagePicker();
-  final UserService _userService = UserService();
-  final CloudinaryService _cloudinaryService = CloudinaryService();
-  File? _image;
-  String? _imagePath;
-
   @override
   Widget build(BuildContext context) {
+    myContext = context;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(children: [
@@ -246,25 +241,36 @@ class _EditProfileState extends State<EditProfile> {
         getBasicInfo(),
         const SizedBox(height: 20),
         getUserInfo(),
-        const SizedBox(height: 20),
-        getUserConfidentialInfo(),
+        // const SizedBox(height: 20),
+        // getUserConfidentialInfo(),
       ],
     );
   }
 
   getAvatar() {
-    return _image != null
-        ? FileImage(_image!)
-        : const NetworkImage(
-            'https://res.cloudinary.com/x2mint/image/upload/v1652892076/2mintRecipes/fxpssnnxl0urdlynqhkz.png');
-    // : const AssetImage("assets/images/avatar.jpg");
+    try {
+      if (_image != null) {
+        setState(() {
+          recipeImage = FileImage(_image!);
+        });
+        return;
+      }
+      if (_imagePath != null) {
+        setState(() {
+          recipeImage = NetworkImage(_imagePath!);
+        });
+        return;
+      }
+    } catch (e) {
+      assert(false, e.toString());
+    }
   }
 
   Widget getBasicInfo() {
     return Column(
       children: [
         GFAvatar(
-          backgroundImage: getAvatar(),
+          backgroundImage: recipeImage,
           shape: GFAvatarShape.circle,
           size: 150,
         ),
@@ -354,7 +360,7 @@ class _EditProfileState extends State<EditProfile> {
               child: Text(
                 "Personal Info",
                 style: TextStyle(
-                  fontSize: 25,
+                  fontSize: 22,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -370,9 +376,6 @@ class _EditProfileState extends State<EditProfile> {
                     fullNameError = null;
                   });
                 }
-                setState(() {
-                  fullName = value;
-                });
               },
               labelText: "FullName",
               errorText: fullNameError,
@@ -389,9 +392,6 @@ class _EditProfileState extends State<EditProfile> {
                     usernameError = null;
                   });
                 }
-                setState(() {
-                  username = value;
-                });
               },
               labelText: "Username",
               errorText: usernameError,
@@ -487,9 +487,6 @@ class _EditProfileState extends State<EditProfile> {
                     phoneError = null;
                   });
                 }
-                setState(() {
-                  phone = value;
-                });
               },
               labelText: "Phone",
               errorText: phoneError,
@@ -506,9 +503,6 @@ class _EditProfileState extends State<EditProfile> {
                     addressError = null;
                   });
                 }
-                setState(() {
-                  address = value;
-                });
               },
               labelText: "Address",
               errorText: addressError,
@@ -532,20 +526,22 @@ class _EditProfileState extends State<EditProfile> {
     if (_imagePath != null) {
       _avatar = await _cloudinaryService.uploadImage(_imagePath!);
       print(_avatar);
-
-      UserDto data = UserDto(
-        fullName: _fullNameController.text,
-        username: _usernameController.text,
-        address: _addressController.text,
-        phone: _phoneController.text,
-        gender: _selectedGender,
-        avatar: _avatar,
-      );
-      var re = await _userService.update(data);
-      print(re);
     } else {
-      print("============");
+      _avatar = defaultRecipeImage;
     }
+
+    UserDto data = UserDto(
+      fullName: _fullNameController.text,
+      username: _usernameController.text,
+      address: _addressController.text,
+      phone: _phoneController.text,
+      gender: _selectedGender,
+      avatar: _avatar,
+      email: user?.email,
+      uid: user?.uid,
+    );
+    await _userService.update(user!.id!, data);
+    Navigator.pop(myContext);
   }
 
   Widget getUserConfidentialInfo() {
@@ -580,9 +576,6 @@ class _EditProfileState extends State<EditProfile> {
                     emailError = null;
                   });
                 }
-                setState(() {
-                  email = value;
-                });
               },
               labelText: "Email",
               errorText: emailError,
@@ -599,9 +592,6 @@ class _EditProfileState extends State<EditProfile> {
                     passwordError = null;
                   });
                 }
-                setState(() {
-                  password = value;
-                });
               },
               labelText: "Password",
               errorText: passwordError,
@@ -613,17 +603,14 @@ class _EditProfileState extends State<EditProfile> {
             InputField(
               prefixIcon: Icons.lock,
               onChanged: (value) {
-                if (reEnterPasswordError != null) {
+                if (confirmPasswordError != null) {
                   setState(() {
-                    reEnterPasswordError = null;
+                    confirmPasswordError = null;
                   });
                 }
-                setState(() {
-                  reEnterPassword = value;
-                });
               },
               labelText: "Confirm Password",
-              errorText: reEnterPasswordError,
+              errorText: confirmPasswordError,
               keyboardType: TextInputType.visiblePassword,
               textInputAction: TextInputAction.next,
               autoFocus: true,
@@ -705,6 +692,7 @@ class _EditProfileState extends State<EditProfile> {
         _image = File(image.path);
         _imagePath = image.path;
       });
+      getAvatar();
     }
   }
 
@@ -715,6 +703,7 @@ class _EditProfileState extends State<EditProfile> {
         _image = File(image.path);
         _imagePath = image.path;
       });
+      getAvatar();
     }
   }
 }
