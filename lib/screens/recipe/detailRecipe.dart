@@ -3,10 +3,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/recipe/create.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
+import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
 import 'package:x2mint_recipes/widgets/category.dart';
@@ -27,10 +29,29 @@ class _RecipeDetailState extends State<RecipeDetail> {
   final _formKeySteps = GlobalKey<FormState>();
   SecureStorage secureStorage = SecureStorage();
   final RecipesService _recipesService = RecipesService();
+  final UserService _userService = UserService();
   late Future _recipeFuture;
   late Map<String, dynamic> _recipe;
   late String id = widget.id;
   late bool like = false;
+  late bool isAuthor = false;
+  UserDto? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    like = false;
+    init();
+  }
+
+  Future init() async {
+    _recipeFuture = _recipesService.getOne(id);
+    currentUser = await _userService.getCurrentUser();
+    var recipe = await _recipesService.getOne(id);
+    setState(() {
+      isAuthor = recipe['creator'].id == currentUser?.id;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +62,11 @@ class _RecipeDetailState extends State<RecipeDetail> {
         AsyncSnapshot snapshot,
       ) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
           _recipe = snapshot.data;
-          print(_recipe);
+
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
@@ -90,8 +111,9 @@ class _RecipeDetailState extends State<RecipeDetail> {
     return GestureDetector(
         child: Container(
       decoration: BoxDecoration(
-          color: Colors.black.withOpacity(.2),
-          borderRadius: BorderRadius.circular(15)),
+        color: Colors.black.withOpacity(.2),
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Column(
         children: [
           Stack(
@@ -107,30 +129,33 @@ class _RecipeDetailState extends State<RecipeDetail> {
                       width: 1,
                       color: Colors.transparent,
                     ),
-                    image: ((_recipe['image'] == '')
+                    image: (_recipe['image'] == '')
                         ? const DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/images/welcome_bg.jpg'))
+                            image: AssetImage('assets/images/welcome_bg.jpg'),
+                          )
                         : DecorationImage(
                             image: NetworkImage(_recipe['image']),
                             fit: BoxFit.cover,
-                          )),
+                          ),
                     borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15)),
+                      bottomLeft: Radius.circular(15),
+                      bottomRight: Radius.circular(15),
+                    ),
                   ),
                 ),
               ),
               SizedBox(
-                  height: MediaQuery.of(context).size.width * .75,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      getTitleSection(),
-                      getFavoriteAndTimeSection(),
-                    ],
-                  ))
+                height: MediaQuery.of(context).size.width * .75,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    getTitleSection(),
+                    getFavoriteAndTimeSection(),
+                  ],
+                ),
+              )
             ],
           ),
           Padding(
@@ -164,20 +189,20 @@ class _RecipeDetailState extends State<RecipeDetail> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             TextView(
-              text: _recipe['serving'].toString(),
+              text: _recipe['serving'].toString().split('.')[0],
               icon: Icons.supervisor_account,
               fontSize: 20,
               width: MediaQuery.of(context).size.width * .1,
             ),
             const SizedBox(height: 10),
             TextView(
-              text: _recipe['level'].toString(),
+              text: _recipe['level'].toString().split('.')[0],
               icon: Icons.star,
               fontSize: 20,
               width: MediaQuery.of(context).size.width * .1,
             ),
             TextView(
-              text: _recipe['cookTime'].toString(),
+              text: _recipe['cookTime'].toString().split('.')[0],
               icon: Icons.schedule,
               fontSize: 20,
               width: MediaQuery.of(context).size.width * .2,
@@ -187,7 +212,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
         const SizedBox(height: 15),
 
         /// Category
-        //Category(_recipe['category'].toString()),
+        Category(_recipe['category'].toString()),
         const SizedBox(height: 10),
       ],
     );
@@ -198,8 +223,12 @@ class _RecipeDetailState extends State<RecipeDetail> {
       children: [
         getBannerSection(),
         Padding(
-          padding:
-              const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+          padding: const EdgeInsets.only(
+            top: 20,
+            bottom: 20,
+            left: 20,
+            right: 20,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +236,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               getBasicInfoSection(),
               getIngredientSection(),
               getStepsSection(),
-              // getEditWidget(),
+              isAuthor ? getEditWidget() : Container(),
             ],
           ),
         )
@@ -262,78 +291,80 @@ class _RecipeDetailState extends State<RecipeDetail> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: ClipRRect(
-          // borderRadius: BorderRadius.circular(5),
-          child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 0, sigmaY: 3),
-              child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            IconButton(
-                                tooltip: 'Like',
-                                onPressed: () {
-                                  setState(() {
-                                    if (like == true) {
-                                      _recipe['like'] -= 1;
-                                      like = false;
-                                    } else {
-                                      like = true;
-                                      _recipe['like'] += 1;
-                                    }
-                                  });
-                                },
-                                icon: SizedBox(
-                                  child: Icon(
-                                    ((like == true)
-                                        ? Icons.favorite
-                                        : Icons.favorite_border_outlined),
-                                    size: 30,
-                                    color: (like == true)
-                                        ? Colors.red
-                                        : Colors.white,
-                                  ),
-                                )),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(_recipe['like'].toString(),
-                                style: TextStyle(
-                                    color: (like == true)
-                                        ? Colors.red
-                                        : Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold))
-                          ],
+        // borderRadius: BorderRadius.circular(5),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 0, sigmaY: 3),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      tooltip: 'Like',
+                      onPressed: () {
+                        setState(() {
+                          if (like == true) {
+                            _recipe['like'] -= 1;
+                            like = false;
+                          } else {
+                            like = true;
+                            _recipe['like'] += 1;
+                          }
+                        });
+                      },
+                      icon: SizedBox(
+                        child: Icon(
+                          ((like == true)
+                              ? Icons.favorite
+                              : Icons.favorite_border_outlined),
+                          size: 30,
+                          color: (like == true) ? Colors.red : Colors.white,
                         ),
-                        Row(
-                          children: [
-                            IconButton(
-                                tooltip: "Total Time",
-                                onPressed: () {},
-                                icon: const SizedBox(
-                                  child: Icon(
-                                    Icons.timer,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              _recipe['totalTime'].toString() + " mins",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      _recipe['like'].toString(),
+                      style: TextStyle(
+                        color: (like == true) ? Colors.red : Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      tooltip: "Total Time",
+                      onPressed: () {},
+                      icon: const SizedBox(
+                        child: Icon(
+                          Icons.timer,
+                          size: 30,
+                          color: Colors.white,
                         ),
-                      ])))),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      _recipe['totalTime'].toString().split('.')[0] + " mins",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -524,17 +555,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
         ),
       ),
     );
-  }
-
-  Future init() async {
-    _recipeFuture = _recipesService.getOne(id);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    like = false;
-    init();
   }
 
   void _editRecipe() {
