@@ -9,6 +9,7 @@ import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
+import 'package:x2mint_recipes/widgets/category.dart';
 import 'package:x2mint_recipes/widgets/creator.dart';
 import 'package:x2mint_recipes/widgets/text_field.dart';
 
@@ -176,7 +177,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               width: MediaQuery.of(context).size.width * .1,
             ),
             TextView(
-              text: _recipe['cookTime'].toString() + ' mins',
+              text: _recipe['cookTime'].toString(),
               icon: Icons.schedule,
               fontSize: 20,
               width: MediaQuery.of(context).size.width * .2,
@@ -186,10 +187,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
         const SizedBox(height: 15),
 
         /// Category
-        TextView(
-          icon: Icons.restaurant_menu,
-          text: _recipe['category'] ?? '',
-        ),
+        //Category(_recipe['category'].toString()),
         const SizedBox(height: 10),
       ],
     );
@@ -209,7 +207,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               getBasicInfoSection(),
               getIngredientSection(),
               getStepsSection(),
-              getEditWidget(),
+              // getEditWidget(),
             ],
           ),
         )
@@ -341,32 +339,21 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getIngredientItem(int index) {
     return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text(
-              "Ingredient $index",
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
           TextView(
-            icon: Icons.edit,
-            text: _recipe["ingredients"][index - 1]["name"] ?? '',
+            width: MediaQuery.of(context).size.width * .4,
+            text: _recipe["ingredients"][index - 1]['name'] ?? '',
             fontSize: 20,
           ),
-          const SizedBox(height: 10),
           TextView(
-            icon: Icons.line_weight,
+            width: MediaQuery.of(context).size.width * .3,
             text: _recipe["ingredients"][index - 1]["amount"] ?? '',
             fontSize: 20,
+            maxLine: 5,
           ),
         ],
       ),
@@ -377,6 +364,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
@@ -384,31 +372,30 @@ class _RecipeDetailState extends State<RecipeDetail> {
       child: Form(
         key: _formKeyIngredients,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "INGREDIENT",
-                style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              "INGREDIENTS",
+              style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            /// Steps
+            /// INGREDIENT
             SingleChildScrollView(
               scrollDirection: Axis.vertical,
               controller: ScrollController(),
               child: Column(
-                children: List.generate(
-                    _recipe["ingredients"] != null
-                        ? _recipe["ingredients"].length
-                        : 0,
-                    (index) => getStepItem(index + 1)),
-              ),
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: List.generate(
+                      _recipe["ingredients"] != null
+                          ? _recipe["ingredients"].length
+                          : 0,
+                      (index) => getIngredientItem(index + 1))),
             ),
           ],
         ),
@@ -421,30 +408,35 @@ class _RecipeDetailState extends State<RecipeDetail> {
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: Text(
-              'Step ' + index.toString(),
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.normal,
+          Container(
+            margin: const EdgeInsets.only(right: 20),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.black.withOpacity(.1),
               ),
+              borderRadius: BorderRadius.circular(15),
+              color: UI.appColor,
+            ),
+            padding:
+                const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+            child: Text(
+              _recipe["steps"][index - 1]["title"] ?? '',
+              style: const TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400),
             ),
           ),
           const SizedBox(height: 10),
           TextView(
-            icon: Icons.edit,
-            text: _recipe["steps"][index - 1]["title"] ?? '',
-            fontSize: 20,
-          ),
-          const SizedBox(height: 10),
-          TextView(
-            icon: Icons.menu_book,
+            width: MediaQuery.of(context).size.width * .75,
+            maxLine: 10,
             text: _recipe["steps"][index - 1]["detail"] ?? '',
             fontSize: 20,
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -466,7 +458,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
             const Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                "STEP",
+                "STEPS",
                 style: TextStyle(
                   fontSize: 25,
                   color: Colors.white,

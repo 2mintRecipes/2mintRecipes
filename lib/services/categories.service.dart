@@ -8,7 +8,6 @@ class CategoryService {
     try {
       List<Map<String, dynamic>> result =
           await StorageService.getAll('categories');
-
       return result;
     } catch (e) {
       print(e);
