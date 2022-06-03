@@ -266,12 +266,14 @@ class _RecipeDetailState extends State<RecipeDetail> {
           child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 0, sigmaY: 3),
               child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(15),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
                                 tooltip: 'Like',
@@ -291,48 +293,34 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     ((like == true)
                                         ? Icons.favorite
                                         : Icons.favorite_border_outlined),
-                                    size: 30,
+                                    size: 40,
                                     color: (like == true)
                                         ? Colors.red
-                                        : Colors.white,
+                                        : UI.appColor,
                                   ),
                                 )),
                             const SizedBox(
-                              width: 5,
+                              width: 10,
                             ),
                             Text(_recipe['like'].toString(),
                                 style: TextStyle(
                                     color: (like == true)
                                         ? Colors.red
-                                        : Colors.white,
-                                    fontSize: 20,
+                                        : UI.appColor,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.bold))
                           ],
                         ),
-                        Row(
-                          children: [
-                            IconButton(
-                                tooltip: "Total Time",
-                                onPressed: () {},
-                                icon: const SizedBox(
-                                  child: Icon(
-                                    Icons.timer,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                )),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              _recipe['totalTime'].toString() + " mins",
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
+                        IconButton(
+                            tooltip: "Bookmark",
+                            onPressed: () {},
+                            icon: const SizedBox(
+                              child: Icon(
+                                Icons.bookmark_add_outlined,
+                                size: 40,
+                                color: UI.appColor,
+                              ),
+                            )),
                       ])))),
     );
   }
@@ -485,45 +473,30 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getTitleSection() {
     return Padding(
-      padding: const EdgeInsets.only(top: UI.topPadding),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width - 60,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            IconButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, '/');
-                },
-                icon: const SizedBox(
-                  child: Icon(
-                    Icons.arrow_back,
-                    size: 30,
-                    color: Colors.white,
+        padding: const EdgeInsets.only(top: UI.topPadding),
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: UI.appColor.withOpacity(.4),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, right: 15),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width - 120,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  child: Text(
+                    _recipe['name'],
+                    maxLines: 5,
+                    softWrap: true,
+                    style: const TextStyle(
+                      fontSize: 25,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
                 )),
-            const SizedBox(
-              width: 5,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 120,
-              child: Text(
-                _recipe['name'],
-                maxLines: 5,
-                softWrap: true,
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.start,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 
   Future init() async {
