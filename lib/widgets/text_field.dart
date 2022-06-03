@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class TextView extends StatelessWidget {
   const TextView({
-    this.align,
     this.text,
     this.autoFocus = false,
     this.obscureText = true,
@@ -18,7 +17,6 @@ class TextView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   final Color? color;
-  final TextAlign? align;
   final double? width;
   final BorderRadius? border;
   final String? text;
@@ -45,7 +43,6 @@ class TextView extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: 5, top: 5),
                     child: SizedBox(
                       height: 30,
-                      width: 0,
                     ))
                 : Padding(
                     padding: const EdgeInsets.all(5),
@@ -59,20 +56,17 @@ class TextView extends StatelessWidget {
               width: 10,
             ),
             SizedBox(
-                width: width,
-                child: Padding(
-                  padding: EdgeInsets.all(5),
-                  child: Text(
-                    text!,
-                    textAlign: TextAlign.justify,
-                    maxLines: maxLine,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSize,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ))
+              width: width,
+              child: Text(
+                text!,
+                maxLines: maxLine,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: fontSize,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            )
           ],
         ));
   }

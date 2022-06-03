@@ -100,9 +100,8 @@ class _TrendingNowState extends State<TrendingNow> {
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 5, right: 30),
+                    padding: const EdgeInsets.only(left: 5),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: List.generate(
                         _allRecipes.length,
                         (index) {
@@ -137,16 +136,13 @@ class _TrendingNowState extends State<TrendingNow> {
                                     ),
                                   ),
                                   const SizedBox(height: 5),
-                                  SizedBox(
-                                    width: 250,
-                                    child: Text(
-                                      _allRecipes[index]['name'],
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        color: UI.appColor,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                  Text(
+                                    _allRecipes[index]['name'],
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                      color: UI.appColor,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   const SizedBox(

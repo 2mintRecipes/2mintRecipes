@@ -31,7 +31,6 @@ class _RecipeDetailState extends State<RecipeDetail> {
   late Map<String, dynamic> _recipe;
   late String id = widget.id;
   late bool like = false;
-  late bool bookmark = false;
 
   @override
   Widget build(BuildContext context) {
@@ -125,67 +124,36 @@ class _RecipeDetailState extends State<RecipeDetail> {
               SizedBox(
                   height: MediaQuery.of(context).size.width * .75,
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        getTitle(),
-                        getFavoriteAndTimeSection(),
-                      ]))
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      getTitleSection(),
+                      getFavoriteAndTimeSection(),
+                    ],
+                  ))
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 5, left: 20),
+            padding: const EdgeInsets.all(10),
             child: Creator(_recipe['creator'].id),
           ),
-          Padding(
-            padding: const EdgeInsets.all(5),
-            child: TextView(
-              text: _recipe['description'],
-              fontSize: 15,
-              width: MediaQuery.of(context).size.width - 40,
-              color: Colors.transparent,
-              maxLine: 15,
-              border: const BorderRadius.only(
-                topLeft: Radius.zero,
-                topRight: Radius.zero,
-                bottomLeft: Radius.circular(15),
-                bottomRight: Radius.circular(15),
-              ),
+          TextView(
+            text: _recipe['description'],
+            fontSize: 15,
+            width: MediaQuery.of(context).size.width - 20,
+            color: Colors.transparent,
+            maxLine: 15,
+            border: const BorderRadius.only(
+              topLeft: Radius.zero,
+              topRight: Radius.zero,
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
             ),
           ),
           const SizedBox(height: 5)
         ],
       ),
     ));
-  }
-
-  Widget getTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50),
-      child: Container(
-        color: UI.appColor.withOpacity(.3),
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 15,
-            right: 15,
-            top: 5,
-            bottom: 5,
-          ),
-          child: Text(
-            _recipe['name'],
-            maxLines: 5,
-            softWrap: true,
-            style: const TextStyle(
-              fontSize: 25,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.start,
-          ),
-        ),
-      ),
-    );
   }
 
   Widget getBasicInfoSection() {
@@ -212,7 +180,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               text: _recipe['cookTime'].toString(),
               icon: Icons.schedule,
               fontSize: 20,
-              width: MediaQuery.of(context).size.width * .1,
+              width: MediaQuery.of(context).size.width * .2,
             ),
           ],
         ),
@@ -239,7 +207,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
               getBasicInfoSection(),
               getIngredientSection(),
               getStepsSection(),
-              //getEditWidget(),
+              // getEditWidget(),
             ],
           ),
         )
@@ -341,40 +309,30 @@ class _RecipeDetailState extends State<RecipeDetail> {
                                     fontWeight: FontWeight.bold))
                           ],
                         ),
-                        IconButton(
-                            tooltip: "Bookmark",
-                            onPressed: () {},
-                            icon: const SizedBox(
-                              child: Icon(
-                                Icons.bookmark_add_outlined,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            )),
-                        // Row(
-                        //   children: [
-                        //     IconButton(
-                        //         tooltip: "Total Time",
-                        //         onPressed: () {},
-                        //         icon: const SizedBox(
-                        //           child: Icon(
-                        //             Icons.timer,
-                        //             size: 30,
-                        //             color: Colors.white,
-                        //           ),
-                        //         )),
-                        //     const SizedBox(
-                        //       width: 5,
-                        //     ),
-                        //     Text(
-                        //       _recipe['totalTime'].toString() + " mins",
-                        //       style: const TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 20,
-                        //           fontWeight: FontWeight.bold),
-                        //     )
-                        //   ],
-                        // ),
+                        Row(
+                          children: [
+                            IconButton(
+                                tooltip: "Total Time",
+                                onPressed: () {},
+                                icon: const SizedBox(
+                                  child: Icon(
+                                    Icons.timer,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                )),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              _recipe['totalTime'].toString() + " mins",
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
                       ])))),
     );
   }
@@ -389,12 +347,12 @@ class _RecipeDetailState extends State<RecipeDetail> {
           TextView(
             width: MediaQuery.of(context).size.width * .4,
             text: _recipe["ingredients"][index - 1]['name'] ?? '',
-            fontSize: 18,
+            fontSize: 20,
           ),
           TextView(
             width: MediaQuery.of(context).size.width * .3,
             text: _recipe["ingredients"][index - 1]["amount"] ?? '',
-            fontSize: 18,
+            fontSize: 20,
             maxLine: 5,
           ),
         ],
@@ -450,8 +408,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
+            margin: const EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black.withOpacity(.1),
@@ -471,10 +431,10 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ),
           const SizedBox(height: 10),
           TextView(
-            width: MediaQuery.of(context).size.width * .78,
+            width: MediaQuery.of(context).size.width * .75,
             maxLine: 10,
             text: _recipe["steps"][index - 1]["detail"] ?? '',
-            fontSize: 18,
+            fontSize: 20,
           ),
           const SizedBox(height: 10),
         ],
@@ -485,10 +445,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
   Widget getStepsSection() {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(
-        top: 20,
-        bottom: 20,
-      ),
+      margin: const EdgeInsets.only(top: 20, bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.white.withOpacity(.4),
@@ -520,6 +477,49 @@ class _RecipeDetailState extends State<RecipeDetail> {
                     (index) => getStepItem(index + 1)),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget getTitleSection() {
+    return Padding(
+      padding: const EdgeInsets.only(top: UI.topPadding),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width - 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            IconButton(
+                onPressed: () {
+                  //Navigator.pushNamed(context, '/');
+                },
+                icon: const SizedBox(
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: 30,
+                    color: Colors.white,
+                  ),
+                )),
+            const SizedBox(
+              width: 5,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 120,
+              child: Text(
+                _recipe['name'],
+                maxLines: 5,
+                softWrap: true,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            )
           ],
         ),
       ),
