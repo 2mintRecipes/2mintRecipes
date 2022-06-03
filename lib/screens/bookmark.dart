@@ -141,13 +141,18 @@ class _BookmarkState extends State<Bookmark> {
                           : Colors.black.withOpacity(.1),
                     ),
                     padding: const EdgeInsets.only(
-                        top: 5, bottom: 5, left: 10, right: 10),
+                      top: 5,
+                      bottom: 5,
+                      left: 10,
+                      right: 10,
+                    ),
                     child: Text(
                       category[index],
                       style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400),
+                        fontSize: 20,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   )
                 ],
@@ -170,7 +175,7 @@ class _BookmarkState extends State<Bookmark> {
           AsyncSnapshot snapshot,
         ) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
@@ -208,13 +213,12 @@ class _BookmarkState extends State<Bookmark> {
                             _allRecipes[index]['name'],
                             textAlign: TextAlign.left,
                             style: const TextStyle(
-                                color: UI.appColor,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w500),
+                              color: UI.appColor,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                          const SizedBox(
-                            height: 3,
-                          ),
+                          const SizedBox(height: 3),
                           Row(
                             children: [
                               CircleAvatar(
@@ -222,7 +226,9 @@ class _BookmarkState extends State<Bookmark> {
                                 child: const Text(
                                   'MT',
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.white),
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               Text(
@@ -234,9 +240,7 @@ class _BookmarkState extends State<Bookmark> {
                               )
                             ],
                           ),
-                          const SizedBox(
-                            height: 35,
-                          ),
+                          const SizedBox(height: 35),
                         ],
                       ),
                     ),

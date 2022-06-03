@@ -58,7 +58,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
           AsyncSnapshot snapshot,
         ) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
@@ -66,16 +66,21 @@ class _PopularCategoriesState extends State<PopularCategories> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      left: 30, right: 20, bottom: 10, top: 30),
+                    left: 30,
+                    right: 20,
+                    bottom: 10,
+                    top: 30,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Popular Category",
                         style: TextStyle(
-                            color: Colors.white.withOpacity(.8),
-                            fontSize: 27,
-                            fontWeight: FontWeight.w600),
+                          color: Colors.white.withOpacity(.8),
+                          fontSize: 27,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),

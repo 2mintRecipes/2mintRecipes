@@ -235,7 +235,7 @@ class _MyNotificationState extends State<MyNotification> {
         AsyncSnapshot snapshot,
       ) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
           _notifications = snapshot.data;
