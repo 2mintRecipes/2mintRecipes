@@ -99,12 +99,27 @@ class UserService {
     }
   }
 
-  //TODO fix
-  Future update(UserDto data) async {
+  Future update(String path, UserDto data) async {
     try {
-      return await StorageService.add('users', data.toJson());
+      await StorageService.update('users', path, data.toJson());
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future isAuthor(String creatorId) async {
+    try {
+      SecureStorage secureStorage = SecureStorage();
+      var uid = await secureStorage.readSecureData('uid');
+      var result = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+      return result[0]['id'] == creatorId;
+    } catch (e) {
+      print(e);
+      return false;
     }
   }
 }

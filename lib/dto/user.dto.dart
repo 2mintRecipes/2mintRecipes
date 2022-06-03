@@ -48,7 +48,6 @@ class UserDto {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "uid": uid,
         "fullName": fullName,
         "username": username,
