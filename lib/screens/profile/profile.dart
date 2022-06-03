@@ -110,8 +110,8 @@ class _ProfileState extends State<Profile> {
       child: Column(
         children: [
           getBasicInfo(),
-          const SizedBox(height: 20),
-          getOverview(),
+          // const SizedBox(height: 20),
+          // getOverview(),
           getGallery(),
         ],
       ),
@@ -338,7 +338,7 @@ class _ProfileState extends State<Profile> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        const SizedBox(height: 20),
+        // const SizedBox(height: 20),
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
@@ -350,50 +350,59 @@ class _ProfileState extends State<Profile> {
             _myRecipes.length,
             (index) {
               return GestureDetector(
-                onTap: () {},
-                child: Column(
-                  children: [
-                    Container(
-                      // margin: const EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width * .35,
-                      height: MediaQuery.of(context).size.width * .35,
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.white),
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: getImage(_myRecipes[index]['image']),
-                          fit: BoxFit.cover,
+                onTap: () {
+                  ScreenUtils.pushScreen(
+                      context: context,
+                      screen: RecipeDetail(_myRecipes[index]['id']));
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * .5,
+                  height: MediaQuery.of(context).size.width * .5,
+                  child: Column(
+                    children: [
+                      Container(
+                        // margin: const EdgeInsets.only(bottom: 10),
+                        width: MediaQuery.of(context).size.width * .4,
+                        height: MediaQuery.of(context).size.width * .3,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 2, color: Colors.white),
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                            image: getImage(_myRecipes[index]['image']),
+                            fit: BoxFit.cover,
+                          ),
+                          color: Colors.white,
                         ),
-                        color: Colors.white,
                       ),
-                    ),
-                    Text(
-                      _myRecipes[index]['name'],
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                      const SizedBox(height: 5),
+                      Text(
+                        _myRecipes[index]['name'],
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
 
-                    // const SizedBox(
-                    //   height: 5,
-                    // ),
-                    // SizedBox(
-                    //   width: MediaQuery.of(context).size.width * .35,
-                    //   child: Text(
-                    //     songs[index]['description'],
-                    //     maxLines: 2,
-                    //     overflow: TextOverflow.ellipsis,
-                    //     textAlign: TextAlign.center,
-                    //     style: TextStyle(
-                    //         fontSize: 12,
-                    //         color: Colors.white.withOpacity(.4),
-                    //         fontWeight: FontWeight.w600),
-                    //   ),
-                    // )
-                  ],
+                      // const SizedBox(
+                      //   height: 5,
+                      // ),
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width * .35,
+                      //   child: Text(
+                      //     songs[index]['description'],
+                      //     maxLines: 2,
+                      //     overflow: TextOverflow.ellipsis,
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle(
+                      //         fontSize: 12,
+                      //         color: Colors.white.withOpacity(.4),
+                      //         fontWeight: FontWeight.w600),
+                      //   ),
+                      // )
+                    ],
+                  ),
                 ),
               );
             },
