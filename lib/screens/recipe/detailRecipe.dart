@@ -516,30 +516,32 @@ class _RecipeDetailState extends State<RecipeDetail> {
 
   Widget getTitleSection() {
     return Padding(
-        padding: const EdgeInsets.only(top: UI.topPadding),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          color: UI.appColor.withOpacity(.4),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 15),
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width - 120,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 5, bottom: 5),
-                  child: Text(
-                    _recipe['name'],
-                    maxLines: 5,
-                    softWrap: true,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                )),
+      padding: const EdgeInsets.only(top: UI.topPadding),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        color: UI.appColor.withOpacity(.4),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 15),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width - 120,
+            child: Padding(
+              padding: EdgeInsets.only(top: 5, bottom: 5),
+              child: Text(
+                _recipe['name'],
+                maxLines: 5,
+                softWrap: true,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
+              ),
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   void _editRecipe() {
