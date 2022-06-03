@@ -9,6 +9,7 @@ import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/profile/edit_profile.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
+import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:getwidget/getwidget.dart';
@@ -28,8 +29,10 @@ class _ProfileState extends State<Profile> {
   SecureStorage secureStorage = SecureStorage();
   AuthClass authClass = AuthClass();
   UserService userService = UserService();
+  RecipesService recipesService = RecipesService();
   late String uid;
   UserDto? user;
+  List _myRecipes = [];
 
   @override
   void initState() {
@@ -40,6 +43,12 @@ class _ProfileState extends State<Profile> {
   Future init() async {
     var _uid = await secureStorage.readSecureData('uid');
     var _user = await userService.getUserByUid(_uid);
+    if (_user != null) {
+      var result = await recipesService.getByCreatorId(_user.id);
+      setState(() {
+        _myRecipes = result;
+      });
+    }
     setState(() {
       uid = _uid;
       user = _user;
@@ -84,7 +93,7 @@ class _ProfileState extends State<Profile> {
 
   Widget getBody() {
     return Padding(
-      padding: EdgeInsets.only(top: UI.topPadding, left: 30, right: 30),
+      padding: const EdgeInsets.only(top: UI.topPadding, left: 30, right: 30),
       child: Column(
         children: [
           getBasicInfo(),
@@ -124,7 +133,11 @@ class _ProfileState extends State<Profile> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 3, bottom: 3, left: 10, right: 10),
+                    top: 3,
+                    bottom: 3,
+                    left: 10,
+                    right: 10,
+                  ),
                   child: SizedBox(
                     height: 40,
                     child: ElevatedButton.icon(
@@ -179,21 +192,22 @@ class _ProfileState extends State<Profile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "@TienNHM",
-              style: TextStyle(
-                  fontSize: 18,
-                  color: UI.appColor,
-                  fontStyle: FontStyle.italic),
-            ),
-            const Text(
-              "Nguyễn Huỳnh Minh Tiến",
+            Text(
+              user?.fullName ?? '',
               overflow: TextOverflow.ellipsis,
               softWrap: true,
-              style: TextStyle(
-                fontSize: 25,
+              style: const TextStyle(
+                fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              "@${user?.username ?? ''}",
+              style: const TextStyle(
+                fontSize: 16,
+                color: UI.appColor,
+                fontStyle: FontStyle.italic,
               ),
             ),
           ],
@@ -306,41 +320,48 @@ class _ProfileState extends State<Profile> {
         const Text(
           "My Gallery",
           style: TextStyle(
-              color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 20),
         GridView.count(
           crossAxisCount: 2,
           shrinkWrap: true,
           crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+          // mainAxisSpacing: 20,
           // padding: const EdgeInsets.all(10),
           controller: ScrollController(),
           children: List.generate(
-            10,
+            _myRecipes.length,
             (index) {
               return GestureDetector(
                 onTap: () {},
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      width: MediaQuery.of(context).size.width * .3,
-                      height: MediaQuery.of(context).size.width * .3,
+                      // margin: const EdgeInsets.only(bottom: 10),
+                      width: MediaQuery.of(context).size.width * .35,
+                      height: MediaQuery.of(context).size.width * .35,
                       decoration: BoxDecoration(
-                          border: Border.all(width: 2, color: Colors.white),
-                          borderRadius: BorderRadius.circular(15),
-                          image: DecorationImage(
-                              image: AssetImage(mockRecipes[index]['img']),
-                              fit: BoxFit.cover),
-                          color: Colors.white),
+                        border: Border.all(width: 2, color: Colors.white),
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                          image: getImage(_myRecipes[index]['image']),
+                          fit: BoxFit.cover,
+                        ),
+                        color: Colors.white,
+                      ),
                     ),
                     Text(
-                      mockRecipes[index]['title'],
+                      _myRecipes[index]['name'],
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500),
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
 
                     // const SizedBox(
@@ -370,6 +391,16 @@ class _ProfileState extends State<Profile> {
         )
       ],
     );
+  }
+
+  getImage(String? _imageUrl) {
+    try {
+      _imageUrl ??= defaultRecipeImage;
+      return NetworkImage(_imageUrl);
+    } catch (e) {
+      assert(false, e.toString());
+      return const NetworkImage(defaultRecipeImage);
+    }
   }
 
   void editProfile() {
