@@ -76,19 +76,16 @@ class RecipesService {
     }
   }
 
-  Future isAuthor(String creatorId) async {
+  Future getByCreatorId(dynamic value) async {
     try {
-      SecureStorage secureStorage = SecureStorage();
-      var uid = await secureStorage.readSecureData('uid');
-      var result = await StorageService.search(
-        collectionName: 'users',
-        fieldName: 'uid',
-        value: uid,
-      );
-      return result[0]['id'] == creatorId;
+      var allRecipes = await StorageService.getAll('recipes');
+      List result = allRecipes.where((element) {
+        return element['creator'].id == value;
+      }).toList();
+      return result;
     } catch (e) {
       print(e);
-      return false;
+      return null;
     }
   }
 

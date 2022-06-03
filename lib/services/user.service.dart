@@ -107,4 +107,20 @@ class UserService {
       print(e);
     }
   }
+
+  Future isAuthor(String creatorId) async {
+    try {
+      SecureStorage secureStorage = SecureStorage();
+      var uid = await secureStorage.readSecureData('uid');
+      var result = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+      return result[0]['id'] == creatorId;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }
