@@ -351,9 +351,16 @@ class _ProfileState extends State<Profile> {
             (index) {
               return GestureDetector(
                 onTap: () {
-                  ScreenUtils.pushScreen(
-                      context: context,
-                      screen: RecipeDetail(_myRecipes[index]['id']));
+                  var screen = RecipeDetail(_myRecipes[index]['id']);
+                  ThemeData themeData = Theme.of(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => Theme(data: themeData, child: screen),
+                    ),
+                  ).then((value) async {
+                    await init();
+                  });
                 },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * .5,
@@ -426,7 +433,17 @@ class _ProfileState extends State<Profile> {
   }
 
   void editProfile() {
-    ScreenUtils.pushScreen(context: context, screen: EditProfile(uid!));
+    // ScreenUtils.pushScreen(context: context, screen: EditProfile(uid!));
+    var screen = EditProfile(uid!);
+    ThemeData themeData = Theme.of(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Theme(data: themeData, child: screen),
+      ),
+    ).then((value) async {
+      await init();
+    });
   }
 
   void logout() async {
