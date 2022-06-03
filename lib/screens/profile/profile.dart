@@ -8,6 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/login.dart';
 import 'package:x2mint_recipes/screens/profile/edit_profile.dart';
+import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/auth.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
@@ -15,6 +16,7 @@ import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/utils/database.dart';
+import 'package:x2mint_recipes/utils/screen_utils.dart';
 
 class Profile extends StatefulWidget {
   static const routeName = '/Profile';
@@ -30,7 +32,7 @@ class _ProfileState extends State<Profile> {
   AuthClass authClass = AuthClass();
   UserService userService = UserService();
   RecipesService recipesService = RecipesService();
-  late String uid;
+  String? uid;
   UserDto? user;
   List _myRecipes = [];
 
@@ -57,38 +59,49 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          SafeArea(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  filterQuality: FilterQuality.low,
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(.6),
-                    BlendMode.darken,
+    return RefreshIndicator(
+      onRefresh: _pullRefresh,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    filterQuality: FilterQuality.low,
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(.6),
+                      BlendMode.darken,
+                    ),
+                    image: const AssetImage("assets/images/bg.jpg"),
                   ),
-                  image: const AssetImage("assets/images/bg.jpg"),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: ClipRRect(
-                // borderRadius: BorderRadius.circular(5),
-                child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-                    child: SingleChildScrollView(
-                      child: getBody(),
-                    ))),
-          )
-        ],
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: ClipRRect(
+                  // borderRadius: BorderRadius.circular(5),
+                  child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                      child: SingleChildScrollView(
+                        child: getBody(),
+                      ))),
+            )
+          ],
+        ),
       ),
     );
+  }
+
+  Future<void> _pullRefresh() async {
+    print("============");
+    setState(() {
+      // words = freshWords;
+    });
+    // why use freshWords var? https://stackoverflow.com/a/52992836/2301224
   }
 
   Widget getBody() {
@@ -404,12 +417,7 @@ class _ProfileState extends State<Profile> {
   }
 
   void editProfile() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const EditProfile(),
-      ),
-    );
+    ScreenUtils.pushScreen(context: context, screen: EditProfile(uid!));
   }
 
   void logout() async {

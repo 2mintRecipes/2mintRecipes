@@ -99,10 +99,9 @@ class UserService {
     }
   }
 
-  //TODO fix
-  Future update(UserDto data) async {
+  Future update(String path, UserDto data) async {
     try {
-      return await StorageService.add('users', data.toJson());
+      await StorageService.update('users', path, data.toJson());
     } catch (e) {
       print(e);
     }
