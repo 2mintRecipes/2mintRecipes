@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/services/db.service.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
 
 class RecipesService {
   Future getAll() async {
@@ -75,12 +76,27 @@ class RecipesService {
     }
   }
 
-  Future update(String path, RecipeDto data) async {
+  Future isAuthor(String creatorId) async {
     try {
-      return await StorageService.update('recipes', path, data.toJson());
+      SecureStorage secureStorage = SecureStorage();
+      var uid = await secureStorage.readSecureData('uid');
+      var result = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+      return result[0]['id'] == creatorId;
     } catch (e) {
       print(e);
-      return null;
+      return false;
+    }
+  }
+
+  Future update(String path, RecipeDto data) async {
+    try {
+      await StorageService.update('recipes', path, data.toJson());
+    } catch (e) {
+      print(e);
     }
   }
 

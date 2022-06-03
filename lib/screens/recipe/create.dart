@@ -35,7 +35,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final SecureStorage _secureStorage = SecureStorage();
   // late bool showEditButton;
   File? _image;
-  String? _imagePath, _imageUrl, _selectedLevel, _selectedCategory;
+  String? _imagePath, _imageUrl, _selectedLevel, _selectedCategory, _recipeId;
   String? recipeNameError,
       servingError,
       cookTimeError,
@@ -53,6 +53,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
   final List<TextEditingController> _ingredientAmountControllers = [];
   final List<TextEditingController> _stepTitleControllers = [];
   final List<TextEditingController> _stepDetailControllers = [];
+  dynamic recipeImage = const NetworkImage(defaultRecipeImage);
   RecipesService recipesService = RecipesService();
 
   @override
@@ -63,35 +64,43 @@ class _CreateRecipeState extends State<CreateRecipe> {
 
   Future init() async {
     if (widget.id.isNotEmpty) {
-      final recipe = await recipesService.getOne(widget.id);
-      _nameController.text = recipe['name'];
-      _servingController.text = recipe['serving'].toString();
-      _cookTimeController.text = recipe['cookTime'].toString();
-      _totalTimeController.text = recipe['totalTime'].toString();
-      _descriptionController.text = recipe['description'].toString();
-      _selectedLevel = recipe['level'].toString();
-      _selectedCategory = recipe['category'].toString();
-      _imageUrl = recipe['image'];
-      if (recipe['ingredients'] != null) {
-        for (var ingredient in recipe['ingredients']) {
-          _ingredientNameControllers.add(TextEditingController(
-            text: ingredient['name'],
-          ));
-          _ingredientAmountControllers.add(TextEditingController(
-            text: ingredient['amount'],
-          ));
+      _recipeId = widget.id;
+      await recipesService.getOne(widget.id).then((recipe) {
+        _nameController.text = recipe['name'];
+        _servingController.text = recipe['serving'].toString().split('.')[0];
+        _cookTimeController.text = recipe['cookTime'].toString().split('.')[0];
+        _totalTimeController.text =
+            recipe['totalTime'].toString().split('.')[0];
+        _descriptionController.text = recipe['description'].toString();
+        _imageUrl = recipe['image'];
+        setState(() {
+          _selectedLevel = recipe['level'].toString().split('.')[0];
+          _selectedCategory = recipe['category'].toString();
+        });
+
+        if (recipe['ingredients'] != null) {
+          for (var ingredient in recipe['ingredients']) {
+            _ingredientNameControllers.add(TextEditingController(
+              text: ingredient['name'],
+            ));
+            _ingredientAmountControllers.add(TextEditingController(
+              text: ingredient['amount'],
+            ));
+          }
         }
-      }
-      if (recipe['steps'] != null) {
-        for (var step in recipe['steps']) {
-          _stepTitleControllers.add(TextEditingController(
-            text: step['title'],
-          ));
-          _stepDetailControllers.add(TextEditingController(
-            text: step['detail'],
-          ));
+        if (recipe['steps'] != null) {
+          for (var step in recipe['steps']) {
+            _stepTitleControllers.add(TextEditingController(
+              text: step['title'],
+            ));
+            _stepDetailControllers.add(TextEditingController(
+              text: step['detail'],
+            ));
+          }
         }
-      }
+
+        getBanner();
+      });
     }
   }
 
@@ -198,7 +207,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
                   child: InkWell(
                     // onTap: () => setState(() => showEditButton = true),
                     child: Image(
-                      image: getBanner(), // AssetImage(songs[0]['img']),
+                      image:
+                          recipeImage ?? const NetworkImage(defaultRecipeImage),
                       fit: BoxFit.cover,
                       alignment: Alignment.center,
                       isAntiAlias: true,
@@ -241,20 +251,26 @@ class _CreateRecipeState extends State<CreateRecipe> {
         _image = File(image.path);
         _imagePath = image.path;
       });
+      getBanner();
     }
   }
 
   getBanner() {
     try {
       if (_image != null) {
-        return FileImage(_image!);
+        setState(() {
+          recipeImage = FileImage(_image!);
+        });
+        return;
       }
       if (_imageUrl != null) {
-        return NetworkImage(_imageUrl!);
+        setState(() {
+          recipeImage = NetworkImage(_imageUrl!);
+        });
+        return;
       }
-      return const NetworkImage(defaultRecipeImage);
     } catch (e) {
-      return const NetworkImage(defaultRecipeImage);
+      assert(false, e.toString());
     }
   }
 
@@ -479,7 +495,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
                 });
               }
             },
-            labelText: "g",
+            labelText: "Amount",
             errorText: detailError,
             keyboardType: TextInputType.name,
             textInputAction: TextInputAction.next,
@@ -924,7 +940,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
         steps: getStepsList(),
       );
 
-      if (widget.id.isEmpty) {
+      if (_recipeId == null || _recipeId!.isEmpty) {
         await recipesService.add(data).then((value) {
           print(value);
 
@@ -932,12 +948,10 @@ class _CreateRecipeState extends State<CreateRecipe> {
               context: context, screen: RecipeDetail(value.id));
         });
       } else {
-        await recipesService.update('recipes/' + widget.id, data).then((value) {
-          print(value);
-
-          ScreenUtils.pushScreen(
-              context: context, screen: RecipeDetail(value.id));
-        });
+        print(_recipeId);
+        await recipesService.update(_recipeId!, data);
+        ScreenUtils.pushScreen(
+            context: context, screen: RecipeDetail(_recipeId!));
       }
     });
   }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:x2mint_recipes/dto/recipe.dto.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/db.service.dart';
+import 'package:x2mint_recipes/services/seccure_storage.dart';
 
 class UserService {
   Future getAll() async {
@@ -25,6 +26,27 @@ class UserService {
 
   Future<UserDto?> getUserByUid(String uid) async {
     try {
+      var users = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+
+      if (users.length > 0) {
+        return UserDto.fromJson(users[0]);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  Future<UserDto?> getCurrentUser() async {
+    try {
+      SecureStorage secureStorage = SecureStorage();
+      var uid = await secureStorage.readSecureData('uid');
       var users = await StorageService.search(
         collectionName: 'users',
         fieldName: 'uid',
