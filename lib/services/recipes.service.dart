@@ -10,6 +10,8 @@ class RecipesService {
       result.forEach((element) async {
         element['creator'] =
             await StorageService.getOne("users", element['creator']);
+        // element['category'] =
+        //     await StorageService.getOne("categories", element['category']);
       });
       return result;
     } catch (e) {

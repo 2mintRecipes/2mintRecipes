@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
+import 'package:x2mint_recipes/utils/app_ui.dart';
 
 class Creator extends StatefulWidget {
   final String id;
@@ -47,13 +49,22 @@ class _CreatorState extends State<Creator> {
           return Row(
             children: [
               ClipOval(
-                child: Image.network(
-                  _user.avatar ??
-                      'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200',
-                  width: 35,
-                  height: 35,
-                  fit: BoxFit.cover,
-                ),
+                child: ((_user.avatar != '')
+                    ? Image.network(
+                        _user.avatar!,
+                        width: 35,
+                        height: 35,
+                        fit: BoxFit.cover,
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Color(
+                                (math.Random().nextDouble() * 0xFFFFFF).toInt())
+                            .withOpacity(1.0),
+                        child: Text(
+                          _user.username!.substring(0, 2),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
