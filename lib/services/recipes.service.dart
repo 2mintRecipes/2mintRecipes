@@ -39,11 +39,19 @@ class RecipesService {
 
   Future getByName(String value) async {
     try {
-      return await StorageService.search(
+      var result = await StorageService.searchLike(
         collectionName: 'recipes',
         fieldName: 'name',
         value: value,
       );
+      for (var i = 0; i < result.length; i++) {
+        result[i]['creator'] =
+            await StorageService.getOne("users", result[i]['creator'].id);
+        // result[i]['category'] =
+        //     await StorageService.getOne("categories", result[i]['category']);
+      }
+
+      return result;
     } catch (e) {
       print(e);
       return null;

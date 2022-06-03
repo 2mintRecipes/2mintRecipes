@@ -85,4 +85,23 @@ class StorageService {
 
     return result;
   }
+
+  static Future searchLike({
+    required String collectionName,
+    required String fieldName,
+    required dynamic value,
+  }) async {
+    List<Map<String, dynamic>>? result = [];
+
+    await getCollection(collectionName).get().then((event) {
+      event.docs.forEach((doc) {
+        var data = doc.data();
+        if (data[fieldName]?.toString().contains(value) ?? false) {
+          result.add(data);
+        }
+      });
+    });
+
+    return result;
+  }
 }
