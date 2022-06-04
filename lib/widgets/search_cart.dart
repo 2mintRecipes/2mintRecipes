@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:x2mint_recipes/screens/home/homepage.dart';
+import 'package:x2mint_recipes/screens/root.dart';
+import 'package:x2mint_recipes/screens/search_recipe.dart';
 
 import '../utils/app_ui.dart';
 
@@ -23,8 +26,24 @@ class SearchCard extends StatelessWidget {
         ),
         child: TextField(
           keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+          onSubmitted: (value) {
+            if (value.isEmpty) {
+              return;
+            }
+            var screen = SearchRecipe(_searchControl.text);
+            ThemeData themeData = Theme.of(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => Theme(data: themeData, child: screen),
+              ),
+            ).then((value) {
+              Navigator.of(context).popAndPushNamed(Root.routeName);
+            });
+          },
           style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
               fontWeight: FontWeight.normal,
               color: Colors.white),
           decoration: InputDecoration(
@@ -35,7 +54,7 @@ class SearchCard extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            //contentPadding: EdgeInsets.all(10.0),
+            contentPadding: EdgeInsets.all(10.0),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.black.withOpacity(.1),
@@ -43,17 +62,12 @@ class SearchCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(15.0),
             ),
             hintText: "Search...",
-            prefixIcon: Transform.scale(
-              scale: 0.6,
-              child: Image.asset(UI.search),
-            ),
-            //Icon(Icons.search, color: Colors.white, size: 30),
-            suffixIcon: Icon(
-              Icons.filter_alt_outlined,
+            prefixIcon: Icon(
+              Icons.search,
               color: Colors.white,
             ),
             hintStyle: TextStyle(
-              fontSize: 20.0,
+              fontSize: 18.0,
               color: Colors.white,
             ),
           ),

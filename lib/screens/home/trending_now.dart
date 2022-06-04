@@ -152,7 +152,7 @@ class _TrendingNowState extends State<TrendingNow> {
                                   const SizedBox(
                                     height: 3,
                                   ),
-                                  Creator(_allRecipes[index]['creator'].id),
+                                  Creator(_allRecipes[index]['creator']?['id']),
 
                                   //Text(_allRecipes[index]['creator']),
                                 ],

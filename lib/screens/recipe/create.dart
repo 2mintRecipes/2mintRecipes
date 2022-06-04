@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
+import 'package:x2mint_recipes/screens/search_recipe.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
 import 'package:x2mint_recipes/services/user.service.dart';
 import 'package:x2mint_recipes/utils/screen_utils.dart';
@@ -944,14 +945,34 @@ class _CreateRecipeState extends State<CreateRecipe> {
         await recipesService.add(data).then((value) {
           print(value);
 
-          ScreenUtils.pushScreen(
-              context: context, screen: RecipeDetail(value.id));
+          // ScreenUtils.pushScreen(
+          //     context: context, screen: RecipeDetail(value.id));
+          var screen = RecipeDetail(value.id);
+          ThemeData themeData = Theme.of(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => Theme(data: themeData, child: screen),
+            ),
+          ).then((value) async {
+            Navigator.pushNamed(context, SearchRecipe.routeName);
+          });
         });
       } else {
         print(_recipeId);
         await recipesService.update(_recipeId!, data);
-        ScreenUtils.pushScreen(
-            context: context, screen: RecipeDetail(_recipeId!));
+        // ScreenUtils.pushScreen(
+        //     context: context, screen: RecipeDetail(_recipeId!));
+        var screen = RecipeDetail(_recipeId!);
+        ThemeData themeData = Theme.of(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Theme(data: themeData, child: screen),
+          ),
+        ).then((value) async {
+          Navigator.pushNamed(context, SearchRecipe.routeName);
+        });
       }
     });
   }
