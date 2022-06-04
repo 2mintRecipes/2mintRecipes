@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:x2mint_recipes/screens/home/homepage.dart';
 import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
+import 'package:x2mint_recipes/widgets/creator.dart';
 
 import '../../utils/app_ui.dart';
 
@@ -171,24 +172,7 @@ class _SeeAllPageState extends State<SeeAllPage> {
                   const SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white.withOpacity(.5),
-                        child: const Text(
-                          'MT',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
-                        ),
-                      ),
-                      Text(
-                        '  By ',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white.withOpacity(.7),
-                        ),
-                      )
-                    ],
-                  ),
+                  Creator(widget.data[index]['creator'].id),
                   const SizedBox(
                     height: 35,
                   ),
