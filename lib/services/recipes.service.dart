@@ -103,35 +103,52 @@ class RecipesService {
         return null;
       }
     }
+  }
 
-    Future isAuthor(String creatorId) async {
-      try {
-        var allRecipes = await StorageService.getAll('recipes');
-        List result = allRecipes.where((element) {
-          return element['creator'].id == value;
-        }).toList();
-        return result;
-      } catch (e) {
-        print(e);
-        return null;
-      }
+  Future getByType(String value) async {
+    try {
+      List<Map<String, dynamic>> result = await StorageService.search(
+        collectionName: 'recipes',
+        fieldName: 'category',
+        value: value,
+      );
+      return result;
+    } catch (e) {
+      print(e);
+      return null;
     }
+  }
 
-    Future update(String path, RecipeDto data) async {
-      try {
-        await StorageService.update('recipes', path, data.toJson());
-      } catch (e) {
-        print(e);
-      }
+  Future isAuthor(String creatorId) async {
+    try {
+      SecureStorage secureStorage = SecureStorage();
+      var uid = await secureStorage.readSecureData('uid');
+      var result = await StorageService.search(
+        collectionName: 'users',
+        fieldName: 'uid',
+        value: uid,
+      );
+      return result[0]['id'] == creatorId;
+    } catch (e) {
+      print(e);
+      return false;
     }
+  }
 
-    Future remove(String path) async {
-      try {
-        return await StorageService.delete('recipes', path);
-      } catch (e) {
-        print(e);
-        return null;
-      }
+  Future update(String path, RecipeDto data) async {
+    try {
+      await StorageService.update('recipes', path, data.toJson());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future remove(String path) async {
+    try {
+      return await StorageService.delete('recipes', path);
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 }
