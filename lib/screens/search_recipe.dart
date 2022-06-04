@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:x2mint_recipes/screens/recipe/detailRecipe.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/creator.dart';
@@ -88,7 +89,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           child: SearchCard(),
         ),
 
-        getSearchSummary(),
+        // getSearchSummary(),
 
         /// Bookmark Items
         getListItems(),
@@ -125,7 +126,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Found $totalRecipes recipes for `${widget.searchText}`.",
+            "Found ${_allRecipes.length} recipes for `${widget.searchText}`.",
             style: const TextStyle(
               fontSize: 16,
               color: Colors.white,
@@ -162,9 +163,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
-            setState(() {
-              totalRecipes = _allRecipes.length;
-            });
+
             return Column(
               children: List.generate(
                 _allRecipes.length,
@@ -172,7 +171,19 @@ class _SearchRecipeState extends State<SearchRecipe> {
                   return Padding(
                     padding: const EdgeInsets.only(left: 30),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        var screen = RecipeDetail(_allRecipes[index]['id']);
+                        ThemeData themeData = Theme.of(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                Theme(data: themeData, child: screen),
+                          ),
+                        ).then((value) async {
+                          Navigator.pushNamed(context, SearchRecipe.routeName);
+                        });
+                      },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -32,7 +32,10 @@ class RecipesService {
 
   Future getOne(String? id) async {
     try {
-      return await StorageService.getOne('recipes', id!);
+      var result = await StorageService.getOne('recipes', id!);
+      result['creator'] =
+          await StorageService.getOne("users", result['creator'].id);
+      return result;
     } catch (e) {
       print(e);
       return null;

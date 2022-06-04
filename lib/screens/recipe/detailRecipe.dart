@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:x2mint_recipes/dto/user.dto.dart';
 import 'package:x2mint_recipes/screens/recipe/create.dart';
+import 'package:x2mint_recipes/screens/search_recipe.dart';
 import 'package:x2mint_recipes/services/cloudinary.service.dart';
 import 'package:x2mint_recipes/services/recipes.service.dart';
 import 'package:x2mint_recipes/services/seccure_storage.dart';
@@ -49,7 +50,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
     currentUser = await _userService.getCurrentUser();
     var recipe = await _recipesService.getOne(id);
     setState(() {
-      isAuthor = recipe['creator'].id == currentUser?.id;
+      isAuthor = recipe['creator']['id'] == currentUser?.id;
     });
   }
 
@@ -160,7 +161,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
           ),
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Creator(_recipe['creator'].id),
+            child: Creator(_recipe['creator']['id']),
           ),
           TextView(
             text: _recipe['description'],
@@ -545,6 +546,16 @@ class _RecipeDetailState extends State<RecipeDetail> {
   }
 
   void _editRecipe() {
-    ScreenUtils.pushScreen(context: context, screen: CreateRecipe(widget.id));
+    // ScreenUtils.pushScreen(context: context, screen: CreateRecipe(widget.id));
+    var screen = CreateRecipe(widget.id);
+    ThemeData themeData = Theme.of(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Theme(data: themeData, child: screen),
+      ),
+    ).then((value) async {
+      Navigator.pushNamed(context, SearchRecipe.routeName);
+    });
   }
 }
