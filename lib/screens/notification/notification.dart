@@ -155,13 +155,21 @@ class _MyNotificationState extends State<MyNotification> {
     );
   }
 
-  Widget getNotificationItem(int index) {
+  Widget getNotificationItem(dynamic notification) {
     double notificationWidth = MediaQuery.of(context).size.width - 60;
     double contentWidth = notificationWidth * .7;
     double photoWidth = notificationWidth * .2;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () async {
+        await notificationService.makeNotificationRead(notification['id']);
+        // await getNotifications(getActiveNotificationsType());
+        var result = await notificationService
+            .getNotificationsByStatus(getActiveNotificationsType());
+        setState(() {
+          _notifications = result;
+        });
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +207,7 @@ class _MyNotificationState extends State<MyNotification> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            _notifications[index]['title'],
+                            notification?['title'] ?? '',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.justify,
@@ -211,7 +219,7 @@ class _MyNotificationState extends State<MyNotification> {
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            _notifications[index]['content'],
+                            notification?['content'] ?? '',
                             style: const TextStyle(color: Colors.black),
                           ),
                         ],
@@ -248,7 +256,7 @@ class _MyNotificationState extends State<MyNotification> {
               children: List.generate(
                 _notifications.length,
                 (index) {
-                  return getNotificationItem(index);
+                  return getNotificationItem(_notifications[index]);
                 },
               ),
             ),

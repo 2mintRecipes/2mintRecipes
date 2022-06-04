@@ -53,22 +53,17 @@ class NotificationsService {
 
   Future getNotificationsByStatus(String status) async {
     try {
-      List<Map<String, dynamic>> result = [];
+      // List<Map<String, dynamic>> result = [];
 
       if (status == 'ALL') {
-        result = await StorageService.getAll('notifications');
+        return await StorageService.getAll('notifications');
       } else {
-        await StorageService.getCollection("notifications")
-            .where("status", isEqualTo: status)
-            .get()
-            .then((value) {
-          value.docs.forEach((element) {
-            result.add(element.data());
-          });
-        });
+        return await StorageService.search(
+          collectionName: "notifications",
+          fieldName: "status",
+          value: status,
+        );
       }
-
-      return result;
     } catch (e) {
       print(e);
     }
