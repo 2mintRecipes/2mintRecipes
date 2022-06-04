@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
     if (_user != null) {
       var result = await recipesService.getByCreatorId(_user.id);
       setState(() {
-        _myRecipes = result;
+        _myRecipes = result ?? [];
       });
     }
     setState(() {
@@ -347,7 +347,7 @@ class _ProfileState extends State<Profile> {
           // padding: const EdgeInsets.all(10),
           controller: ScrollController(),
           children: List.generate(
-            _myRecipes?.length ?? 0,
+            _myRecipes.length,
             (index) {
               return GestureDetector(
                 onTap: () {

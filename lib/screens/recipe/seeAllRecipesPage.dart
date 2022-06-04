@@ -172,7 +172,7 @@ class _SeeAllPageState extends State<SeeAllPage> {
                   const SizedBox(
                     height: 3,
                   ),
-                  Creator(widget.data[index]['creator'].id),
+                  Creator(widget.data[index]['creator']?['id']),
                   const SizedBox(
                     height: 35,
                   ),

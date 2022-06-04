@@ -29,6 +29,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
   late Future _allCategoriesFuture;
   late String typeId;
   List<Map<String, dynamic>> _allCategories = [];
+  Widget listRecipes = Container();
 
   @override
   void initState() {
@@ -49,6 +50,12 @@ class _PopularCategoriesState extends State<PopularCategories> {
         builder: (_) => Theme(data: themeData, child: screen),
       ),
     );
+  }
+
+  getListRecipesByCategory() {
+    setState(() {
+      listRecipes = ListPopularRecipes(typeId);
+    });
   }
 
   @override
@@ -106,6 +113,7 @@ class _PopularCategoriesState extends State<PopularCategories> {
                                   typeId = _allCategories[index]["id"];
                                   //print(_allCategories[index]["id"]);
                                 });
+                                getListRecipesByCategory();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +158,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   height: 20,
                 ),
                 //Text(typeId),
-                ListPopularRecipes(typeId),
+                // ListPopularRecipes(typeId),
+                listRecipes,
 
                 const SizedBox(
                   height: 20,
