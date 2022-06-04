@@ -76,6 +76,20 @@ class RecipesService {
     }
   }
 
+  Future getByType(String value) async {
+    try {
+      List<Map<String, dynamic>> result = await StorageService.search(
+        collectionName: 'recipes',
+        fieldName: 'category',
+        value: value,
+      );
+      return result;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   Future isAuthor(String creatorId) async {
     try {
       SecureStorage secureStorage = SecureStorage();
