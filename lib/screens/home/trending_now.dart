@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -24,11 +26,13 @@ class _TrendingNowState extends State<TrendingNow> {
   SecureStorage secureStorage = SecureStorage();
   RecipesService recipesService = RecipesService();
   late Future _allRecipesFuture;
+  late List<bool> like;
   List<Map<String, dynamic>> _allRecipes = [];
 
   @override
   void initState() {
     super.initState();
+    like = [false];
     init();
   }
 
@@ -49,6 +53,7 @@ class _TrendingNowState extends State<TrendingNow> {
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
+            //like.length = _allRecipes.length.toInt();
             //print(_allRecipes);
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -119,22 +124,139 @@ class _TrendingNowState extends State<TrendingNow> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: 250,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 2,
-                                        color: Colors.white.withOpacity(.4),
+                                  Stack(
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      Container(
+                                        width: 250,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 2,
+                                            color: Colors.white.withOpacity(.4),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          image: DecorationImage(
+                                            image: NetworkImage(
+                                                _allRecipes[index]['image']),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          color: Colors.white.withOpacity(.4),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.circular(15),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                            _allRecipes[index]['image']),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      color: Colors.white.withOpacity(.4),
-                                    ),
+                                      // Align(
+                                      //   alignment: Alignment.bottomCenter,
+                                      //   child: ClipRRect(
+                                      //     child: BackdropFilter(
+                                      //       filter: ImageFilter.blur(
+                                      //           sigmaX: 0, sigmaY: 3),
+                                      //       child: Padding(
+                                      //         padding: const EdgeInsets.all(10),
+                                      //         child: Row(
+                                      //           mainAxisAlignment:
+                                      //               MainAxisAlignment
+                                      //                   .spaceBetween,
+                                      //           crossAxisAlignment:
+                                      //               CrossAxisAlignment.center,
+                                      //           children: [
+                                      //             Row(
+                                      //               mainAxisAlignment:
+                                      //                   MainAxisAlignment
+                                      //                       .spaceBetween,
+                                      //               crossAxisAlignment:
+                                      //                   CrossAxisAlignment
+                                      //                       .center,
+                                      //               children: [
+                                      //                 IconButton(
+                                      //                   tooltip: 'Like',
+                                      //                   onPressed: () {
+                                      //                     setState(() {
+                                      //                       if (like[index] ==
+                                      //                           true) {
+                                      //                         _allRecipes[index]
+                                      //                             ['like'] -= 1;
+                                      //                         like[index] =
+                                      //                             false;
+                                      //                       } else {
+                                      //                         like[index] =
+                                      //                             true;
+                                      //                         _allRecipes[index]
+                                      //                             ['like'] += 1;
+                                      //                       }
+                                      //                     });
+                                      //                   },
+                                      //                   icon: SizedBox(
+                                      //                     child: Icon(
+                                      //                       ((like[index] ==
+                                      //                               true)
+                                      //                           ? Icons.favorite
+                                      //                           : Icons
+                                      //                               .favorite_border_outlined),
+                                      //                       size: 30,
+                                      //                       color:
+                                      //                           (like[index] ==
+                                      //                                   true)
+                                      //                               ? Colors.red
+                                      //                               : Colors
+                                      //                                   .white,
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //                 const SizedBox(width: 5),
+                                      //                 Text(
+                                      //                   _allRecipes[index]
+                                      //                           ['like']
+                                      //                       .toString(),
+                                      //                   style: TextStyle(
+                                      //                     color: (like[index] ==
+                                      //                             true)
+                                      //                         ? Colors.red
+                                      //                         : Colors.white,
+                                      //                     fontSize: 20,
+                                      //                     fontWeight:
+                                      //                         FontWeight.bold,
+                                      //                   ),
+                                      //                 )
+                                      //               ],
+                                      //             ),
+                                      //             Row(
+                                      //               children: [
+                                      //                 IconButton(
+                                      //                   tooltip: "Total Time",
+                                      //                   onPressed: () {},
+                                      //                   icon: const SizedBox(
+                                      //                     child: Icon(
+                                      //                       Icons.timer,
+                                      //                       size: 30,
+                                      //                       color: Colors.white,
+                                      //                     ),
+                                      //                   ),
+                                      //                 ),
+                                      //                 const SizedBox(width: 5),
+                                      //                 Text(
+                                      //                   _allRecipes[index][
+                                      //                               'totalTime']
+                                      //                           .toString()
+                                      //                           .split('.')[0] +
+                                      //                       " mins",
+                                      //                   style: const TextStyle(
+                                      //                     color: Colors.white,
+                                      //                     fontSize: 20,
+                                      //                     fontWeight:
+                                      //                         FontWeight.bold,
+                                      //                   ),
+                                      //                 )
+                                      //               ],
+                                      //             ),
+                                      //           ],
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ],
                                   ),
                                   const SizedBox(height: 5),
                                   SizedBox(

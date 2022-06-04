@@ -43,10 +43,10 @@ class _ListPopularRecipesState extends State<ListPopularRecipes> {
           AsyncSnapshot snapshot,
         ) {
           if (snapshot.connectionState == ConnectionState.waiting) {
+            init();
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
-            init();
             _allRecipes = snapshot.data;
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
