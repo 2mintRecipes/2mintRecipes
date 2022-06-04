@@ -4,6 +4,7 @@ import 'package:x2mint_recipes/screens/home/homepage.dart';
 import 'package:x2mint_recipes/screens/notification/notification.dart';
 import 'package:x2mint_recipes/screens/profile/profile.dart';
 import 'package:x2mint_recipes/screens/bookmark.dart';
+import 'package:x2mint_recipes/screens/search_recipe.dart';
 import 'package:x2mint_recipes/utils/app_ui.dart';
 import 'package:x2mint_recipes/widgets/nav_model.dart';
 
@@ -58,7 +59,7 @@ class _RootState extends State<Root> {
       index: currentIndex,
       children: const [
         HomePage(),
-        Bookmark(),
+        SearchRecipe(''),
         CreateRecipe(''),
         MyNotification(),
         Profile(),

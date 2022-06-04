@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:x2mint_recipes/screens/home/homepage.dart';
 import 'package:x2mint_recipes/screens/root.dart';
-import 'package:x2mint_recipes/screens/search_result.dart';
+import 'package:x2mint_recipes/screens/search_recipe.dart';
 
 import '../utils/app_ui.dart';
 
@@ -31,7 +31,7 @@ class SearchCard extends StatelessWidget {
             if (value.isEmpty) {
               return;
             }
-            var screen = SearchResult(_searchControl.text);
+            var screen = SearchRecipe(_searchControl.text);
             ThemeData themeData = Theme.of(context);
             Navigator.push(
               context,

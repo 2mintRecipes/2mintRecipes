@@ -7,20 +7,21 @@ import 'package:x2mint_recipes/widgets/creator.dart';
 import 'package:x2mint_recipes/widgets/search_cart.dart';
 import 'package:x2mint_recipes/utils/database.dart';
 
-class SearchResult extends StatefulWidget {
+class SearchRecipe extends StatefulWidget {
   static const routeName = '/search';
   final String searchText;
-  const SearchResult(this.searchText, {Key? key}) : super(key: key);
+  const SearchRecipe(this.searchText, {Key? key}) : super(key: key);
 
   @override
-  State<SearchResult> createState() => _SearchResultState();
+  State<SearchRecipe> createState() => _SearchRecipeState();
 }
 
-class _SearchResultState extends State<SearchResult> {
+class _SearchRecipeState extends State<SearchRecipe> {
   int activeMenu = 0;
   RecipesService recipesService = RecipesService();
   late Future _allRecipesFuture;
   List<Map<String, dynamic>> _allRecipes = [];
+  int totalRecipes = 0;
 
   @override
   void initState() {
@@ -29,7 +30,11 @@ class _SearchResultState extends State<SearchResult> {
   }
 
   Future init() async {
-    _allRecipesFuture = recipesService.getByName(widget.searchText);
+    if (widget.searchText.isNotEmpty) {
+      _allRecipesFuture = recipesService.getByName(widget.searchText);
+    } else {
+      _allRecipesFuture = recipesService.getAll();
+    }
   }
 
   @override
@@ -111,13 +116,16 @@ class _SearchResultState extends State<SearchResult> {
   }
 
   Widget getSearchSummary() {
+    if (widget.searchText.isEmpty) {
+      return const SizedBox(height: 20);
+    }
     return Padding(
       padding: const EdgeInsets.all(30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Found ${_allRecipes.length} recipes for ``${widget.searchText}``.",
+            "Found $totalRecipes recipes for `${widget.searchText}`.",
             style: const TextStyle(
               fontSize: 16,
               color: Colors.white,
@@ -154,6 +162,9 @@ class _SearchResultState extends State<SearchResult> {
           }
           if (snapshot.hasData) {
             _allRecipes = snapshot.data;
+            setState(() {
+              totalRecipes = _allRecipes.length;
+            });
             return Column(
               children: List.generate(
                 _allRecipes.length,
@@ -194,7 +205,7 @@ class _SearchResultState extends State<SearchResult> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          Creator(_allRecipes[index]['creator']['id']),
+                          Creator(_allRecipes[index]['creator']?['id']),
                           const SizedBox(height: 30),
                         ],
                       ),

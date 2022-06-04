@@ -8,12 +8,14 @@ class RecipesService {
     try {
       List<Map<String, dynamic>> result =
           await StorageService.getAll('recipes');
-      result.forEach((element) async {
-        element['creator'] =
-            await StorageService.getOne("users", element['creator']);
-        // element['category'] =
-        //     await StorageService.getOne("categories", element['category']);
-      });
+
+      for (var i = 0; i < result.length; i++) {
+        result[i]['creator'] =
+            await StorageService.getOne("users", result[i]['creator'].id);
+        // result[i]['category'] =
+        //     await StorageService.getOne("categories", result[i]['category']);
+      }
+
       return result;
     } catch (e) {
       print(e);
