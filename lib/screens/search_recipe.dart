@@ -180,7 +180,7 @@ class _SearchRecipeState extends State<SearchRecipe> {
                             builder: (_) =>
                                 Theme(data: themeData, child: screen),
                           ),
-                        ).then((value) async {
+                        ).then((value) {
                           Navigator.pushNamed(context, SearchRecipe.routeName);
                         });
                       },

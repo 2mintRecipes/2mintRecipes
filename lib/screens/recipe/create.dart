@@ -942,21 +942,19 @@ class _CreateRecipeState extends State<CreateRecipe> {
       );
 
       if (_recipeId == null || _recipeId!.isEmpty) {
-        await recipesService.add(data).then((value) {
-          print(value);
+        var value = await recipesService.add(data);
 
-          // ScreenUtils.pushScreen(
-          //     context: context, screen: RecipeDetail(value.id));
-          var screen = RecipeDetail(value.id);
-          ThemeData themeData = Theme.of(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => Theme(data: themeData, child: screen),
-            ),
-          ).then((value) async {
-            Navigator.pushNamed(context, SearchRecipe.routeName);
-          });
+        // ScreenUtils.pushScreen(
+        //     context: context, screen: RecipeDetail(value.id));
+        var screen = RecipeDetail(value.id);
+        ThemeData themeData = Theme.of(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => Theme(data: themeData, child: screen),
+          ),
+        ).then((value) {
+          Navigator.pushNamed(context, SearchRecipe.routeName);
         });
       } else {
         print(_recipeId);
@@ -970,7 +968,7 @@ class _CreateRecipeState extends State<CreateRecipe> {
           MaterialPageRoute(
             builder: (_) => Theme(data: themeData, child: screen),
           ),
-        ).then((value) async {
+        ).then((value) {
           Navigator.pushNamed(context, SearchRecipe.routeName);
         });
       }

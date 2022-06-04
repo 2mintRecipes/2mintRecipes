@@ -554,7 +554,7 @@ class _RecipeDetailState extends State<RecipeDetail> {
       MaterialPageRoute(
         builder: (_) => Theme(data: themeData, child: screen),
       ),
-    ).then((value) async {
+    ).then((value) {
       Navigator.pushNamed(context, SearchRecipe.routeName);
     });
   }
