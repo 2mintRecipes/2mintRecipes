@@ -347,7 +347,7 @@ class _ProfileState extends State<Profile> {
           // padding: const EdgeInsets.all(10),
           controller: ScrollController(),
           children: List.generate(
-            _myRecipes.length,
+            _myRecipes?.length ?? 0,
             (index) {
               return GestureDetector(
                 onTap: () {
