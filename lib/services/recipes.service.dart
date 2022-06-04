@@ -90,32 +90,48 @@ class RecipesService {
   }
 
   Future getByCreatorId(dynamic value) async {
-    try {
-      var allRecipes = await StorageService.getAll('recipes');
-      List result = allRecipes.where((element) {
-        return element['creator'].id == value;
-      }).toList();
-      return result;
-    } catch (e) {
-      print(e);
-      return null;
+    Future getByType(String value) async {
+      try {
+        List<Map<String, dynamic>> result = await StorageService.search(
+          collectionName: 'recipes',
+          fieldName: 'category',
+          value: value,
+        );
+        return result;
+      } catch (e) {
+        print(e);
+        return null;
+      }
     }
-  }
 
-  Future update(String path, RecipeDto data) async {
-    try {
-      await StorageService.update('recipes', path, data.toJson());
-    } catch (e) {
-      print(e);
+    Future isAuthor(String creatorId) async {
+      try {
+        var allRecipes = await StorageService.getAll('recipes');
+        List result = allRecipes.where((element) {
+          return element['creator'].id == value;
+        }).toList();
+        return result;
+      } catch (e) {
+        print(e);
+        return null;
+      }
     }
-  }
 
-  Future remove(String path) async {
-    try {
-      return await StorageService.delete('recipes', path);
-    } catch (e) {
-      print(e);
-      return null;
+    Future update(String path, RecipeDto data) async {
+      try {
+        await StorageService.update('recipes', path, data.toJson());
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    Future remove(String path) async {
+      try {
+        return await StorageService.delete('recipes', path);
+      } catch (e) {
+        print(e);
+        return null;
+      }
     }
   }
 }

@@ -3,7 +3,7 @@ class RecipeDto {
   String? name;
   String? description;
   String? image;
-  dynamic category;
+  String? category;
   double? totalTime;
   double? cookTime;
   double? serving;
