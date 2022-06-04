@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
         const TrendingNow(),
 
         // /// Popular Category Bar
-        // const PopularCategories(),
+        const PopularCategories(),
 
         // /// Recent Recipes
         // const RecentRecipes(),
