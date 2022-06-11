@@ -33,7 +33,7 @@ class _TrendingNowState extends State<TrendingNow> {
   }
 
   Future init() async {
-    _allRecipesFuture = recipesService.getAll();
+    _allRecipesFuture = recipesService.getTrending();
   }
 
   @override

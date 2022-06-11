@@ -35,11 +35,14 @@ class _PopularCategoriesState extends State<PopularCategories> {
   void initState() {
     super.initState();
     init();
-    typeId = 'monanvat';
   }
 
   Future init() async {
     _allCategoriesFuture = categoryService.getAll();
+    setState(() {
+      typeId = 'monanvat';
+      listRecipes = ListPopularRecipes(typeId);
+    });
   }
 
   void _pushScreen({required BuildContext context, required Widget screen}) {
@@ -112,8 +115,9 @@ class _PopularCategoriesState extends State<PopularCategories> {
                                   activeMenu = index;
                                   typeId = _allCategories[index]["id"];
                                   //print(_allCategories[index]["id"]);
+                                  listRecipes = ListPopularRecipes(typeId);
                                 });
-                                getListRecipesByCategory();
+                                // getListRecipesByCategory();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

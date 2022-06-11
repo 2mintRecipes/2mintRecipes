@@ -140,6 +140,27 @@ class RecipesService {
     }
   }
 
+  Future getTrending() async {
+    try {
+      var result = await StorageService.searchGreather(
+        collectionName: 'recipes',
+        fieldName: "like",
+        value: 0,
+      );
+
+      for (var i = 0; i < result.length; i++) {
+        result[i]['creator'] =
+            await StorageService.getOne("users", result[i]['creator'].id);
+        // result[i]['category'] =
+        //     await StorageService.getOne("categories", result[i]['category']);
+      }
+
+      return result;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future remove(String path) async {
     try {
       return await StorageService.delete('recipes', path);
