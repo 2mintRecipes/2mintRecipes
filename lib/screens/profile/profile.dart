@@ -48,7 +48,7 @@ class _ProfileState extends State<Profile> {
     if (_user != null) {
       var result = await recipesService.getByCreatorId(_user.id);
       setState(() {
-        _myRecipes = result;
+        _myRecipes = result ?? [];
       });
     }
     setState(() {

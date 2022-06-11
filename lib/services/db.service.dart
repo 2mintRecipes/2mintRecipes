@@ -86,6 +86,32 @@ class StorageService {
     return result;
   }
 
+  static Future searchGreather({
+    required String collectionName,
+    required String fieldName,
+    required dynamic value,
+    int limit = 10,
+    // int offset = 0,
+    bool descending = false,
+  }) async {
+    List<Map<String, dynamic>>? result = [];
+
+    var snapshot = await getCollection(collectionName)
+        .where(fieldName, isGreaterThan: value)
+        // .orderBy(fieldName, descending: descending)
+        .limit(limit)
+        // .startAt([offset])
+        .get();
+
+    snapshot.docs.forEach((doc) {
+      var value = doc.data();
+      value['id'] = doc.id;
+      result.add(value);
+    });
+
+    return result;
+  }
+
   static Future searchLike({
     required String collectionName,
     required String fieldName,

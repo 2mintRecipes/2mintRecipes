@@ -29,16 +29,20 @@ class _PopularCategoriesState extends State<PopularCategories> {
   late Future _allCategoriesFuture;
   late String typeId;
   List<Map<String, dynamic>> _allCategories = [];
+  Widget listRecipes = Container();
 
   @override
   void initState() {
     super.initState();
     init();
-    typeId = 'monanvat';
   }
 
   Future init() async {
     _allCategoriesFuture = categoryService.getAll();
+    setState(() {
+      typeId = 'monanvat';
+      listRecipes = ListPopularRecipes(typeId);
+    });
   }
 
   void _pushScreen({required BuildContext context, required Widget screen}) {
@@ -49,6 +53,12 @@ class _PopularCategoriesState extends State<PopularCategories> {
         builder: (_) => Theme(data: themeData, child: screen),
       ),
     );
+  }
+
+  getListRecipesByCategory() {
+    setState(() {
+      listRecipes = ListPopularRecipes(typeId);
+    });
   }
 
   @override
@@ -105,7 +115,9 @@ class _PopularCategoriesState extends State<PopularCategories> {
                                   activeMenu = index;
                                   typeId = _allCategories[index]["id"];
                                   //print(_allCategories[index]["id"]);
+                                  listRecipes = ListPopularRecipes(typeId);
                                 });
+                                // getListRecipesByCategory();
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +162,8 @@ class _PopularCategoriesState extends State<PopularCategories> {
                   height: 20,
                 ),
                 //Text(typeId),
-                ListPopularRecipes(typeId),
+                // ListPopularRecipes(typeId),
+                listRecipes,
 
                 const SizedBox(
                   height: 20,
