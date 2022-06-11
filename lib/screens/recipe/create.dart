@@ -171,7 +171,8 @@ class _CreateRecipeState extends State<CreateRecipe> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.id != null ? "Edit recipe" : "Create recipe",
+            "Recipe",
+            // widget.id != null ? "Edit recipe" : "Create recipe",
             style: const TextStyle(
               fontSize: 30,
               color: Colors.white,
