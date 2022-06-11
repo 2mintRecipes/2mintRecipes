@@ -124,16 +124,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     children: [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(bottom: 20),
+                            
                             child: Text(
                               "RETRIEVE PASSWORD",
                               style: TextStyle(
-                                fontSize: 30,
+                                fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
+
                               ),
                             ),
                           ),

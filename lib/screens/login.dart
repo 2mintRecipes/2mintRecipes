@@ -256,39 +256,40 @@ class _LoginState extends State<Login> {
   }
 
   Widget forgotPasswordOrRegister() {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      // width: MediaQuery.of(context).size.width * .7,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/signup');
-            },
-            child: const Text(
-              'Register',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/forgotPassword');
-            },
-            child: const Text(
-              'Forgot password?',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Container();
+    // return Container(
+    //   padding: const EdgeInsets.all(10),
+    //   // width: MediaQuery.of(context).size.width * .7,
+    //   child: Column(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.pushNamed(context, '/signup');
+    //         },
+    //         child: const Text(
+    //           'Register',
+    //           style: TextStyle(
+    //             color: Colors.white,
+    //             fontSize: 17,
+    //           ),
+    //         ),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           Navigator.pushNamed(context, '/forgotPassword');
+    //         },
+    //         child: const Text(
+    //           'Forgot password?',
+    //           style: TextStyle(
+    //             color: Colors.white,
+    //             fontSize: 17,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget signInWith(String icon) {
